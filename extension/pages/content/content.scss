@@ -1,0 +1,129 @@
+
+// highlight
+.wc-highlight {
+    margin: 0 5px;
+    background-color: yellow;
+    color: black;
+}
+
+.lightbox {
+    position:fixed;
+    z-index:999999999999;
+    left:50%;
+
+    width:46px;
+    height:20px;
+    margin: 0 0 0 -23px;
+    padding:4px;
+
+    border-radius:7px;
+    background:#f7f7f7;
+    box-shadow:0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.wordcard-main {
+    position:fixed;
+    z-index:999999999999;
+    left:50%;
+
+    overflow:hidden;
+
+    width:80px;
+    height:80px;
+    margin: 0 0 0 -40px;
+
+    border:1px solid #bfbfbf;
+    border-radius:4px;
+    background:#f7f7f7;
+    -webkit-box-shadow:0 0 10px #7f7f7f;
+    box-shadow:0 0 10px #7f7f7f;
+
+    &.top {
+        top:3px;
+    }
+
+    &.bottom {
+        bottom:3px;
+    }
+
+    .wordcard-close {
+        position:absolute;
+        top:9px;
+        right:10px;
+    
+        overflow:hidden;
+    
+        width:18px;
+        height:18px;
+    
+        text-indent:-9999px;
+
+        :hover {background-position:-18px -50px;}
+
+        :active {background-position:-36px -50px;}
+    }
+}
+
+#lingua-translate {
+    position:absolute;
+    z-index:9999;
+    left: 200px;
+
+    display:none;
+
+    padding:2px;
+
+    font-family: verdana;
+    font-size:8px;
+
+    border: 2px solid #ccc;
+    border-radius:5px;
+    background-color:#ffffff;   
+}
+
+.lingualy-translate-close {
+    position:absolute; 
+    top: 8px; 
+    right:8px;
+
+    width:18px; 
+    height:20px;
+}
+
+#lingualy-translate-btn {
+    position:fixed; 
+    z-index:9999999999;
+    top:80px; 
+    right:0px; 
+
+    margin:3px;
+    padding:8px 38px 8px 8px;
+
+    cursor:pointer;
+
+    opacity:0.85;
+    border: 1px solid #000;
+    border-radius:18px;
+    background:#333;
+}
+
+#lingualy-translate-logo {
+    position:absolute;
+    top:-12px;
+    left:-3px;
+}
+
+#lingualy-translate-link {
+    padding-left:8px;
+
+    font-size:14px;
+    font-weight:normal;
+
+    text-decoration:underline;
+
+    color:#36bdf2;
+}
+
+#lingualy-translate-link:hover {
+    color:#ffa82a;
+}

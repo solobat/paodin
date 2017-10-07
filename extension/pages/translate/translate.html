@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="lightbox-content" id="main" v-cloak>
+        <div class="top-row">
+            <a class="close" @click="handleCloseClick">X</a>
+        </div>
+        <div id="popup-lookup">
+            <div id="content">
+                <ul class="tabset">
+                </ul>
+                <div class="tab-content">
+                    <div class="scroll-area" id="lookup-area">
+                        <div id="lookup-area-inner">
+                            <div class="head">
+                                <input type="text" v-model="word" id="lookup-root" @blur="saveWord" @dblclick="enbaleWordInput" class="title" :readonly="!wordEditable"/>
+                                <span>[{{ translate.phonetic }}]</span>
+                                <span class="add-txt"></span>
+                                <a class="ico-audio" @mouseover="playAudio" id="read-root" root="depression" language="en"></a>
+                            </div>
+                            <a class="btn defitem active" v-for="(item, index) in translate.trans" :defindex="index">
+                                {{ item }}
+                            </a>
+                            <div class="add-btn">
+                                <input id="add-definition" v-model="newWordDef" type="text" @keyup.enter="handleDefAdd" placeholder="Add your own">
+                                <a class="btn-plus" @click="handleDefAdd">+</a>
+                            </div>
+                            <ul>
+                                <li v-for="explain in translate.explains">
+                                    {{ explain }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="two-cols">
+                <div class="col context right-col" language="zhs">
+                    <div class="text-hold">
+                        <div class="text scroll-area" id="surroundings">
+                            <p v-show="!sentenceEditable" class="translated-container" @dblclick="toggleEdit" language="zhs">
+                                {{ surroundings }}
+                            </p>
+                            <textarea v-show="sentenceEditable" v-model="surroundings" class="sent-translated" cols="30" rows="3"></textarea>
+                        </div>
+                        <div class="actions">
+                            <a v-show="!sentenceEditable" class="edit-btn">edit</a>
+                            <a v-show="sentenceEditable" class="confirm-btn" @click="saveSentence">
+                                <i class="el-icon-check"></i>
+                            </a>
+                            <a v-show="sentenceEditable" class="reject-btn">
+                                <i class="el-icon-close"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-footer"> 
+                        <span class="by">Translation by 有道</span>
+                        <span class="saveCard" @click="handleSaveClick">
+                            <i class="el-icon-star-off"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

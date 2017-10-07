@@ -1,0 +1,38 @@
+{
+    "manifest_version": 2,
+    "name": "单词小卡片: 查词/收集/背单词",
+    "short_name": "单词小卡片",
+    "version": "2.0",
+    "description": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出",
+    "background": {
+        "page": "background.html"
+    },
+    "browser_action": {
+        "default_icon": "img/icon.png",
+        "default_title": "Word Card",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "css": ["content.css"],
+        "all_frames": true,
+        "js": ["content.js"]
+    }],
+    "icons": {
+        "16": "img/icon16.png"
+    },
+    "web_accessible_resources": [
+        "img/*",
+        "translate.html"
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "permissions": [
+        "tabs",
+        "clipboardRead",
+        "clipboardWrite",
+        "contextMenus",
+        "storage",
+        "notifications",
+        "<all_urls>"
+    ]
+}
