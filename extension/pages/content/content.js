@@ -8,7 +8,10 @@
 import './content.scss'
 import Highlight from '../../js/highlight'
 import $ from 'jquery'
+import browser from 'webextension-polyfill'
+import defaultConfig from '../../js/common/config'
 
+console.log(browser);
 const chrome = window.chrome;
 var options = window.options;
 
@@ -135,8 +138,22 @@ var App = {
         var self = this;
 
         // 选中翻译
-        $(document).on('dblclick', function(e) {
-            self.handleTextSelected(e);
+        if (false) {
+            $(document).on('dblclick', function(e) {
+                self.handleTextSelected(e);
+            });
+        }
+
+        let menuEvent;
+
+        document.body.addEventListener('contextmenu', function(e) {
+            menuEvent = e;
+        }, false);
+
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if (request.action === 'menuitemclick') {
+                self.handleTextSelected(menuEvent);
+            }
         });
 
         $(document).on('click', '.wordcard-close', function() {
@@ -189,7 +206,9 @@ var App = {
         });
     },
 
-    init: function() {
+    init: function(config) {
+        this.config = config;
+
         var popup = [
             '<div id="wordcard-main" class="wordcard-main" style="display:none;">',
             '</div>'
@@ -205,4 +224,14 @@ var App = {
 // TODO: host enable
 var host = window.location.hostname;
 
-App.init();
+browser.storage.sync.get('config').then(({ config }) => {
+    if (!config) {
+        config = defaultConfig;
+
+        browser.storage.sync.set({
+            config
+        });
+    }
+
+    App.init(config);
+});

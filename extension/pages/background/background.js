@@ -117,6 +117,14 @@ var wordsHelper = {
         console.log(words);
     },
 
+    getWord: function(name) {
+        var model = Words.findWhere({
+            name
+        });
+
+        return model;
+    },
+
     addImage: function(id, imageUrl) {
 
     },
@@ -130,7 +138,7 @@ var wordsHelper = {
     }
 };
 
-chrome.extension.onRequest.addListener(function(req, sender, resp) {
+chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     var data = req.data;
     // 新建单词
     if (req.action === 'create') {
@@ -170,10 +178,27 @@ chrome.extension.onRequest.addListener(function(req, sender, resp) {
         });
     }
 
+    if (req.action === 'find') {
+        resp({
+            msg: 'find word',
+            data: wordsHelper.getWord(req.word)
+        });
+    }
+
     // removeLast
 });
 
 function setup() {
+    let parentMenu = chrome.contextMenus.create({
+        title : "单词小卡片",
+        contexts: ['selection'],
+        onclick : function(info, tab) {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                chrome.tabs.sendMessage(tabs[0].id, {action: "menuitemclick"}, function(response) {});  
+            });
+        }
+    });
+
     wordsHelper.init();
 }
 

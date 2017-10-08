@@ -19,7 +19,7 @@
                     <div class="scroll-area" id="lookup-area">
                         <div id="lookup-area-inner">
                             <div class="head">
-                                <input type="text" v-model="word" id="lookup-root" @blur="saveWord" @dblclick="enbaleWordInput" class="title" :readonly="!wordEditable"/>
+                                <input type="text" v-model="word" id="lookup-root" @blur="updateWord" @dblclick="enbaleWordInput" class="title" :readonly="!wordEditable"/>
                                 <span>[{{ translate.phonetic }}]</span>
                                 <span class="add-txt"></span>
                                 <a class="ico-audio" @mouseover="playAudio" id="read-root" root="depression" language="en"></a>
@@ -30,6 +30,9 @@
                             <div class="add-btn">
                                 <input id="add-definition" v-model="newWordDef" type="text" @keyup.enter="handleDefAdd" placeholder="Add your own">
                                 <a class="btn-plus" @click="handleDefAdd">+</a>
+                            </div>
+                            <div class="tags">
+                                <input-tag placeholder="输入标签" :on-change="handleTagsChange" :tags="wordTags"></input-tag>
                             </div>
                             <ul>
                                 <li v-for="explain in translate.explains">
@@ -62,7 +65,8 @@
                     <div class="col-footer"> 
                         <span class="by">Translation by 有道</span>
                         <span class="saveCard" @click="handleSaveClick">
-                            <i class="el-icon-star-off"></i>
+                            <i v-if="orgWord" class="el-icon-star-on"></i>
+                            <i v-else class="el-icon-star-off"></i>
                         </span>
                     </div>
                 </div>
