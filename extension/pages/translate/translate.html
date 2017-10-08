@@ -53,11 +53,11 @@
                             <textarea v-show="sentenceEditable" v-model="surroundings" class="sent-translated" cols="30" rows="3"></textarea>
                         </div>
                         <div class="actions">
-                            <a v-show="!sentenceEditable" class="edit-btn">edit</a>
+                            <a v-show="!sentenceEditable" class="edit-btn" @click="toggleEdit">edit</a>
                             <a v-show="sentenceEditable" class="confirm-btn" @click="saveSentence">
                                 <i class="el-icon-check"></i>
                             </a>
-                            <a v-show="sentenceEditable" class="reject-btn">
+                            <a v-show="sentenceEditable" class="reject-btn" @click="toggleEdit">
                                 <i class="el-icon-close"></i>
                             </a>
                         </div>

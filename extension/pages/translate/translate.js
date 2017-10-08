@@ -6,12 +6,12 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './translate.scss'
+import ga from '../../js/common/ga'
 import InputTag from 'vue-input-tag'
 
 Vue.use(ElementUI)
 
 function render(word, surroundings, parentWin) {
-    console.log(arguments);
     new Vue({
         el: '#main',
         data: function() {
@@ -72,21 +72,24 @@ function render(word, surroundings, parentWin) {
 
             enbaleWordInput() {
                 this.wordEditable = true;
+                _gaq.push(['_trackEvent', 'iframe', 'click', 'editword']);
             },
 
             handleDefAdd() {
                 if (this.newWordDef) {
                     this.translate.trans.push(this.newWordDef);
                     this.newWordDef = '';
+                    _gaq.push(['_trackEvent', 'iframe', 'input', 'addDef']);
                 }
             },
 
             handleTagsChange() {
-                console.log(this.wordTags);
+                _gaq.push(['_trackEvent', 'iframe', 'input', 'addTags']);
             },
 
             toggleEdit() {
                 this.sentenceEditable = !this.sentenceEditable;
+                _gaq.push(['_trackEvent', 'iframe', 'click', 'editsentence']);
             },
 
             saveSentence() {
@@ -99,6 +102,7 @@ function render(word, surroundings, parentWin) {
                 if (this.wordEditable) {
                     this.wordEditable = false;
                     this.loadWord();
+                    _gaq.push(['_trackEvent', 'iframe', 'input', 'updateword']);
                 }
             },
 
@@ -134,14 +138,17 @@ function render(word, surroundings, parentWin) {
                 chrome.runtime.sendMessage({
                     'action': 'create',
                     'data': attrs
-                }, function() {
+                }, function({ data }) {
+                    self.orgWord = data;
                     self.$message('Save successfully');     
                 });
+
+                _gaq.push(['_trackEvent', 'iframe', 'save']);
             },
 
             handleSaveClick() {
                 if (this.orgWord) {
-                    this.$confirm('会覆盖单词库里的信息，确定要继续吗?', '提示', {
+                    this.$confirm('会覆盖单词库里的单词，确定要继续吗?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
@@ -158,4 +165,5 @@ function render(word, surroundings, parentWin) {
 
 window.addEventListener('message', function(event) {
     render(event.data.word, event.data.surroundings, event.source);
+    ga();
 });

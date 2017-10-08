@@ -15,10 +15,13 @@ import API from '../../js/common/api'
 import guid from '../../js/common/guid'
 import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
+import { WORD_LEVEL } from '../../js/constant/options'
 
 var chrome = window.chrome;
 var Notification = window.Notification;
 var Words = new WordList();
+
+window.Words = Words;
 
 // TODO: option
 var options = {
@@ -33,14 +36,6 @@ var options = {
 };
 
 var words;
-var StarLevel = {
-    ZERO: 0,
-    ONE: 1,
-    TWO: 2,
-    THREE: 3,
-    FOUR: 4,
-    DONE: 5
-};
 
 var wordsHelper = {
     create: function(info) {
@@ -62,10 +57,8 @@ var wordsHelper = {
         }
 
         word = Words.create({
-            name: info.name,
-            sentence: info.sentence || '',
-            trans: info.trans,
-            state: StarLevel.ZERO,
+            ...info,
+            state: WORD_LEVEL.ZERO,
             images: []
         });
 
@@ -76,13 +69,13 @@ var wordsHelper = {
         var word = Words.findWhere({
             id: id
         });
-        var state = (word.get('state') || StarLevel.ZERO) + offset;
+        var state = (word.get('state') || WORD_LEVEL.ZERO) + offset;
 
-        if (state < StarLevel.ZERO) {
-            state = StarLevel.ZERO;
+        if (state < WORD_LEVEL.ZERO) {
+            state = WORD_LEVEL.ZERO;
         }
 
-        if (state >= StarLevel.DONE) {
+        if (state >= WORD_LEVEL.DONE) {
             return this.remove(id);
         }
 
@@ -114,7 +107,8 @@ var wordsHelper = {
 
     getWords: function() {
         words = Words.toJSON();
-        console.log(words);
+
+        return words;
     },
 
     getWord: function(name) {
@@ -142,12 +136,10 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     var data = req.data;
     // 新建单词
     if (req.action === 'create') {
-        var word = wordsHelper.create(data);
+        let { id } = wordsHelper.create(data);
         resp({
             msg: 'create ok...',
-            data: {
-                id: word.id
-            }
+            data: { id }
         });
         return;
     }
@@ -155,14 +147,11 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     // 删除单词
     if (req.action === 'remove') {
         wordsHelper.remove(data.id);
-        resp({
-            msg: 'remove ok...'
-        });
+        resp({ msg: 'remove ok...' });
     }
 
     if (req.action === 'update') {
         var word = wordsHelper.update(data);
-        console.log(word);
         resp({
             msg: 'update ok...',
             data: {}
@@ -170,7 +159,7 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     }
 
     if (req.action === 'get') {
-        wordsHelper.getWords()
+        let words = wordsHelper.getWords()
 
         resp({
             msg: 'get words',
@@ -184,8 +173,6 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
             data: wordsHelper.getWord(req.word)
         });
     }
-
-    // removeLast
 });
 
 function setup() {

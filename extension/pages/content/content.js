@@ -9,9 +9,9 @@ import './content.scss'
 import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
-import defaultConfig from '../../js/common/config'
+import { getSyncConfig } from '../../js/common/config'
+import ga from '../../js/common/ga'
 
-console.log(browser);
 const chrome = window.chrome;
 var options = window.options;
 
@@ -138,9 +138,10 @@ var App = {
         var self = this;
 
         // 选中翻译
-        if (false) {
+        if (this.config.dblclick2trigger) {
             $(document).on('dblclick', function(e) {
                 self.handleTextSelected(e);
+                _gaq.push(['_trackEvent', 'content', 'dblclick']);
             });
         }
 
@@ -153,6 +154,7 @@ var App = {
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (request.action === 'menuitemclick') {
                 self.handleTextSelected(menuEvent);
+                _gaq.push(['_trackEvent', 'content', 'menuitemclick']);
             }
         });
 
@@ -217,6 +219,7 @@ var App = {
         this.el = $('#wordcard-main');
         this.bindEvents();
 
+        ga();
         // this.initHighlights();
     }
 };
@@ -224,14 +227,6 @@ var App = {
 // TODO: host enable
 var host = window.location.hostname;
 
-browser.storage.sync.get('config').then(({ config }) => {
-    if (!config) {
-        config = defaultConfig;
-
-        browser.storage.sync.set({
-            config
-        });
-    }
-
+getSyncConfig().then(config => {
     App.init(config);
 });

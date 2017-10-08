@@ -3,13 +3,121 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>wordcard 设置选项</title>
+    <title>单词小卡片 设置选项</title>
+    <link rel="stylesheet" href="css/base.css">
 </head>
 
 <body>
-    <h1>单词小卡片</h1>
-    <div id="main">
-        
+    <div id="app" class="wordcard" v-cloak>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="通用" name="general">
+                <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
+                    <el-form-item label="双击取词">
+                        <el-switch
+                            v-model="config.dblclick2trigger"
+                            on-color="#20a0ff">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click.native.prevent="handleConfigSubmit">Save</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="单词列表" name="words">
+                <el-row>
+                    <el-col :span="6">
+                        <div class="word-filter">
+                            <div class="filter-item">
+                                <div class="field-label">搜索</div>
+                                <el-input placeholder="Search" icon="search" v-model="filter.wordSearchText">
+                                </el-input>
+                            </div>
+                            <div class="filter-item">
+                                <div class="field-label">
+                                    <span class="label-text">记忆级别</span>
+                                    <el-button type="primary" size="mini" @click="filter.level = void 0">复位</el-button>
+                                </div>
+                                <div class="filter-tags">
+                                    <el-tag style="margin-right: 10px;" v-for="level in [0, 1, 2, 3, 4, 5]" 
+                                        :type="filter.level === level ? 'danger' : 'grey'"
+                                        :key="level"
+                                        @click.native="handleLevelFilterClick(level)">{{level}}</el-tag>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <div class="field-label">
+                                    <span class="label-text">标签</span>
+                                    <el-button type="primary" size="mini" @click="filter.tags = []">复位</el-button>
+                                </div>
+                                <div class="filter-tags">
+                                    <el-tag style="margin-right: 10px;" 
+                                        v-for="(tag, index) in tags" :key="index"
+                                        :type="filter.tags.indexOf(tag) !== -1 ? 'danger' : 'grey'" 
+                                        @click.native="handleTagFilterClick(tag)"
+                                        >{{tag}}</el-tag>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="18">
+                        <div class="word-list">
+                            <div class="word-item" v-for="(word, index) in filteredWords" :key="index">
+                                <div class="word-name">{{word.name}}</div>
+                                <div class="word-trans">{{ word.trans.join(',') }}</div>
+                                <el-tag type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-tab-pane>
+            <el-tab-pane label="背单词" name="wordsrecite">
+                敬请期待
+            </el-tab-pane>
+            <el-tab-pane label="高级" name="advanced">
+                <div class="panel-content" style="padding: 10px 0;">
+                    <el-tooltip class="item" effect="dark" content="将单词列表导出成CSV格式" placement="top-start">
+                        <el-button type="primary" @click="handleExportClick">导出</el-button>
+                    </el-tooltip>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="帮助" name="help">
+                <div class="text-panel">
+                    此扩展可以帮助你在访问英文网站过程中，遇到不认识的单词，使用<em>右键菜单</em>查询： <br>
+                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/command.png" alt="">
+                    <br>
+                    如果你想更方便地查词，可以在设置页设置<em>双击取词</em> ：<br>
+                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/options.png" alt="">
+                    同时，通过点击左下角的
+                    <i class="el-icon-star-on"></i>
+                    按钮将单词、释义、例句保存成单词小卡片，
+                    你还可以为单词打上各种 <em>标签</em> ，以方便筛选复习. <br>
+                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/search.png" alt="">
+                    如果你还在使用其它背单词app，那你还可以将这里收集到的单词导出成 <em>csv</em> 文件，然后导入app中。
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="更新" name="update">
+                <div class="text-panel">
+                    <h2>{{ appName }} v{{config.version}}</h2>
+                    <section class="changelog">
+                        <template v-for="update in changelog" v-if="!update.ext || update.ext === appName">
+                            <h3 v-html="update.version"></h3>
+                            <p v-html="update.detail"></p>
+                        </template>
+                    </section>
+                    <a :href="'http://owsjc7iz3.bkt.clouddn.com/' + appName + '-' + config.version + '.crx'">download crx</a>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="关于" name="about">
+                    <div class="about-wrap text-panel">
+                        最近在使用Mac上的一款叫 <em>wokabulary</em> 的app背单词，喜欢它的同时，也觉得收集单词挺麻烦，于是就开发了<em>单词小卡片</em>这个扩展。
+                        <br>
+                        如果觉得它还不错，希望可以给我<a :href="'https://chrome.google.com/webstore/detail/' + storeId + '/reviews?hl=zh-CN'">点赞评论</a>或通过下方的二维码 <span class="notice">请我喝杯咖啡</span>，这是对{{appName}}的最大鼓励。
+                        虽然一直在安静地开发，但也希望通过大家的口口相传，让更多的人知道
+                        <a :href="'https://chrome.google.com/webstore/detail/' + storeId">{{appName}}</a>的存在。
+                        <img src="http://owsjc7iz3.bkt.clouddn.com/IMG_2180.jpg" alt="" class="wx-pay">
+                    </div>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </body>
 
