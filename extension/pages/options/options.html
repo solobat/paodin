@@ -50,7 +50,7 @@
                                     <el-button type="primary" size="mini" @click="filter.tags = []">复位</el-button>
                                 </div>
                                 <div class="filter-tags">
-                                    <el-tag style="margin-right: 10px;" 
+                                    <el-tag style="margin-right: 10px;margin-bottom: 5px;" 
                                         v-for="(tag, index) in tags" :key="index"
                                         :type="filter.tags.indexOf(tag) !== -1 ? 'danger' : 'grey'" 
                                         @click.native="handleTagFilterClick(tag)"
