@@ -301,7 +301,13 @@ function render(config, i18nTexts) {
             },
 
             handleEditorDeleteClick() {
-                
+                chrome.runtime.sendMessage({
+                    action: 'remove',
+                    data: { id: this.wordForm.id }
+                }, () => {
+                    this.$message('删除成功!');
+                    this.resetWordEditor();
+                }); 
             },
 
             onWordFormSubmit() {
@@ -352,11 +358,15 @@ function render(config, i18nTexts) {
                     };
 
                     this.saveWord(word).then(resp => {
-                        this.loadWords();
-                        this.wordEditorVisible = false;
-                        this.resetWordForm();
+                        this.resetWordEditor();
                     });
                 });
+            },
+
+            resetWordEditor() {
+                this.loadWords();
+                this.wordEditorVisible = false;
+                this.resetWordForm();
             },
 
             handleExportClick() {

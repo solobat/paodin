@@ -86,13 +86,9 @@ var wordsHelper = {
     },
 
     remove: function(id) {
-        var model = Words.findWhere({
-            id: id
-        });
-
-        model.destroy();
-        this.getWords();
-        console.log('remove word: %s', model.get('name'));
+        var model = Words.remove(id);
+        console.log(model);
+        return model;
     },
 
     update: function(attrs) {
