@@ -35,11 +35,11 @@
                             <div class="filter-item">
                                 <div class="field-label">
                                     <span class="label-text">记忆级别</span>
-                                    <el-button type="primary" size="mini" @click="filter.level = void 0">复位</el-button>
+                                    <el-button type="primary" size="mini" @click="filter.levels = []">复位</el-button>
                                 </div>
                                 <div class="filter-tags">
                                     <el-tag style="margin-right: 10px;" v-for="level in [0, 1, 2, 3, 4, 5]" 
-                                        :type="filter.level === level ? 'danger' : 'grey'"
+                                        :type="filter.levels.indexOf(level) !== -1 ? 'danger' : 'grey'"
                                         :key="level"
                                         @click.native="handleLevelFilterClick(level)">{{level}}</el-tag>
                                 </div>

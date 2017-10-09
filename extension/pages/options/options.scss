@@ -95,6 +95,11 @@ a {
 
         }
     }
+
+    .el-tag {
+        cursor: pointer;
+        user-select: none;
+    }
 }
 
 .word-list {

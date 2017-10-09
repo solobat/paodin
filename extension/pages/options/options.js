@@ -72,7 +72,7 @@ function render(config, i18nTexts) {
                 words: [],
                 filter: {
                     wordSearchText: '',
-                    level: '',
+                    levels: [],
                     tags: []
                 },
                 tags: []
@@ -81,7 +81,7 @@ function render(config, i18nTexts) {
 
         computed: {
             filteredWords() {
-                let { wordSearchText, level, tags } = this.filter;
+                let { wordSearchText, levels, tags } = this.filter;
 
                 if (!this.words.length) {
                     return [];
@@ -96,8 +96,10 @@ function render(config, i18nTexts) {
                     });
                 }
 
-                if (typeof level === 'number') {
-                    results = results.filter(word => word.state === level);
+                if (levels.length) {
+                    results = results.filter(({ state: level }) => {
+                        return levels.indexOf(level) !== -1;                         
+                    });
                 }
 
                 if (tags.length) {
@@ -172,10 +174,12 @@ function render(config, i18nTexts) {
             },
 
             handleLevelFilterClick(level) {
-                if (this.filter.level === level) {
-                    this.filter.level = void 0;
+                let index = this.filter.levels.indexOf(level);
+
+                if (index > -1) {
+                    this.filter.levels.splice(index, 1);
                 } else {
-                    this.filter.level = level;
+                    this.filter.levels.push(level);
                 }
 
                 _gaq.push(['_trackEvent', 'options_words_filter', 'click', 'level']);
