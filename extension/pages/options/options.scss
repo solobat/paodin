@@ -110,8 +110,14 @@ a {
     }
 }
 
-.word-list {
+.word-list-container {
     height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.word-list {
+    flex: 1;
     overflow-y: scroll;
 }
 
@@ -127,6 +133,43 @@ a {
     .word-trans {
         font-size: 14px;
         line-height: 1.8;
+    }
+}
+
+.word-editor {
+    background: #f7f7f7;
+    border-top: 1px solid #ededed;
+    padding: 0 20px;
+    width: 100%;
+    height: 240px;
+    box-sizing: border-box;
+
+    .el-form-item {
+        margin-bottom: 0;
+        border-bottom: 1px solid #dfdfdf;
+    }
+
+    .el-form {
+        .el-input__inner,
+        .el-textarea__inner {
+            border: 0;
+            background: inherit;
+        }
+    }
+
+    .form-btns {
+        margin-top: 20px;
+    }
+
+    .form-aside {
+        display: flex;
+        flex-direction: column;
+        padding: 0 15px;
+        height: 233px;
+
+        .form-aside-fields {
+            flex: 1;
+        }
     }
 }
 

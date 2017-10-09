@@ -13,6 +13,7 @@ import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
 import { WORD_LEVEL } from '../../js/constant/options'
+import * as Validator from '../../js/common/validatorHelper'
 
 const chrome = window.chrome;
 const bg = chrome.extension.getBackgroundPage();
@@ -51,6 +52,13 @@ function getI18nTexts(obj) {
     return texts;
 }
 
+const levels = [0, 1, 2, 3, 4, 5].map(level => {
+    return {
+        label: level,
+        value: level
+    }
+});
+
 function render(config, i18nTexts) {
     let activeName = 'general';
     
@@ -75,7 +83,23 @@ function render(config, i18nTexts) {
                     levels: [],
                     tags: []
                 },
-                tags: []
+                tags: [],
+                allTags: [],
+                tagInputVisible: false,
+                tagInputValue: '',
+                levels,
+                wordEditorVisible: false,
+                wordForm: {
+                    name: '',
+                    trans: '',
+                    sentence: '',
+                    tags: [],
+                    level: 0
+                },
+                wordRules: {
+                    name: Validator.text('单词'),
+                    trans: Validator.text('翻译')
+                }
             }
         },
 
@@ -139,6 +163,12 @@ function render(config, i18nTexts) {
                 });
 
                 this.tags = _.uniq(allTags);
+                this.allTags = this.tags.map(tag => {
+                    return {
+                        label: tag,
+                        value: tag
+                    };
+                });
             }
         },
         mounted: function() {
@@ -213,6 +243,119 @@ function render(config, i18nTexts) {
                     if (!silent) {
                         this.$message('保存成功');
                     }
+                });
+            },
+
+            handleWordClick(word) {
+                this.wordEditorVisible = true;
+                this.wordForm = {
+                    id: word.id,
+                    name: word.name,
+                    trans: word.trans.join(','),
+                    sentence: word.sentence,
+                    tags: word.tags,
+                    level: word.state
+                };
+            },
+
+            handleTagClose(tag) {
+                this.wordForm.tags.splice(this.wordForm.tags.indexOf(tag), 1);
+                _gaq.push(['_trackEvent', 'options_word_editor', 'input', 'tagClose']);
+            },
+
+            createFilter(queryString) {
+                return (item) => {
+                  return (item.value.indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+
+            tagsQuerySearch(queryString, cb) {
+                let allTags = this.allTags;
+                let results = queryString ? allTags.filter(this.createFilter(queryString)) : allTags;
+
+                cb(results);
+            },
+
+            handleTagSelect() {
+                this.handleTagInputConfirm();
+            },
+
+            handleTagInputConfirm() {
+                let tagInputValue = this.tagInputValue;
+                if (tagInputValue && this.wordForm.tags.indexOf(tagInputValue) === -1) {
+                  this.wordForm.tags.push(tagInputValue);
+                }
+                this.tagInputVisible = false;
+                this.tagInputValue = '';
+            },
+
+            showTagInput() {
+                this.tagInputVisible = true;
+                this.$nextTick(_ => {
+                    this.$refs.saveTagInput.$refs.input.$refs.input.focus();
+                });
+            },
+
+            handleEditorCancelClick() {
+                this.wordEditorVisible = false;
+            },
+
+            handleEditorDeleteClick() {
+                
+            },
+
+            onWordFormSubmit() {
+
+            },
+
+            saveWord(word) {
+                if (word && word.name) {
+                    return new Promise((resolve, reject) => {
+                        chrome.runtime.sendMessage({
+                            action: 'update',
+                            data: JSON.parse(JSON.stringify(word))
+                        }, (resp) => {
+                            resolve(resp);
+                        });
+                    });
+                } else {
+                    return Promise.reject(null);
+                }
+            },
+
+            resetWordForm() {
+                this.wordForm = {
+                    name: '',
+                    trans: '',
+                    sentence: '',
+                    tags: [],
+                    level: 0
+                };
+            },
+
+            handleEditorSubmit() {
+                this.$refs.wordForm.validate((valid) => {
+                    if (!valid) {
+                        this.$message.error('信息填写有问题');
+                        return;
+                    }
+                    
+                    let {id, name, trans, sentence, tags, level: state} = this.wordForm;
+
+                    let word = {
+                        id,
+                        name,
+                        trans: trans.split(','),
+                        sentence,
+                        tags,
+                        state
+                    };
+
+                    this.saveWord(word).then(resp => {
+                        this.loadWords();
+                        this.wordEditorVisible = false;
+                        this.resetWordForm();
+                    });
                 });
             },
 

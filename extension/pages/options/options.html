@@ -63,14 +63,84 @@
                         </div>
                     </el-col>
                     <el-col :span="18">
-                        <div class="word-list">
-                            <div class="word-item" v-for="(word, index) in filteredWords" :key="index">
-                                <div class="word-name">{{word.name}}</div>
-                                <div class="word-trans">{{ word.trans.join(',') }}</div>
-                                <div class="word-tags">
-                                    <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
-                                </div> 
+                        <div class="word-list-container">
+                            <div class="word-list">
+                                <div class="word-item" v-for="(word, index) in filteredWords" :key="index" @click="handleWordClick(word)">
+                                    <div class="word-name">{{word.name}}</div>
+                                    <div class="word-trans">{{ word.trans.join(',') }}</div>
+                                    <div class="word-tags">
+                                        <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
+                                    </div> 
+                                </div>
                             </div>
+                            <el-collapse-transition>
+                                <div class="word-editor" v-show="wordEditorVisible">
+                                    <el-row>
+                                        <el-col :span="20">
+                                            <el-form ref="wordForm" :rules="wordRules" :model="wordForm" label-width="60px" @submit.prevent="onWordFormSubmit">
+                                                <el-form-item label="英文:" prop="name">
+                                                    <el-input type="text" v-model="wordForm.name"></el-input>
+                                                </el-form-item>
+                                                <el-form-item label="翻译:" prop="trans">
+                                                    <el-input type="text" v-model="wordForm.trans"></el-input>
+                                                </el-form-item>
+                                                <el-form-item label="标记:">
+                                                    <el-tag
+                                                        style="margin-right: 5px;"
+                                                        :key="tag"
+                                                        v-for="tag in wordForm.tags"
+                                                        :closable="true"
+                                                        :close-transition="false"
+                                                        @close="handleTagClose(tag)"
+                                                    >
+                                                        {{tag}}
+                                                    </el-tag>
+                                                    <el-autocomplete
+                                                        class="inline-input"
+                                                        v-if="tagInputVisible"
+                                                        v-model="tagInputValue"
+                                                        :fetch-suggestions="tagsQuerySearch"
+                                                        placeholder="请输入内容"
+                                                        ref="saveTagInput"
+                                                        :trigger-on-focus="false"
+                                                        @select="handleTagSelect"
+                                                        @keyup.enter.native="handleTagInputConfirm"
+                                                        @blur="handleTagInputConfirm"
+                                                    ></el-autocomplete>
+                                                    <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ New Tag</el-button>
+                                                </el-form-item>
+                                                <el-form-item label="例句:">
+                                                    <el-input type="textarea" :rows="3" placeholder="请输入内容"
+                                                        v-model="wordForm.sentence">
+                                                    </el-input>
+                                                </el-form-item>
+                                                <div class="form-btns">
+                                                    <el-button size="small" @click="handleEditorCancelClick">取消</el-button>
+                                                    <el-button size="small" @click="handleEditorDeleteClick">删除</el-button>
+                                                </div>
+                                            </el-form>
+                                        </el-col>
+                                        <el-col :span="4">
+                                            <div class="form-aside">
+                                                <div class="form-aside-fields">
+                                                    <div class="el-form-item__label">级别:</div>
+                                                    <el-select v-model="wordForm.level" placeholder="请选择" size="small">
+                                                        <el-option
+                                                            v-for="item in levels"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                                <div class="form-aside-btns">
+                                                    <el-button type="primary" size="small" @click.native.prevent="handleEditorSubmit">保存</el-button>
+                                                </div>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </el-collapse-transition>
                         </div>
                     </el-col>
                 </el-row>
