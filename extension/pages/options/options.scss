@@ -72,6 +72,7 @@ a {
 }
 
 .word-filter {
+    position: relative;    
     box-sizing: border-box;
     padding: 20px;
     height: 600px;
@@ -100,11 +101,18 @@ a {
         cursor: pointer;
         user-select: none;
     }
+
+    .other-info {
+        position: absolute;
+        width: 100%;
+        bottom: 20px;
+        color: #999;
+    }
 }
 
 .word-list {
     height: 600px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .word-item {
@@ -126,4 +134,30 @@ a {
     margin: 10px 0;
     width: 100%;
     height: auto;
+}
+/* scrollbar styles */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-button:start,
+::-webkit-scrollbar-button:end {
+    display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+    -webkit-border-radius: 0;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 50px;
+
+    -webkit-border-radius: 8px;
+    outline: 1px solid #7f7f7f;
+    background-color: #7f7f7f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #333;
 }
