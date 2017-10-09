@@ -20,6 +20,9 @@
 
 ---
 #### 截图:
+![查询](http://owsjc7iz3.bkt.clouddn.com/command.png)
+![选项](http://owsjc7iz3.bkt.clouddn.com/options.png)
+![单词卡片](http://owsjc7iz3.bkt.clouddn.com/iframe.png)
 
 ---
 #### 许可:
