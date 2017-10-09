@@ -58,31 +58,31 @@ var wordsHelper = {
 
         word = Words.create({
             ...info,
-            state: WORD_LEVEL.ZERO,
+            level: WORD_LEVEL.ZERO,
             images: []
         });
 
         return word;
     },
 
-    changeState: function(id, offset) {
+    changeLevel: function(id, offset) {
         var word = Words.findWhere({
             id: id
         });
-        var state = (word.get('state') || WORD_LEVEL.ZERO) + offset;
+        var level = (word.get('level') || WORD_LEVEL.ZERO) + offset;
 
-        if (state < WORD_LEVEL.ZERO) {
-            state = WORD_LEVEL.ZERO;
+        if (level < WORD_LEVEL.ZERO) {
+            level = WORD_LEVEL.ZERO;
         }
 
-        if (state >= WORD_LEVEL.DONE) {
+        if (level >= WORD_LEVEL.DONE) {
             return this.remove(id);
         }
 
         word.save({
-            state: state
+            level: level
         });
-        console.log('change word: %s state to %d', word.get('name'), state);
+        console.log('change word: %s level to %d', word.get('name'), level);
     },
 
     remove: function(id) {

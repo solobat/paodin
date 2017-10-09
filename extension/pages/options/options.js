@@ -121,7 +121,7 @@ function render(config, i18nTexts) {
                 }
 
                 if (levels.length) {
-                    results = results.filter(({ state: level }) => {
+                    results = results.filter(({ level }) => {
                         return levels.indexOf(level) !== -1;                         
                     });
                 }
@@ -254,7 +254,7 @@ function render(config, i18nTexts) {
                     trans: word.trans.join(','),
                     sentence: word.sentence,
                     tags: word.tags,
-                    level: word.state
+                    level: word.level
                 };
             },
 
@@ -265,7 +265,7 @@ function render(config, i18nTexts) {
 
             createFilter(queryString) {
                 return (item) => {
-                  return (item.value.indexOf(queryString.toLowerCase()) === 0);
+                  return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
                 };
             },
 
@@ -340,7 +340,7 @@ function render(config, i18nTexts) {
                         return;
                     }
                     
-                    let {id, name, trans, sentence, tags, level: state} = this.wordForm;
+                    let {id, name, trans, sentence, tags, level} = this.wordForm;
 
                     let word = {
                         id,
@@ -348,7 +348,7 @@ function render(config, i18nTexts) {
                         trans: trans.split(','),
                         sentence,
                         tags,
-                        state
+                        level
                     };
 
                     this.saveWord(word).then(resp => {
