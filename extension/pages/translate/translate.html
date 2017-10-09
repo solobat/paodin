@@ -32,7 +32,28 @@
                                 <a class="btn-plus" @click="handleDefAdd">+</a>
                             </div>
                             <div class="tags">
-                                <input-tag placeholder="输入标签" :on-change="handleTagsChange" :tags="wordTags"></input-tag>
+                                <el-tag
+                                    style="margin-right: 5px;"
+                                    :key="tag"
+                                    v-for="tag in wordTags"
+                                    :closable="true"
+                                    :close-transition="false"
+                                    @close="handleTagClose(tag)"
+                                >
+                                  {{tag}}
+                                </el-tag>
+                                <el-autocomplete
+                                    class="inline-input"
+                                    v-if="tagInputVisible"
+                                    v-model="tagInputValue"
+                                    :fetch-suggestions="tagsQuerySearch"
+                                    placeholder="请输入内容"
+                                    ref="saveTagInput"
+                                    @select="handleTagSelect"
+                                    @keyup.enter.native="handleTagInputConfirm"
+                                    @blur="handleTagInputConfirm"
+                                ></el-autocomplete>
+                                <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ New Tag</el-button>
                             </div>
                             <ul>
                                 <li v-for="explain in translate.explains">

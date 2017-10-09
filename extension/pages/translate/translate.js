@@ -7,7 +7,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './translate.scss'
 import ga from '../../js/common/ga'
-import InputTag from 'vue-input-tag'
 
 Vue.use(ElementUI)
 
@@ -22,20 +21,35 @@ function render(word, surroundings, parentWin) {
                 sentenceEditable: false,
                 newWordDef: '',
                 translate: {},
+                tagInputVisible: false,
+                tagInputValue: '',
                 wordTags: [],
+                allTags: [],
                 orgWord: null
             }
         },
 
         mounted() {
             this.loadWord();
-        },
-
-        components: {
-            InputTag
+            this.fetchAllTags();
         },
 
         methods: {
+            fetchAllTags() {
+                chrome.runtime.sendMessage({
+                    action: 'allTags'
+                }, ({ data: tags }) => {
+                    if (tags && tags.length) {
+                        this.allTags = tags.map(tag => {
+                            return {
+                                value: tag,
+                                label: tag
+                            }
+                        });
+                    }
+                });
+            },
+
             loadWord() {
                 chrome.runtime.sendMessage({
                     action: 'find',
@@ -83,8 +97,42 @@ function render(word, surroundings, parentWin) {
                 }
             },
 
-            handleTagsChange() {
-                _gaq.push(['_trackEvent', 'iframe', 'input', 'addTags']);
+            handleTagClose(tag) {
+                this.wordTags.splice(this.wordTags.indexOf(tag), 1);
+                _gaq.push(['_trackEvent', 'iframe', 'input', 'tagClose']);
+            },
+
+            createFilter(queryString) {
+                return (item) => {
+                  return (item.value.indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+
+            tagsQuerySearch(queryString, cb) {
+                let allTags = this.allTags;
+                let results = queryString ? allTags.filter(this.createFilter(queryString)) : allTags;
+
+                cb(results);
+            },
+
+            handleTagSelect() {
+                this.handleTagInputConfirm();
+            },
+
+            handleTagInputConfirm() {
+                let tagInputValue = this.tagInputValue;
+                if (tagInputValue && this.wordTags.indexOf(tagInputValue) === -1) {
+                  this.wordTags.push(tagInputValue);
+                }
+                this.tagInputVisible = false;
+                this.tagInputValue = '';
+            },
+
+            showTagInput() {
+                this.tagInputVisible = true;
+                this.$nextTick(_ => {
+                    this.$refs.saveTagInput.$refs.input.$refs.input.focus();
+                });
             },
 
             toggleEdit() {

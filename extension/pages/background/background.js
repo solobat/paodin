@@ -111,6 +111,10 @@ var wordsHelper = {
         return words;
     },
 
+    getAllTags: function() {
+        return _.uniq(_.flatten(Words.pluck('tags')));
+    },
+
     getWord: function(name) {
         var model = Words.findWhere({
             name
@@ -171,6 +175,15 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
         resp({
             msg: 'find word',
             data: wordsHelper.getWord(req.word)
+        });
+    }
+
+    if (req.action === 'allTags') {
+        let allTags = wordsHelper.getAllTags();
+
+        resp({
+            msg: 'get All Tags',
+            data: allTags
         });
     }
 });
