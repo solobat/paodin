@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             <el-collapse-transition>
-                                <div class="word-editor" v-show="wordEditorVisible">
+                                <div class="word-editor" v-show="wordEditorVisible" @keyup.esc="handleEditorCancelClick">
                                     <el-row>
                                         <el-col :span="20">
                                             <el-form ref="wordForm" :rules="wordRules" :model="wordForm" label-width="60px" @submit.prevent="onWordFormSubmit">
