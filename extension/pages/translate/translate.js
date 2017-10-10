@@ -58,9 +58,8 @@ function render(word, surroundings, parentWin) {
                     if (data) {
                         this.orgWord = data;
                     }
+                    this.getTranslate();
                 });
-
-                this.getTranslate();
             },
             getTranslate() {
                 Translate.translate(this.word).then(data => {
@@ -68,11 +67,20 @@ function render(word, surroundings, parentWin) {
                         return false;
                     }
         
-                    this.translate = {
+                    let results = {
                         phonetic: data.basic['us-phonetic'],
-                        trans: data.translation,
+                        trans: data.translation || [],
                         explains: data.basic.explains
                     };
+
+                    if (this.orgWord) {
+                        let { trans = [], tags = [] } = this.orgWord;
+
+                        results.trans = trans;
+                        this.wordTags = tags;
+                    }
+
+                    this.translate = results;
         
                     setTimeout(function() {
                         Translate.playAudio(word);

@@ -1254,6 +1254,15 @@ p {
     border-radius: 3px 0 0 3px;
 }
 
+.actions {
+    > a {
+        display: block;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+    }
+}
+
 .actions .edit-btn {
     position: relative;
 
