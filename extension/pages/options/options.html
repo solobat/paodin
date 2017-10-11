@@ -146,7 +146,83 @@
                 </el-row>
             </el-tab-pane>
             <el-tab-pane label="背单词" name="wordsrecite">
-                敬请期待
+                <section class="scheme-filter" v-if="!wordrecitevisible && !allRecited">
+                    <header>
+                        <h2>测验方案</h2>
+                    </header>
+                    <div class="filter-items">
+                        <div class="filter-results">
+                            <em>{{schemedWords.length}}</em> 个 / 共{{words.length}}个单词
+                        </div>
+                        <div class="filter-item">
+                            <div class="field-label">
+                                <span class="label-text">记忆级别</span>
+                            </div>
+                            <div class="filter-tags">
+                                <el-tag style="margin-right: 10px;" v-for="level in [0, 1, 2, 3, 4, 5]" 
+                                    :type="reciteFilter.levels.indexOf(level) !== -1 ? 'danger' : 'grey'"
+                                    :key="level"
+                                    @click.native="handleLevelFilterClick(level, 'recite')">{{level}}</el-tag>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="field-label">
+                                <span class="label-text">标签</span>
+                            </div>
+                            <div class="filter-tags">
+                                <el-tag style="margin-right: 10px;margin-bottom: 5px;" 
+                                    v-for="(tag, index) in tags" :key="index"
+                                    :type="reciteFilter.tags.indexOf(tag) !== -1 ? 'danger' : 'grey'" 
+                                    @click.native="handleTagFilterClick(tag, 'recite')"
+                                    >{{tag}}</el-tag>
+                            </div>
+                        </div>
+                    </div>
+                    <footer>
+                        <div class="action-btns">
+                            <el-button size="small" @click="beginRecite">开始测验</el-button>
+                        </div>
+                    </footer>
+                </section>
+                <section class="wordrecite-ground" v-if="wordrecitevisible && !allRecited">
+                    <div class="word-card-wrap">
+                        <el-card class="word-card">
+                            <div class="word-fields">
+                                <div class="word-card-name word-field">{{curRecitedWord.name}}</div>
+                                <div class="word-card-trans word-field">{{curRecitedWord.trans.join(',')}}</div>
+                                <div class="word-card-sentence word-field">{{curRecitedWord.sentence}}</div>
+                            </div>
+                            <div class="word-otherinfo">
+                                <div class="word-level">
+                                    <img :src="`/img/level${curRecitedWord.level || 0}.png`" alt="">
+                                </div>
+                                <div class="play-voice">
+                                    <img class="voice-btn" src="/img/wordvoice.png" alt="" @click="playVoice">
+                                </div>
+                            </div>
+                        </el-card>
+                        <div class="word-card-actions">
+                            <img src="/img/nextstep.png" alt="" v-if="!isFinalStep" @click="goNextStep">
+                            <template v-else>
+                                <img src="/img/gotit.png" alt="" @click="wordRecited(true)">
+                                <img src="/img/wrong.png" alt="" @click="wordRecited(false)">
+                            </template>
+                        </div>
+                    </div>
+                </section>
+                <section class="recite-results" v-if="allRecited">
+                    <header>
+                        <h2>结果</h2>
+                    </header>
+                    <div>
+                        <pie style="width: 300px;height: 200px; margin: 0 auto" :chart-data="reciteResultData"></pie>
+                    </div>
+                    <footer>
+                        <div class="action-btns">
+                            <el-button size="small" @click="beginNewReciteFilter">新测验</el-button>
+                        </div>
+                    </footer>
+                </section>
             </el-tab-pane>
             <el-tab-pane label="高级" name="advanced">
                 <div class="panel-content" style="padding: 10px 0;">

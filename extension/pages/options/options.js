@@ -14,6 +14,8 @@ import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
 import { WORD_LEVEL } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
+import Pie from '../../js/components/pieChart'
+import Translate from '../../js/translate'
 
 const chrome = window.chrome;
 const bg = chrome.extension.getBackgroundPage();
@@ -58,6 +60,15 @@ const levels = [0, 1, 2, 3, 4, 5].map(level => {
         value: level
     }
 });
+const filterKeyMap = {
+    list: 'filter',
+    recite: 'reciteFilter'
+};
+const reciteStages = [
+    'name',
+    'sentence',
+    'trans'
+];
 
 function render(config, i18nTexts) {
     let activeName = 'general';
@@ -71,12 +82,15 @@ function render(config, i18nTexts) {
         el: '#app',
         data: function() {
             return {
+                // tab
                 activeName,
+                // base info
                 changelog,
                 appName,
                 storeId,
                 config,
                 i18nTexts,
+                // list
                 words: [],
                 filter: {
                     wordSearchText: '',
@@ -99,58 +113,77 @@ function render(config, i18nTexts) {
                 wordRules: {
                     name: Validator.text('单词'),
                     trans: Validator.text('翻译')
+                },
+                // recite
+                wordrecitevisible: false,
+                reciteFilter: {
+                    levels: [],
+                    tags: []
+                },
+                reciteStage: 0,
+                recitedWordIndex: 0,
+                allRecited: false,
+                curRecitedWord: {
+                    id: '',
+                    name: '',
+                    level: 0,
+                    trans: [],
+                    sentence: ''
+                },
+                reciteResult: {
+                    right: 0,
+                    wrong: 0
+                },
+                test: {
+                    labels: ['正确', '错误'],
+                    datasets: [
+                      {
+                        backgroundColor: ['#1ebe8d', '#e80d39'],
+                        data: [2, 3]
+                      }
+                    ]
                 }
             }
         },
 
+        components: {
+            Pie
+        },
+
         computed: {
             filteredWords() {
-                let { wordSearchText, levels, tags } = this.filter;
+                let filter = this.filter;
 
-                if (!this.words.length) {
-                    return [];
-                }
+                return this.filterWords(filter, 'list');
+            },
+            schemedWords() {
+                let filter = this.reciteFilter;
 
-                let results = this.words;
+                return this.filterWords(filter, 'recite');
+            },
+            isFinalStep() {
+                return this.reciteStage === (reciteStages.length - 1);
+            },
+            reciteResultData() {
+                let { right, wrong } = this.reciteResult;
 
-                if (wordSearchText) {
-                    results = results.filter(word => {
-                        // TODO: 连同sentence一起筛选
-                        return word.name.toLowerCase().indexOf(wordSearchText.toLowerCase()) !== -1;
-                    });
-                }
-
-                if (levels.length) {
-                    results = results.filter(({ level }) => {
-                        return levels.indexOf(level) !== -1;                         
-                    });
-                }
-
-                if (tags.length) {
-                    results = results.filter(({tags: wtags = []}) => {
-                        if (!wtags.length) {
-                            return false;
+                return {
+                    labels: ['正确', '错误'],
+                    datasets: [
+                        {
+                            backgroundColor: ['#1ebe8d', '#e80d39'],
+                            data: [right, wrong]
                         }
-
-                        let hasTag = false;
-
-                        tags.forEach(tag => {
-                            if (wtags.indexOf(tag) > -1) {
-                                hasTag = true;
-                            }
-                        });
-
-                        return hasTag;
-                    });
-                }
-
-                return results;
+                    ]
+                };
             }
         },
 
         watch: {
             activeName() {
-                if (this.activeName === 'words') {
+                let activeName = this.activeName;
+
+                if (activeName === 'words' || activeName === 'wordsrecite') {
                     this.loadWords();
                 }
             },
@@ -203,28 +236,73 @@ function render(config, i18nTexts) {
                 });
             },
 
-            handleLevelFilterClick(level) {
-                let index = this.filter.levels.indexOf(level);
+            filterWords(filter, type = 'list') {
+                let { wordSearchText, levels, tags } = filter;
 
-                if (index > -1) {
-                    this.filter.levels.splice(index, 1);
-                } else {
-                    this.filter.levels.push(level);
+                if (!this.words.length) {
+                    return [];
                 }
 
-                _gaq.push(['_trackEvent', 'options_words_filter', 'click', 'level']);
+                let results = this.words;
+
+                if (wordSearchText) {
+                    results = results.filter(word => {
+                        // TODO: 连同sentence一起筛选
+                        return word.name.toLowerCase().indexOf(wordSearchText.toLowerCase()) !== -1;
+                    });
+                }
+
+                if (levels.length) {
+                    results = results.filter(({ level }) => {
+                        return levels.indexOf(level) !== -1;                         
+                    });
+                }
+
+                if (tags.length) {
+                    results = results.filter(({tags: wtags = []}) => {
+                        if (!wtags.length) {
+                            return false;
+                        }
+
+                        let hasTag = false;
+
+                        tags.forEach(tag => {
+                            if (wtags.indexOf(tag) > -1) {
+                                hasTag = true;
+                            }
+                        });
+
+                        return hasTag;
+                    });
+                }
+
+                return results;
             },
 
-            handleTagFilterClick(tag) {
-                let index = this.filter.tags.findIndex(item => item == tag);
+            handleLevelFilterClick(level, type = 'list') {
+                let filter = this[filterKeyMap[type]];
+                let index = filter.levels.indexOf(level);
 
                 if (index > -1) {
-                    this.filter.tags.splice(index, 1);
+                    filter.levels.splice(index, 1);
                 } else {
-                    this.filter.tags.push(tag);
+                    filter.levels.push(level);
                 }
 
-                _gaq.push(['_trackEvent', 'options_words_filter', 'click', 'tags']);
+                _gaq.push(['_trackEvent', 'wordlist', 'click', 'filter', 'level']);
+            },
+
+            handleTagFilterClick(tag, type = 'list') {
+                let filter = this[filterKeyMap[type]];
+                let index = filter.tags.findIndex(item => item == tag);
+
+                if (index > -1) {
+                    filter.tags.splice(index, 1);
+                } else {
+                    filter.tags.push(tag);
+                }
+
+                _gaq.push(['_trackEvent', 'wordlist', 'click', 'filter', 'tag']);
             },
 
             handleConfigSubmit() {
@@ -244,6 +322,8 @@ function render(config, i18nTexts) {
                         this.$message('保存成功');
                     }
                 });
+
+                _gaq.push(['_trackEvent', 'general', 'click', 'save']);
             },
 
             handleWordClick(word) {
@@ -256,11 +336,13 @@ function render(config, i18nTexts) {
                     tags: word.tags,
                     level: word.level
                 };
+
+                _gaq.push(['_trackEvent', 'wordlist', 'click', 'word']);
             },
 
             handleTagClose(tag) {
                 this.wordForm.tags.splice(this.wordForm.tags.indexOf(tag), 1);
-                _gaq.push(['_trackEvent', 'options_word_editor', 'input', 'tagClose']);
+                _gaq.push(['_trackEvent', 'wordeditor', 'input', 'tagClose']);
             },
 
             createFilter(queryString) {
@@ -287,6 +369,8 @@ function render(config, i18nTexts) {
                 }
                 this.tagInputVisible = false;
                 this.tagInputValue = '';
+
+                _gaq.push(['_trackEvent', 'wordeditor', 'input', 'addtag']);
             },
 
             showTagInput() {
@@ -294,10 +378,13 @@ function render(config, i18nTexts) {
                 this.$nextTick(_ => {
                     this.$refs.saveTagInput.$refs.input.$refs.input.focus();
                 });
+
+                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'taginput']);
             },
 
             handleEditorCancelClick() {
                 this.wordEditorVisible = false;
+                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'cancel']);
             },
 
             handleEditorDeleteClick() {
@@ -307,7 +394,8 @@ function render(config, i18nTexts) {
                 }, () => {
                     this.$message('删除成功!');
                     this.resetWordEditor();
-                }); 
+                });
+                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'delete']);
             },
 
             onWordFormSubmit() {
@@ -361,12 +449,121 @@ function render(config, i18nTexts) {
                         this.resetWordEditor();
                     });
                 });
+                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'save']);
             },
 
             resetWordEditor() {
                 this.loadWords();
                 this.wordEditorVisible = false;
                 this.resetWordForm();
+            },
+
+            // recite
+            beginRecite() {
+                this.wordrecitevisible = true;
+                this.reciteWord();
+                _gaq.push(['_trackEvent', 'recite', 'click', 'begin']);
+            },
+
+            reciteWord() {
+                let stage = this.reciteStage;
+                let word = this.schemedWords[this.recitedWordIndex];
+                let curRecitedWord = this.curRecitedWord;
+                let stageName = reciteStages[stage];
+
+                if (stage === 0) {
+                    curRecitedWord.id = word.id;
+                    curRecitedWord.level = word.level;
+                }
+
+                curRecitedWord[stageName] = word[stageName];
+            },
+
+            goNextStep() {
+                let nextStage = this.reciteStage + 1;
+                
+                if (nextStage > (reciteStages.length - 1)) {
+                    this.reciteStage = 0;
+
+                    let nextWordIndex = this.recitedWordIndex + 1;
+
+                    if (nextWordIndex > (this.schemedWords.length - 1)) {
+                        this.allRecited = true;
+                    } else {
+                        this.curRecitedWord = {
+                            id: '',
+                            name: '',
+                            level: 0,
+                            trans: [],
+                            sentence: ''
+                        };
+                        this.recitedWordIndex = this.recitedWordIndex + 1;
+                    }
+                } else {
+                    this.reciteStage = nextStage;
+                }
+
+                if (!this.allRecited) {
+                    this.reciteWord();
+                }
+            },
+
+            playVoice() {
+                Translate.playAudioByWord(this.curRecitedWord.name);
+                _gaq.push(['_trackEvent', 'recite', 'click', 'voice']);
+            },
+
+            wordRecited(gotit) {
+                let word = this.curRecitedWord;
+                let level = word.level || 0;
+                let nextLevel;
+
+                if (gotit) {
+                    nextLevel = level + 1;
+                    this.reciteResult.right = this.reciteResult.right + 1;
+                } else {
+                    nextLevel = level - 1;
+                    this.reciteResult.wrong = this.reciteResult.wrong + 1;
+                }
+
+                if (nextLevel > WORD_LEVEL.DONE) {
+                    nextLevel = WORD_LEVEL.DONE
+                } else if (nextLevel < WORD_LEVEL.ZERO) {
+                    nextLevel = WORD_LEVEL.ZERO;
+                }
+
+                word.level = nextLevel;
+
+                chrome.runtime.sendMessage({
+                    action: 'update',
+                    data: JSON.parse(JSON.stringify(word))
+                }, () => {
+                    this.goNextStep();
+                });
+
+                _gaq.push(['_trackEvent', 'recite', 'click', gotit ? 'right' : 'wrong']);
+            },
+
+            beginNewReciteFilter() {
+                this.allRecited = false;
+                this.wordrecitevisible = false;
+                this.curRecitedWord = {
+                    id: '',
+                    name: '',
+                    level: 0,
+                    trans: [],
+                    sentence: ''
+                };
+                this.reciteFilter = {
+                    levels: [],
+                    tags: []
+                };
+                this.reciteResult = {
+                    right: 0,
+                    wrong: 0
+                };
+
+                _gaq.push(['_trackEvent', 'recite', 'click', 'newrecite']);
             },
 
             handleExportClick() {
