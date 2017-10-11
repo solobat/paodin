@@ -460,8 +460,16 @@ function render(config, i18nTexts) {
 
             // recite
             beginRecite() {
-                this.wordrecitevisible = true;
-                this.reciteWord();
+                if (this.schemedWords.length) {
+                    this.wordrecitevisible = true;
+                    this.reciteWord();
+                } else {
+                    this.$message({
+                        message: '没有选中任何单词!',
+                        type: 'warning'
+                    });
+                }
+                
                 _gaq.push(['_trackEvent', 'recite', 'click', 'begin']);
             },
 
