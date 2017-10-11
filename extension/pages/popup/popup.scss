@@ -1,0 +1,56 @@
+@import "../../../node_modules/normalize.css/normalize.css";
+
+body {
+    margin: 0;
+    padding: 0;
+
+    user-select: none;
+    box-sizing: border-box;
+
+    * {
+        box-sizing: inherit;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+
+    :focus {
+        outline: none;
+    }
+}
+
+.main {
+    padding: 0px 12px;
+    width: 250px;
+}
+
+.menus {
+    margin: 12px 0;
+    padding: 0;
+    border-radius: 2px;
+
+    li {
+        padding: 10px 0px 10px 15px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ece7df;
+        }
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+    }
+
+    img {
+        margin-right: 5px;
+        width: 20px;
+        height: 20px;
+    }
+}

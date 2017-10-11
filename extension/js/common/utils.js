@@ -48,6 +48,12 @@ export function getWords() {
     return words;
 }
 
+export function getParameterByName(name, search = window.location.search) {
+    let urlsearch = new URLSearchParams(search);
+
+    return urlsearch.get(name);
+}
+
 export const events = {
     on: function(eventType, handle) {
         if (!this.o) {

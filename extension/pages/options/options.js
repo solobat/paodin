@@ -16,6 +16,7 @@ import { WORD_LEVEL } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
 import Translate from '../../js/translate'
+import { getParameterByName } from '../../js/common/utils'
 
 const chrome = window.chrome;
 const bg = chrome.extension.getBackgroundPage();
@@ -71,7 +72,7 @@ const reciteStages = [
 ];
 
 function render(config, i18nTexts) {
-    let activeName = 'general';
+    let activeName = getParameterByName('tab') || 'general';
     
     if (config.version < version) {
         config.version = version;
@@ -205,7 +206,7 @@ function render(config, i18nTexts) {
             }
         },
         mounted: function() {
-            if (this.activeName === 'words') {
+            if (this.activeName === 'words' || this.activeName === 'wordsrecite') {
                 this.loadWords();
             }
 

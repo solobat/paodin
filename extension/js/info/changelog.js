@@ -1,5 +1,9 @@
 let langZh = [
     {
+        version: 'v2.1',
+        detail: "添加背单词功能"
+    },
+    {
         version: 'v2.0.3',
         detail: "查词时带出已有单词的tags以及释义; <br />一些交互及UI样式优化。"
     },

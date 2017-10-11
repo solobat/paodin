@@ -3,3 +3,4 @@
  * @author solopea@gmail.com
  */
 
+import './popup.scss'
