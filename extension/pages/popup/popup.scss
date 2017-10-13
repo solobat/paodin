@@ -14,6 +14,14 @@ body {
 
 a {
     text-decoration: none;
+
+    &:active,
+    &:focus,
+    &:hover,
+    &:visited,
+    &:link {
+        color: #333;
+    }
 }
 
 li {

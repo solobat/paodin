@@ -24,6 +24,7 @@
     "getdomain": "^1.0.7",
     "grapnel": "^0.6.4",
     "jquery": "1.11.1",
+    "leancloud-storage": "^3.2.1",
     "normalize.css": "^7.0.0",
     "underscore": "^1.8.3",
     "vue": "^2.4.4",
