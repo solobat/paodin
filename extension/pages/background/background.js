@@ -112,13 +112,41 @@ var wordsHelper = {
     getAllTags: function(host) {
         let allTags = _.uniq(_.flatten(Words.pluck('tags')));
         let tagsArr = Words.where({ host }).map(word => word.get('tags'));
-        let hostTags = _.flatten(
-                _.values(_.groupBy(_.flatten(tagsArr))).sort((a, b) => a.length < b.length)
-            ).filter(tag => cocoaTags.indexOf(tag) === -1);
+
+        function sortTags(tagsList) {
+            let mode = {};
+            
+            tagsList.forEach(tags => {
+                tags.forEach(item => {
+                    if (mode[item]) {
+                        mode[item] += 1;
+                    } else {
+                        mode[item] = 1;
+                    }
+                });
+            });
+
+            let arr = [];
+
+            for (let key in mode) {
+                arr.push({
+                    label: key,
+                    value: mode[key]
+                });
+            }
+
+            let sortedTags = arr.sort((a, b) => a.value < b.value)
+                .filter(item => cocoaTags.indexOf(item.label) === -1)
+                .map(item => item.label);
+
+            return sortedTags;
+        }
+
+        let sortedTags= sortTags(tagsArr);
 
         return {
             allTags,
-            hostTags
+            hostTags: sortedTags
         };
     },
 
