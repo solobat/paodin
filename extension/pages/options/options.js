@@ -463,6 +463,7 @@ function render(config, i18nTexts) {
             beginRecite() {
                 if (this.schemedWords.length) {
                     this.wordrecitevisible = true;
+                    this.recitedWordIndex = 0;
                     this.reciteWord();
                 } else {
                     this.$message({
