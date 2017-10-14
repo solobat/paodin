@@ -22,6 +22,8 @@ var Notification = window.Notification;
 var Words = new WordList();
 
 window.Words = Words;
+window._ = _;
+const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 
 // TODO: option
 var options = {
@@ -107,8 +109,17 @@ var wordsHelper = {
         return words;
     },
 
-    getAllTags: function() {
-        return _.uniq(_.flatten(Words.pluck('tags')));
+    getAllTags: function(host) {
+        let allTags = _.uniq(_.flatten(Words.pluck('tags')));
+        let tagsArr = Words.where({ host }).map(word => word.get('tags'));
+        let hostTags = _.flatten(
+                _.values(_.groupBy(_.flatten(tagsArr))).sort((a, b) => a.length < b.length)
+            ).filter(tag => cocoaTags.indexOf(tag) === -1);
+
+        return {
+            allTags,
+            hostTags
+        };
     },
 
     getWord: function(name) {
@@ -175,7 +186,7 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     }
 
     if (req.action === 'allTags') {
-        let allTags = wordsHelper.getAllTags();
+        let allTags = wordsHelper.getAllTags(req.host);
 
         resp({
             msg: 'get All Tags',

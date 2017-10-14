@@ -1,5 +1,9 @@
 let langZh = [
     {
+        version: 'v2.1.2',
+        detail: "根据网站自动添加最常使用的标签; <br /> bug修复."
+    },
+    {
         version: 'v2.1.1',
         detail: "自动按<em>cocoa 20000</em>词频添加标签;<br />样式优化。"
     },

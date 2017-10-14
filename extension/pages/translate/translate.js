@@ -58,7 +58,7 @@ const AVHelper = {
     }
 };
 
-function render(word, surroundings, parentWin) {
+function render({ word, surroundings, source, host }, parentWin) {
     new Vue({
         el: '#main',
         data: function() {
@@ -92,15 +92,23 @@ function render(word, surroundings, parentWin) {
             },
             fetchAllTags() {
                 chrome.runtime.sendMessage({
-                    action: 'allTags'
-                }, ({ data: tags }) => {
-                    if (tags && tags.length) {
+                    action: 'allTags',
+                    host
+                }, ({ data }) => {
+                    let { tags = [], hostTags = [] } = data;
+
+                    if (tags.length) {
                         this.allTags = tags.map(tag => {
                             return {
                                 value: tag,
                                 label: tag
                             }
                         });
+                    }
+
+                    if (hostTags.length) {
+                        // just add the two most used tag
+                        this.wordTags = this.wordTags.concat(hostTags.slice(0, 2));
                     }
                 });
             },
@@ -129,6 +137,7 @@ function render(word, surroundings, parentWin) {
                         explains: data.basic.explains
                     };
 
+                    // FIXME: orgWord may only have id attr
                     if (this.orgWord) {
                         let { trans = [], tags = [] } = this.orgWord;
 
@@ -244,9 +253,11 @@ function render(word, surroundings, parentWin) {
                     name: this.word,
                     sentence: this.surroundings,
                     trans: this.translate.trans,
-                    tags: this.wordTags
+                    tags: this.wordTags,
+                    host,
+                    source
                 };
-                
+
                 chrome.runtime.sendMessage({
                     'action': 'create',
                     'data': attrs
@@ -284,6 +295,6 @@ function initAV() {
 initAV();
 
 window.addEventListener('message', function(event) {
-    render(event.data.word, event.data.surroundings, event.source);
+    render(event.data, event.source);
     ga();
 });

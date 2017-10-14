@@ -95,7 +95,9 @@ var App = {
 
         var data = {
             word: word,
-            surroundings: this.getSurroundings(word, node)
+            surroundings: this.getSurroundings(word, node),
+            source: window.location.href,
+            host: window.location.hostname
         };
 
         var html = [
