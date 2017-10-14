@@ -95,10 +95,10 @@ function render({ word, surroundings, source, host }, parentWin) {
                     action: 'allTags',
                     host
                 }, ({ data }) => {
-                    let { tags = [], hostTags = [] } = data;
+                    let { allTags = [], hostTags = [] } = data;
 
-                    if (tags.length) {
-                        this.allTags = tags.map(tag => {
+                    if (allTags.length) {
+                        this.allTags = allTags.map(tag => {
                             return {
                                 value: tag,
                                 label: tag
