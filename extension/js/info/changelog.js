@@ -1,7 +1,7 @@
 let langZh = [
     {
         version: 'v2.1.5',
-        detail: "添加常用词根表，更方便单词记忆"
+        detail: "添加常用词根表，更方便单词记忆; <br />修复bug及体验优化"
     },
     {
         version: 'v2.1.4',
