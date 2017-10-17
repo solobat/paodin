@@ -71,7 +71,7 @@ a {
     width: 200px;
 }
 
-.word-filter {
+.filter-panel {
     position: relative;    
     box-sizing: border-box;
     padding: 20px;
@@ -88,6 +88,10 @@ a {
         width: 100%;
         bottom: 20px;
         color: #999;
+
+        a {
+            color: #4698fb;
+        }
     }
 }
 
@@ -319,4 +323,9 @@ a {
             cursor: pointer;
         }
     }
+}
+
+.roots-container {
+    height: 600px;
+    overflow: hidden;
 }

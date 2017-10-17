@@ -17,6 +17,7 @@ import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
 import Translate from '../../js/translate'
 import { getParameterByName } from '../../js/common/utils'
+import wordRoots from '../../js/constant/wordroots'
 
 const chrome = window.chrome;
 const bg = chrome.extension.getBackgroundPage();
@@ -135,15 +136,11 @@ function render(config, i18nTexts) {
                     right: 0,
                     wrong: 0
                 },
-                test: {
-                    labels: ['正确', '错误'],
-                    datasets: [
-                      {
-                        backgroundColor: ['#1ebe8d', '#e80d39'],
-                        data: [2, 3]
-                      }
-                    ]
-                }
+                // roots
+                rootsFilter: {
+                    searchText: 'a'
+                },
+                wordRoots
             }
         },
 
@@ -156,6 +153,19 @@ function render(config, i18nTexts) {
                 let filter = this.filter;
 
                 return this.filterWords(filter, 'list');
+            },
+            filteredRoots() {
+                let { searchText } = this.rootsFilter;
+
+                let results = this.wordRoots;
+                
+                if (searchText) {
+                    results = results.filter(({ root }) => {
+                        return root.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+                    });
+                }
+
+                return results;
             },
             schemedWords() {
                 let filter = this.reciteFilter;
