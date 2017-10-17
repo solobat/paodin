@@ -1,0 +1,33 @@
+
+%clearfix {
+    &:after {
+        display: table;
+        clear: both;
+        content: "";
+    }
+}
+
+@mixin hit-area($area-v: -10px, $area-h: -10px) {
+    position: relative;
+
+    &:before {
+        position: absolute;
+        @if $area-v {
+            top: $area-v;
+            bottom: $area-v;
+        } @else {
+            top: 0;
+            bottom: 0;
+        }
+
+        @if $area-h {
+            right: $area-h;
+            left: $area-h;
+        } @else {
+            right: 0;
+            left: 0;
+        }
+
+        content: "";
+    }
+}

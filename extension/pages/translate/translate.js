@@ -147,8 +147,8 @@ function render({ word, surroundings, source, host }, parentWin) {
 
                     this.translate = results;
         
-                    setTimeout(function() {
-                        Translate.playAudio(word);
+                    setTimeout(() => {
+                        Translate.playAudio(this.word);
                     }, 1000);
                 });
             },

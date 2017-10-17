@@ -1,3 +1,4 @@
+@import "../../scss/mixins.scss";
 
 body {
     margin: 0;
@@ -1574,4 +1575,12 @@ p {
     background: url(../../img/del.png);
     -webkit-background-size: 20px;
     background-size: 20px;
+}
+
+.saveCard {
+    cursor: pointer;
+
+    i {
+        font-size: 20px;
+    }
 }

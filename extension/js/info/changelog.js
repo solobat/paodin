@@ -1,5 +1,9 @@
 let langZh = [
     {
+        version: 'v2.1.5',
+        detail: "添加常用词根表，更方便单词记忆"
+    },
+    {
         version: 'v2.1.4',
         detail: "bugfix"
     },
