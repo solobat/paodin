@@ -67,7 +67,7 @@
                             <div class="word-list">
                                 <div class="word-item" v-for="(word, index) in filteredWords" :key="index" @click="handleWordClick(word)">
                                     <div class="word-name">{{word.name}}</div>
-                                    <div class="word-trans">{{ word.trans.join(',') }}</div>
+                                    <div class="word-trans">{{ (word.trans || []).join(',') }}</div>
                                     <div class="word-tags">
                                         <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
                                     </div> 
@@ -189,7 +189,7 @@
                         <el-card class="word-card">
                             <div class="word-fields">
                                 <div class="word-card-name word-field">{{curRecitedWord.name}}</div>
-                                <div class="word-card-trans word-field">{{curRecitedWord.trans.join(',')}}</div>
+                                <div class="word-card-trans word-field">{{(curRecitedWord.trans || []).join(',')}}</div>
                                 <div class="word-card-sentence word-field">{{curRecitedWord.sentence}}</div>
                             </div>
                             <div class="word-otherinfo">

@@ -252,7 +252,7 @@ function render({ word, surroundings, source, host }, parentWin) {
                 let attrs = {
                     name: this.word,
                     sentence: this.surroundings,
-                    trans: this.translate.trans,
+                    trans: this.translate.trans || [],
                     tags: this.wordTags,
                     host,
                     source

@@ -342,7 +342,7 @@ function render(config, i18nTexts) {
                 this.wordForm = {
                     id: word.id,
                     name: word.name,
-                    trans: word.trans.join(','),
+                    trans: (word.trans || []).join(','),
                     sentence: word.sentence,
                     tags: word.tags,
                     level: word.level
@@ -601,7 +601,7 @@ function render(config, i18nTexts) {
                 
                 let csvContent = "data:text/csv;charset=utf-8,";
 
-                words.forEach(({ name, trans, sentence, tags}, index) => {
+                words.forEach(({ name, trans = [], sentence, tags = []}, index) => {
                     let wordString = `${name};${trans.join(' ')};${sentence};${tags.join(';')}`;
 
                     csvContent += index < words.length ? wordString+ "\n" : wordString;

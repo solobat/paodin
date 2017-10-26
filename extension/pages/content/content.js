@@ -38,7 +38,7 @@ function replaceAll(str, find, replace, useRaw) {
 var App = {
     handleTextSelected: function(e) {
         var selection = window.getSelection();
-        var word = selection.toString();
+        var word = (selection.toString() || '').trim();
         var node = e.target;
 
         if (!word) {
