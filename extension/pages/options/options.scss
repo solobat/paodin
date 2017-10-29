@@ -284,6 +284,11 @@ a {
         font-size: 14px;
         flex: 2;
         overflow: scroll;
+
+        em {
+            color: #d4237a;
+            font-style: normal;
+        }
     }
 
     ::-webkit-scrollbar {

@@ -190,7 +190,7 @@
                             <div class="word-fields">
                                 <div class="word-card-name word-field">{{curRecitedWord.name}}</div>
                                 <div class="word-card-trans word-field">{{(curRecitedWord.trans || []).join(',')}}</div>
-                                <div class="word-card-sentence word-field">{{curRecitedWord.sentence}}</div>
+                                <div class="word-card-sentence word-field" v-html="highlightWord(curRecitedWord.sentence, curRecitedWord.name)"></div>
                             </div>
                             <div class="word-otherinfo">
                                 <div class="word-level">

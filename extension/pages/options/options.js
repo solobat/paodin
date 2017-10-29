@@ -499,6 +499,22 @@ function render(config, i18nTexts) {
                 curRecitedWord[stageName] = word[stageName];
             },
 
+            highlightWord(sentence, word) {
+                if (sentence && word) {
+                    let theword = word.toLowerCase();
+
+                    return sentence.split(' ').map(item => {
+                        if (item.toLowerCase().indexOf(theword) !== -1) {
+                            return `<em>${item}</em>`;
+                        } else {
+                            return item;
+                        }
+                    }).join(' ');
+                } else {
+                    return sentence;
+                }
+            },
+
             goNextStep() {
                 let nextStage = this.reciteStage + 1;
                 
