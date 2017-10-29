@@ -18,6 +18,7 @@ import Pie from '../../js/components/pieChart'
 import Translate from '../../js/translate'
 import { getParameterByName } from '../../js/common/utils'
 import wordRoots from '../../js/constant/wordroots'
+import keyboardJS from 'keyboardjs'
 
 const chrome = window.chrome;
 const bg = chrome.extension.getBackgroundPage();
@@ -72,6 +73,8 @@ const reciteStages = [
     'trans'
 ];
 
+const tabs = ['general', 'words', 'wordsrecite', 'wordroots', 'advanced', 'help', 'update', 'about'];
+
 function render(config, i18nTexts) {
     let activeName = getParameterByName('tab') || 'general';
     
@@ -80,7 +83,7 @@ function render(config, i18nTexts) {
         activeName = 'update';
     }
 
-    new Vue({
+    const app = new Vue({
         el: '#app',
         data: function() {
             return {
@@ -630,6 +633,18 @@ function render(config, i18nTexts) {
             }
         }
     });
+
+    function bindEvents() {
+        let keys = ['alt + 1', 'alt + 2', 'alt + 3', 'alt + 4', 'alt + 5', 'alt + 6', 'alt + 7', 'alt + 8'];
+
+        keys.forEach((key, index) => {
+            keyboardJS.on(key, _ => {
+                app.activeName = tabs[index];
+            });
+        });
+    }
+
+    bindEvents();
 }
 
 init();
