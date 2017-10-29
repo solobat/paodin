@@ -68,7 +68,11 @@ function render({ word, surroundings, source, host }, parentWin) {
                 surroundings,
                 sentenceEditable: false,
                 newWordDef: '',
-                translate: {},
+                translate: {
+                    phonetic: '',
+                    trans: [],
+                    explains: []
+                },
                 tagInputVisible: false,
                 tagInputValue: '',
                 wordTags: [],
