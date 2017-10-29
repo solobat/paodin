@@ -1,5 +1,9 @@
 let langZh = [
     {
+        version: 'v2.1.7',
+        detail: "背单词时在例句中高亮单词; <br />为设置页面所有tab设置快捷键，为alt + [1 - 8]; <br />bug修复及一些改进。"
+    },
+    {
         version: 'v2.1.6',
         detail: "优化双击取词；<br />修复bug"
     },
