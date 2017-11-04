@@ -35,6 +35,16 @@ function replaceAll(str, find, replace, useRaw) {
     return str.replace(new RegExp(useRaw ? find : escapeRegExp(find), 'g'), replace);
 }
 
+let blockTags = ['LI', 'P', 'DIV', 'BODY'];
+
+function getBlock(node, deep) {
+    if (blockTags.indexOf(node.tagName) !== -1 || deep === 0) {
+        return node;
+    } else {
+        return getBlock(node.parentElement, deep - 1);
+    }
+}
+
 var App = {
     handleTextSelected: function(e) {
         var selection = window.getSelection();
@@ -64,16 +74,51 @@ var App = {
         this.lookUp(e, word, node);
     },
 
+    autocutSentenceIfNeeded(word, sentence) {
+        let { autocut, sentenceNum } = this.config;
+        
+        if (autocut && sentenceNum > 0) {
+            let puncts = sentence.match(/[\.\?!;]/g) || [];
+            let arr = sentence.split(/[\.\?!;]/).filter(s => s.trim() !== '').map((s, index) => s.trim() + `${puncts[index] || ''} `);
+            let index = arr.findIndex(s => s.indexOf(word) !== -1);
+            let left = Math.ceil((sentenceNum - 1) / 2);
+            let start = index - left;
+            let end = index + ((sentenceNum - 1) - left);
+
+            if (start < 0) {
+                start = 0;
+                end = sentenceNum - 1;
+            } else if (end > (arr.length - 1)) {
+                end = arr.length - 1;
+
+                if ((end - (sentenceNum -1)) < 0) {
+                    start = 0;
+                } else {
+                    start = end - (sentenceNum - 1);
+                }
+            }
+
+            return arr.slice(start, end + 1).join('');
+        } else {
+            return sentence;
+        }
+    },
+
     getSurroundings: function(word, elem) {
+        let wordContent = '';
+        let upNum = 4;
+
         if ($(elem).hasClass('wc-highlight')) {
             elem = elem.parentElement;
         }
 
-        var wordContent = elem !== document && elem.innerText;
-        // var reg = new RegExp(sentenceReg.replace('{{word}}', word));
-        // var surroundings = wordContent.match(reg) && wordContent.match(reg)[0];
+        elem = getBlock(elem, upNum);
 
-        return wordContent;
+        if (elem !== document) {
+            wordContent = elem.innerText;
+        }
+
+        return this.autocutSentenceIfNeeded(word, wordContent);
     },
 
     lookUp: function(e, word, node) {
