@@ -25,6 +25,7 @@
         "img/*",
         "translate.html"
     ],
+    "omnibox": { "keyword" : "wd" },
     "options_page": "options.html",
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
     "permissions": [

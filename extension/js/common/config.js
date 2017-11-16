@@ -10,6 +10,7 @@ export const defaultConfig = {
     dblclick2trigger: false,
     autocut: true,
     sentenceNum: 3,
+    alertOnOmniboxInputEntered: true,
     version
 }
 

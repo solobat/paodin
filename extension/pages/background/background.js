@@ -16,28 +16,17 @@ import guid from '../../js/common/guid'
 import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
 import { WORD_LEVEL } from '../../js/constant/options'
+import { getSyncConfig } from '../../js/common/config'
+import browser from 'webextension-polyfill'
 
-var chrome = window.chrome;
-var Notification = window.Notification;
-var Words = new WordList();
+const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
+
+let Words = new WordList();
+let config;
+let words;
 
 window.Words = Words;
 window._ = _;
-const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
-
-// TODO: option
-var options = {
-    // hide the explains while the word's num >= hideNum
-    maxNum: 5,
-
-    // interval for notice, default 8 min
-    timeInterval: 1000 * 60 * 8,
-    congratTitle: 'Good Job',
-    congratBody: '背完一轮，新的一轮即将开始....',
-    speakletter: true
-};
-
-var words;
 
 var wordsHelper = {
     create: function(info) {
@@ -171,7 +160,7 @@ var wordsHelper = {
     }
 };
 
-chrome.runtime.onMessage.addListener(function(req, sender, resp) {
+browser.runtime.onMessage.addListener(function(req, sender, resp) {
     var data = req.data;
     // 新建单词
     if (req.action === 'create') {
@@ -223,22 +212,174 @@ chrome.runtime.onMessage.addListener(function(req, sender, resp) {
     }
 });
 
+function filterWords(words, filter) {
+    let { wordSearchText, levels = [], tags = [] } = filter;
+
+    if (!words.length) {
+        return [];
+    }
+
+    if (!filter) {
+        return words;
+    }
+
+    let results = words;
+
+    if (wordSearchText) {
+        results = results.filter(word => {
+            return word.name.toLowerCase().indexOf(wordSearchText.toLowerCase()) !== -1;
+        });
+    }
+
+    if (levels.length) {
+        results = results.filter(({ level }) => {
+            return levels.indexOf(level) !== -1;                         
+        });
+    }
+
+    if (tags.length) {
+        results = results.filter(({tags: wtags = []}) => {
+            if (!wtags.length) {
+                return false;
+            }
+
+            let hasTag = false;
+
+            tags.forEach(tag => {
+                if (wtags.indexOf(tag) > -1) {
+                    hasTag = true;
+                }
+            });
+
+            return hasTag;
+        });
+    }
+
+    return results;
+}
+
+function handleOmniboxInput(str) {
+    let words = wordsHelper.getWords();
+    let levelReg = /^[0-5]{1}$/g;
+    let { allTags } = wordsHelper.getAllTags();
+
+    if (str) {
+        let filter = {
+            wordSearchText: '',
+            levels: [],
+            tags: []
+        };
+
+        let items = str.split(/[\s,]/);
+
+        items.forEach(item => {
+            if (item.match(levelReg)) {
+                filter.levels.push(Number(item));
+            } else if(allTags.indexOf(item) !== -1) {
+                filter.tags.push(item);
+            } else {
+                filter.wordSearchText = item;
+            }
+        });
+
+        return Promise.resolve(filterWords(words, filter));
+    } else {
+        return Promise.resolve(words);
+    }
+}
+
+function getRandomNums(max, repeatTimes) {
+    const nums = [];
+    let times = repeatTimes;
+
+    if (times > max) {
+        times = max;
+    }
+    
+    for (let index = 0; index < times; index += 1) {
+        let gen = Math.floor(Math.random() * max);
+
+        nums.push(gen);
+    }
+
+    return nums;
+}
+
+function genRandomWords(words, num = 5) {
+    if (words && words.length) {
+        let nums = getRandomNums(words.length, num);
+        
+        return nums.map(index => words[index]);
+    } else {
+        return [];
+    }
+}
+
+function map2omnibox({ name, trans = []}) {
+    return {
+        content: `${name}: ${trans.join(',')}`,
+        description: name
+    };
+}
+
+function setupOmnibox() {
+    let suggestion;
+    browser.omnibox.onInputChanged.addListener((str, suggest) => {
+        handleOmniboxInput(str.trim()).then(resp => {
+            suggestion = genRandomWords(resp).map(map2omnibox);
+
+            suggest(suggestion);
+        });
+    });
+    
+    browser.omnibox.onInputEntered.addListener(content => {
+        let name = content.split(':')[0];
+        let word = wordsHelper.getWord(name);
+
+        Translate.playAudio(name);
+
+        if (config.alertOnOmniboxInputEntered) {
+            setTimeout(() => {
+                alert(word.get('sentence'));
+            }, 500);
+        }
+    });
+}
+
 function setup() {
-    let parentMenu = chrome.contextMenus.create({
+    let parentMenu = browser.contextMenus.create({
         title : "单词小卡片",
         contexts: ['selection'],
         onclick : function(info, tab) {
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                chrome.tabs.sendMessage(tabs[0].id, {action: "menuitemclick"}, function(response) {});  
+            browser.tabs.query({active: true, currentWindow: true}, function(tabs){
+                browser.tabs.sendMessage(tabs[0].id, {action: "menuitemclick"}, function(response) {});  
             });
         }
     });
 
-    wordsHelper.init();
+    setupOmnibox();
 }
 
-setup();
+function loadConfig() {
+    return getSyncConfig().then(conf => {
+        config = conf;
+    });
+}
 
-Words.on('add remove', function() {
-    wordsHelper.getWords();
-});
+function init() {
+    wordsHelper.init();
+    Words.on('add remove', function() {
+        wordsHelper.getWords();
+    });
+
+    setup();
+
+    browser.storage.onChanged.addListener((changes) => {
+        if (changes.config) {
+            config = changes.config.newValue;
+        }
+    });
+}
+
+loadConfig().then(init);
+
