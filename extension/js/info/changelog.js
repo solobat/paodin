@@ -1,5 +1,12 @@
 let langZh = [
     {
+        version: 'v2.2',
+        detail: `新增omnibox(地址栏)功能，keyword为<em>wd</em>，通过输入level或tag或英文字符以空格或,分割来查询;
+            <br>设置更新后将即时生效；<br>其它一些改进.
+            <br><a href="http://v.youku.com/v_show/id_XMzE2MTg5OTc4NA==.html?spm=a2h3j.8428770.3416059.1" target="_blank">更新视频</a>
+        `
+    },
+    {
         version: 'v2.1.8',
         detail: "可配置成将相关句子<em>自动剪裁</em>为<em>3</em>句，默认开启；<br />优化句子范围查找逻辑。"
     },
