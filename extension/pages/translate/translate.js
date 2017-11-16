@@ -7,7 +7,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './translate.scss'
 import AV from 'leancloud-storage'
-import ga from '../../js/common/ga'
 
 Vue.use(ElementUI)
 
@@ -163,20 +162,17 @@ function render({ word, surroundings, source, host }, parentWin) {
 
             enbaleWordInput() {
                 this.wordEditable = true;
-                _gaq.push(['_trackEvent', 'iframe', 'click', 'editword']);
             },
 
             handleDefAdd() {
                 if (this.newWordDef) {
                     this.translate.trans.push(this.newWordDef);
                     this.newWordDef = '';
-                    _gaq.push(['_trackEvent', 'iframe', 'input', 'addDef']);
                 }
             },
 
             handleTagClose(tag) {
                 this.wordTags.splice(this.wordTags.indexOf(tag), 1);
-                _gaq.push(['_trackEvent', 'iframe', 'input', 'tagClose']);
             },
 
             createFilter(queryString) {
@@ -214,7 +210,6 @@ function render({ word, surroundings, source, host }, parentWin) {
 
             toggleEdit() {
                 this.sentenceEditable = !this.sentenceEditable;
-                _gaq.push(['_trackEvent', 'iframe', 'click', 'editsentence']);
             },
 
             saveSentence() {
@@ -227,7 +222,6 @@ function render({ word, surroundings, source, host }, parentWin) {
                 if (this.wordEditable) {
                     this.wordEditable = false;
                     this.loadWord();
-                    _gaq.push(['_trackEvent', 'iframe', 'input', 'updateword']);
                 }
             },
 
@@ -269,8 +263,6 @@ function render({ word, surroundings, source, host }, parentWin) {
                     self.orgWord = data;
                     self.$message('Save successfully');     
                 });
-
-                _gaq.push(['_trackEvent', 'iframe', 'save']);
             },
 
             handleSaveClick() {
@@ -300,5 +292,4 @@ initAV();
 
 window.addEventListener('message', function(event) {
     render(event.data, event.source);
-    ga();
 });

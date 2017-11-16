@@ -10,7 +10,6 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import ga from '../../js/common/ga'
 
 const chrome = window.chrome;
 var options = window.options;
@@ -185,12 +184,11 @@ var App = {
         var self = this;
 
         // 选中翻译
-        if (this.config.dblclick2trigger) {
-            $(document).on('dblclick', function(e) {
+        $(document).on('dblclick', function(e) {
+            if (self.config.dblclick2trigger) {
                 self.handleTextSelected(e);
-                _gaq.push(['_trackEvent', 'content', 'dblclick']);
-            });
-        }
+            }
+        });
 
         let menuEvent;
 
@@ -199,9 +197,12 @@ var App = {
         }, false);
 
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-            if (request.action === 'menuitemclick') {
+            let action = request.action;
+
+            if (action === 'menuitemclick') {
                 self.handleTextSelected(menuEvent);
-                _gaq.push(['_trackEvent', 'content', 'menuitemclick']);
+            } else if (action === 'config') {
+                this.config = request.data;
             }
         });
 
@@ -266,7 +267,6 @@ var App = {
         this.el = $('#wordcard-main');
         this.bindEvents();
 
-        ga();
         // this.initHighlights();
     }
 };

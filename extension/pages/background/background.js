@@ -2,11 +2,7 @@
  * @file bg.js
  * @author solopea@gmail.com
  */
-/*
-<script src="js/word.js"></script>
-<script src="js/translate.js"></script>
-<script src="js/bg.js"></script>
-*/
+
 import $ from 'jquery'
 import _ from 'underscore'
 import Backbone from 'backbone'
@@ -17,9 +13,10 @@ import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
 import { WORD_LEVEL } from '../../js/constant/options'
 import { getSyncConfig } from '../../js/common/config'
-import browser from 'webextension-polyfill'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
+// browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
+const browser = window.chrome;
 
 let Words = new WordList();
 let config;
@@ -366,6 +363,14 @@ function loadConfig() {
     });
 }
 
+function notifyTabs(resp) {
+    chrome.tabs.query({}, function(tabs) {
+        tabs.forEach(({ id }) => {
+            chrome.tabs.sendMessage(id, resp, function() {});
+        });
+    });
+}
+
 function init() {
     wordsHelper.init();
     Words.on('add remove', function() {
@@ -377,6 +382,10 @@ function init() {
     browser.storage.onChanged.addListener((changes) => {
         if (changes.config) {
             config = changes.config.newValue;
+            notifyTabs({
+                action: 'config',
+                data: config
+            });
         }
     });
 }
