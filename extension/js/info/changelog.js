@@ -1,4 +1,13 @@
+const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnfcjbgddcgjgkacd';
+
 let langZh = [
+    {
+        version: 'v2.2.1',
+        detail: `
+            将接口暴露给其它扩展，使比如<a href="${stewardUrl}" target="_blank">Steward</a>这样的扩展能与之交互;
+            <br><a href="http://v.youku.com/v_show/id_XMzE2NDA4MzY1Ng==.html?spm=a2h3j.8428770.3416059.1" target="_blank">更新视频</a>
+        `
+    },
     {
         version: 'v2.2',
         detail: `新增omnibox(地址栏)功能，keyword为<em>wd</em>，通过输入level或tag或英文字符以空格或,分割来查询;
