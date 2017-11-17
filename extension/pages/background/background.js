@@ -157,7 +157,7 @@ var wordsHelper = {
     }
 };
 
-browser.runtime.onMessage.addListener(function(req, sender, resp) {
+function msgHandler(req, sender, resp) {
     var data = req.data;
     // 新建单词
     if (req.action === 'create') {
@@ -207,6 +207,19 @@ browser.runtime.onMessage.addListener(function(req, sender, resp) {
             data: allTags
         });
     }
+
+    if (req.action === 'filter') {
+        let filtered = queryByFilter(req.query, true);
+        
+        resp({
+            msg: 'query by filter',
+            data: filtered
+        });
+    }
+}
+
+['onMessage', 'onMessageExternal'].forEach((msgType) => {
+    browser.runtime[msgType].addListener(msgHandler);
 });
 
 function filterWords(words, filter) {
@@ -255,10 +268,11 @@ function filterWords(words, filter) {
     return results;
 }
 
-function handleOmniboxInput(str) {
+function queryByFilter(str, sync) {
     let words = wordsHelper.getWords();
     let levelReg = /^[0-5]{1}$/g;
     let { allTags } = wordsHelper.getAllTags();
+    let results;
 
     if (str) {
         let filter = {
@@ -279,9 +293,15 @@ function handleOmniboxInput(str) {
             }
         });
 
-        return Promise.resolve(filterWords(words, filter));
+        results = filterWords(words, filter);
     } else {
-        return Promise.resolve(words);
+        results = words;
+    }
+
+    if (sync) {
+        return results;
+    } else {
+        return Promise.resolve(results);
     }
 }
 
@@ -322,7 +342,7 @@ function map2omnibox({ name, trans = []}) {
 function setupOmnibox() {
     let suggestion;
     browser.omnibox.onInputChanged.addListener((str, suggest) => {
-        handleOmniboxInput(str.trim()).then(resp => {
+        queryByFilter(str.trim()).then(resp => {
             suggestion = genRandomWords(resp).map(map2omnibox);
 
             suggest(suggestion);
