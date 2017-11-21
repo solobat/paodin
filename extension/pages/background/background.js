@@ -53,26 +53,6 @@ var wordsHelper = {
         return word;
     },
 
-    changeLevel: function(id, offset) {
-        var word = Words.findWhere({
-            id: id
-        });
-        var level = (word.get('level') || WORD_LEVEL.ZERO) + offset;
-
-        if (level < WORD_LEVEL.ZERO) {
-            level = WORD_LEVEL.ZERO;
-        }
-
-        if (level >= WORD_LEVEL.DONE) {
-            return this.remove(id);
-        }
-
-        word.save({
-            level: level
-        });
-        console.log('change word: %s level to %d', word.get('name'), level);
-    },
-
     remove: function(id) {
         var model = Words.remove(id);
         console.log(model);
@@ -87,6 +67,28 @@ var wordsHelper = {
 
         word.save();
         return word;
+    },
+
+    review(id, gotit) {
+        let word = Words.findWhere({ id });
+        let level = word.level || 0;
+        let nextLevel;
+
+        if (gotit) {
+            nextLevel = level + 1;
+        } else {
+            nextLevel = level - 1;
+        }
+
+        if (nextLevel > WORD_LEVEL.DONE) {
+            nextLevel = WORD_LEVEL.DONE
+        } else if (nextLevel < WORD_LEVEL.ZERO) {
+            nextLevel = WORD_LEVEL.ZERO;
+        }
+
+        word.save({ level });
+        console.log('change word: %s level to %d', word.get('name'), level);
+        return nextLevel;
     },
 
     getWords: function() {
@@ -158,9 +160,11 @@ var wordsHelper = {
 };
 
 function msgHandler(req, sender, resp) {
-    var data = req.data;
+    let data = req.data;
+    let action = req.action;
+
     // 新建单词
-    if (req.action === 'create') {
+    if (action === 'create') {
         let { id } = wordsHelper.create(data);
         resp({
             msg: 'create ok...',
@@ -170,12 +174,12 @@ function msgHandler(req, sender, resp) {
     }
 
     // 删除单词
-    if (req.action === 'remove') {
+    if (action === 'remove') {
         wordsHelper.remove(data.id);
         resp({ msg: 'remove ok...' });
     }
 
-    if (req.action === 'update') {
+    if (action === 'update') {
         var word = wordsHelper.update(data);
         resp({
             msg: 'update ok...',
@@ -183,7 +187,7 @@ function msgHandler(req, sender, resp) {
         });
     }
 
-    if (req.action === 'get') {
+    if (action === 'get') {
         let words = wordsHelper.getWords()
 
         resp({
@@ -192,14 +196,14 @@ function msgHandler(req, sender, resp) {
         });
     }
 
-    if (req.action === 'find') {
+    if (action === 'find') {
         resp({
             msg: 'find word',
             data: wordsHelper.getWord(req.word)
         });
     }
 
-    if (req.action === 'allTags') {
+    if (action === 'allTags') {
         let allTags = wordsHelper.getAllTags(req.host);
 
         resp({
@@ -208,12 +212,22 @@ function msgHandler(req, sender, resp) {
         });
     }
 
-    if (req.action === 'filter') {
+    if (action === 'filter') {
         let filtered = queryByFilter(req.query, true);
         
         resp({
             msg: 'query by filter',
             data: filtered
+        });
+    }
+
+    if (action === 'review') {
+        let { id, gotit } = req.data;
+        let newLevel = wordsHelper.review(id, gotit);
+
+        resp({
+            msg: 'review word',
+            data: { newLevel }
         });
     }
 }
