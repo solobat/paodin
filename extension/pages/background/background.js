@@ -222,8 +222,12 @@ function msgHandler(req, sender, resp) {
     }
 
     if (action === 'review') {
-        let { id, gotit } = req.data;
+        let { id, gotit, word } = req.data;
         let newLevel = wordsHelper.review(id, gotit);
+
+        if (word) {
+            Translate.playAudioByWord(word);
+        }
 
         resp({
             msg: 'review word',
