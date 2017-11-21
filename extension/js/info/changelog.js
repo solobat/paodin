@@ -2,6 +2,10 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.2',
+        detail: '修改外部API'
+    },
+    {
         version: 'v2.2.1',
         detail: `
             将接口暴露给其它扩展，使比如<a href="${stewardUrl}" target="_blank">Steward</a>这样的扩展能与之交互;
