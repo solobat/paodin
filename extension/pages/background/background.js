@@ -86,8 +86,8 @@ var wordsHelper = {
             nextLevel = WORD_LEVEL.ZERO;
         }
 
-        word.save({ level });
-        console.log('change word: %s level to %d', word.get('name'), level);
+        word.save({ level: nextLevel });
+        console.log('change word: %s level to %d', word.get('name'), nextLevel);
         return nextLevel;
     },
 
