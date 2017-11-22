@@ -2,6 +2,13 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.3',
+        detail: `
+            更好的配合steward扩展;<br>
+            修复查词时定义不能删除的问题
+        `
+    },
+    {
         version: 'v2.2.2',
         detail: '修改外部API'
     },

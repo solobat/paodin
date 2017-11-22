@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "单词小卡片: 查词/收集/背单词",
     "short_name": "单词小卡片",
-    "version": "2.2.2",
+    "version": "2.2.3",
     "description": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出",
     "background": {
         "page": "background.html"
