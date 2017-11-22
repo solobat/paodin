@@ -71,7 +71,7 @@ var wordsHelper = {
 
     review(id, gotit) {
         let word = Words.findWhere({ id });
-        let level = word.level || 0;
+        let level = word.get('level') || 0;
         let nextLevel;
 
         if (gotit) {
