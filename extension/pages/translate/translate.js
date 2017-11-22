@@ -76,7 +76,8 @@ function render({ word, surroundings, source, host }, parentWin) {
                 tagInputValue: '',
                 wordTags: [],
                 allTags: [],
-                orgWord: null
+                orgWord: null,
+                deleteTimes: 0,
             }
         },
 
@@ -162,6 +163,17 @@ function render({ word, surroundings, source, host }, parentWin) {
 
             enbaleWordInput() {
                 this.wordEditable = true;
+            },
+
+            handleDefDelete() {
+                if (!this.newWordDef) {
+                    if (this.deleteTimes > 0) {
+                        this.translate.trans.pop();
+                        this.deleteTimes = 0;
+                    } else {
+                        this.deleteTimes = this.deleteTimes + 1;
+                    }
+                }
             },
 
             handleDefAdd() {

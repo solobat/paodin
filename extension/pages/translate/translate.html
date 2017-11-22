@@ -28,7 +28,7 @@
                                 {{ item }}
                             </a>
                             <div class="add-btn">
-                                <input id="add-definition" v-model="newWordDef" type="text" @keyup.enter="handleDefAdd" placeholder="Add your own">
+                                <input id="add-definition" v-model="newWordDef" type="text" @keyup.delete="handleDefDelete" @keyup.enter="handleDefAdd" placeholder="Add your own">
                                 <a class="btn-plus" @click="handleDefAdd">+</a>
                             </div>
                             <div class="tags">
