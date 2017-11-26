@@ -19,6 +19,9 @@ import Translate from '../../js/translate'
 import { getParameterByName } from '../../js/common/utils'
 import wordRoots from '../../js/constant/wordroots'
 import keyboardJS from 'keyboardjs'
+import SocialSharing  from 'vue-social-sharing'
+
+Vue.use(SocialSharing);
 
 const chrome = window.chrome;
 const bg = chrome.extension.getBackgroundPage();
@@ -26,6 +29,14 @@ const manifest = chrome.runtime.getManifest();
 const version = manifest.version;
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
+const stat = {
+    '2.2.4': {
+        star: 33,
+        comment: 8,
+        pay: 0,
+        user: 177
+    }
+};
 
 Vue.use(ElementUI)
 
@@ -143,7 +154,9 @@ function render(config, i18nTexts) {
                 rootsFilter: {
                     searchText: 'a'
                 },
-                wordRoots
+                wordRoots,
+                version,
+                stat
             }
         },
 

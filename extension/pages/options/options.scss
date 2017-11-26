@@ -87,7 +87,7 @@ a {
     font-style: normal;
 }
 
-.text-panel .wx-pay {
+.text-panel .qrcode {
     box-shadow: 0 0 10px #555;
     border-radius: 6px;
     margin-left: auto;
@@ -95,6 +95,11 @@ a {
     margin-top: 10px;
     margin-bottom: 10px;
     width: 200px;
+}
+
+.text-panel .qrcodes {
+    display: flex;
+    justify-content: space-between;
 }
 
 .filter-panel {
@@ -359,4 +364,44 @@ a {
 .roots-container {
     height: 600px;
     overflow: hidden;
+}
+
+.share-icons {
+    display: flex;
+    margin-top: 24px;
+
+    > span {
+        margin: 10px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+
+    .fa {
+        display: block;
+        width: 30px;
+        height: 30px;
+        opacity: 0.3;
+        background: no-repeat center center;
+        background-size: 30px 30px;
+        cursor: pointer;
+        transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .fa-weibo {
+        background-image: url(/img/weibo.png);
+    }
+
+    .fa-google-plus {
+        background-image: url(/img/gplus.png);
+    }
+
+    .fa-twitter {
+        background-image: url(/img/twitter.png);
+    }
 }

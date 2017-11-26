@@ -2,6 +2,14 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.4',
+        detail: `
+            双击查词框title，可收藏单词；<br>
+            修复单词无法实际删除的bug；<br>
+            一些说明。
+        `
+    },
+    {
         version: 'v2.2.3',
         detail: `
             更好的配合steward扩展;<br>
