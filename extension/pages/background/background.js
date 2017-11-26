@@ -56,6 +56,7 @@ var wordsHelper = {
     remove: function(id) {
         var model = Words.remove(id);
         console.log(model);
+        Words.chromeStorage.destroy(model);
         return model;
     },
 
