@@ -287,7 +287,15 @@ function render({ word, surroundings, source, host }, parentWin) {
                         this.save();
                     }).catch(() => { });
                 } else {
-                    this.save();
+                    chrome.runtime.sendMessage({
+                        action: 'storageValid'
+                    }, ({ msg, data }) => {
+                        if (!data) {
+                            this.$message.warning(msg);
+                        } else {
+                            this.save();
+                        }
+                    });
                 }
             }
         }
