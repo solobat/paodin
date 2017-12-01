@@ -2,6 +2,13 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.5',
+        detail: `
+            单词库最大容量提醒;<br>
+            兼容 简悦 类阅读器.
+        `
+    },
+    {
         version: 'v2.2.4',
         detail: `
             双击查词框title，可收藏单词；<br>
