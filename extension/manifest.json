@@ -6,7 +6,7 @@
     "description": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出",
     "applications": {
         "gecko": {
-          "id": "solopea@gmail.com",
+          "id": "tomas.yangjianchuan@gmail.com",
           "strict_min_version": "56.0"
         }
     },
