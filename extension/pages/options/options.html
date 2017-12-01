@@ -334,52 +334,23 @@
                     加入 <a href="https://t.me/chromesteward" target="_blank">Telegram</a> 群，获取单词小卡片的第一手资料。
                     <h2>{{ appName }} v{{config.version}}</h2>
                     <section class="changelog">
-                        <template v-for="update in changelog" v-if="!update.ext || update.ext === appName">
+                        <template v-for="update in changelog">
                             <h3 v-html="update.version"></h3>
                             <p v-html="update.detail"></p>
                         </template>
                     </section>
-                    <div>
-                        <a href="http://list.youku.com/albumlist/show/id_51352320.html" target="_blank">单词小卡片视频专辑</a> 
-                        <a :href="'http://owsjc7iz3.bkt.clouddn.com/' + appName + '-' + config.version + '.crx'">download crx</a>
-                    </div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="关于" name="about">
                     <div class="about-wrap text-panel">
                         最近在使用Mac上的一款叫 <em>wokabulary</em> 的app背单词，喜欢它的同时，也觉得收集单词挺麻烦，于是就开发了<em>单词小卡片</em>这个扩展。
                         <br>
-                        虽然个人精力有限，但此扩展还是会一直维护的
-                        <el-tooltip class="item" effect="dark" content="目前的规则是：(新赞 + 新star + 新打赏) * 20 + (新增用户 * 5) >= 500，就更新一版" placement="top-start">
-                            <em>[?]</em>
-                        </el-tooltip>
-                        。
+                        虽然个人精力有限，但此扩展还是会一直维护的。
                         <br>
-                        如果觉得它还不错，希望可以给我
-                        <a :href="'https://chrome.google.com/webstore/detail/' + storeId + '/reviews?hl=zh-CN'">点赞评论</a><em>[{{stat[version].comment}}]</em>、
-                        <a href="https://github.com/solobat/Steward" target="_blank">star</a><em>[{{stat[version].star}}]</em>
-                        或通过下方的二维码 <span class="notice">请我喝杯咖啡</span><em>[{{stat[version].pay}}]</em>，这是对{{appName}}的最大鼓励。
-                        虽然一直在安静地开发，但也希望通过大家的口口相传，让更多的人知道
-                        <a :href="'https://chrome.google.com/webstore/detail/' + storeId">{{appName}}</a><em>[{{stat[version].user}}]</em>的存在。
-                        <social-sharing url="https://chrome.google.com/webstore/detail/oegblnjiajbfeegijlnblepdodmnddbk"
-                            title="单词小卡片chrome扩展 - 这是一款打通了从单词收集到背单词整个环节的免费开源Chrome扩展."
-                            description="功能包括网页取词、自动收集例句、根据 cocoa 20000 词汇打标签并保存为词条、单词编辑管理、分级式背单词单词库导出"
-                            quote="这是一款打通了从单词收集到背单词整个环节的 Chrome 扩展."
-                            hashtags="chrome扩展,单词,英语"
-                            twitter-user="fmlycls"
-                            inline-template>
-                            <div class="share-icons">
-                                <network network="weibo">
-                                    <i class="fa fa-weibo"></i>
-                                </network> 
-                                <network network="googleplus">
-                                    <i class="fa fa-google-plus"></i>
-                                </network>
-                                <network network="twitter">
-                                    <i class="fa fa-twitter"></i>
-                                </network>
-                            </div>
-                        </social-sharing>
+                        如果觉得它还不错，希望可以给我点赞评论、
+                        <a href="https://github.com/solobat/wordcard" target="_blank">star</a>
+                        或通过下方的二维码 <span class="notice">请我喝杯咖啡</span><em>[{{stat[version].pay}}]</em>，这是对单词小卡片的最大鼓励。
+                        虽然一直在安静地开发，但也希望通过大家的口口相传，让更多的人知道单词小卡片的存在。
                         <div class="qrcodes">
                             <div>
                                 <h3>微信</h3>
