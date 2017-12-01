@@ -5,8 +5,6 @@
 import Backbone from 'backbone'
 import $ from 'jquery'
 
-var chrome = window.chrome;
-
 export const Word = Backbone.Model.extend({
     sync: Backbone.sync,
     defaults: function () {

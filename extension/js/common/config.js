@@ -1,13 +1,13 @@
 import browser from 'webextension-polyfill'
 
-const manifest = chrome.runtime.getManifest();
+const manifest = browser.runtime.getManifest();
 const version = manifest.version;
 
 export const defaultConfig = {
     enableUrls: [],
     disableUrls: [],
     urlMode: 'enableUrls',
-    dblclick2trigger: false,
+    dblclick2trigger: true,
     autocut: true,
     sentenceNum: 3,
     alertOnOmniboxInputEntered: true,

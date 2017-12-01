@@ -11,7 +11,6 @@ import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
 
-const chrome = window.chrome;
 var options = window.options;
 
 const enReg = /^[^\u4e00-\u9fa5]+$/i;
@@ -157,7 +156,7 @@ var App = {
             width: '690px',
             marginLeft: '-345px'
         }, 200, function() {
-            $('#wordcard-frame').attr('src', chrome.extension.getURL('translate.html')).fadeIn();
+            $('#wordcard-frame').attr('src', browser.extension.getURL('translate.html')).fadeIn();
             $('#wordcard-frame').load(function() {
                 var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
                 iframeWindow.postMessage(data, '*');
@@ -196,7 +195,7 @@ var App = {
             menuEvent = e;
         }, false);
 
-        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             let action = request.action;
 
             if (action === 'menuitemclick') {
@@ -245,7 +244,7 @@ var App = {
     initHighlights() {
         let self = this;
 
-        chrome.extension.sendRequest({
+        browser.runtime.sendMessage({
             'action': 'get',
             'data': {}
         },

@@ -7,6 +7,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './translate.scss'
 import AV from 'leancloud-storage'
+import browser from 'webextension-polyfill'
 
 Vue.use(ElementUI)
 
@@ -95,7 +96,7 @@ function render({ word, surroundings, source, host }, parentWin) {
                 });
             },
             fetchAllTags() {
-                chrome.runtime.sendMessage({
+                browser.runtime.sendMessage({
                     action: 'allTags',
                     host
                 }, ({ data }) => {
@@ -118,7 +119,7 @@ function render({ word, surroundings, source, host }, parentWin) {
             },
 
             loadWord() {
-                chrome.runtime.sendMessage({
+                browser.runtime.sendMessage({
                     action: 'find',
                     word: this.word
                 }, ({ data }) => {
@@ -246,7 +247,7 @@ function render({ word, surroundings, source, host }, parentWin) {
             handleDeleteClick() {
                 var self = this;
     
-                chrome.extension.sendRequest({
+                browser.extension.sendRequest({
                         'action': 'remove',
                         'data': {
                             id: self.wordId
@@ -268,7 +269,7 @@ function render({ word, surroundings, source, host }, parentWin) {
                     source
                 };
 
-                chrome.runtime.sendMessage({
+                browser.runtime.sendMessage({
                     'action': 'create',
                     'data': attrs
                 }, function({ data }) {
@@ -287,7 +288,7 @@ function render({ word, surroundings, source, host }, parentWin) {
                         this.save();
                     }).catch(() => { });
                 } else {
-                    chrome.runtime.sendMessage({
+                    browser.runtime.sendMessage({
                         action: 'storageValid'
                     }, ({ msg, data }) => {
                         if (!data) {

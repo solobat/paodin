@@ -11,12 +11,12 @@ import API from '../../js/common/api'
 import guid from '../../js/common/guid'
 import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
+import browser from 'webextension-polyfill'
 import { WORD_LEVEL } from '../../js/constant/options'
 import { getSyncConfig } from '../../js/common/config'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
-const browser = window.chrome;
 const MAX_WORDS_NUM = 442;
 
 let Words = new WordList();
@@ -413,9 +413,9 @@ function loadConfig() {
 }
 
 function notifyTabs(resp) {
-    chrome.tabs.query({}, function(tabs) {
+    browser.tabs.query({}, function(tabs) {
         tabs.forEach(({ id }) => {
-            chrome.tabs.sendMessage(id, resp, function() {});
+            browser.tabs.sendMessage(id, resp, function() {});
         });
     });
 }

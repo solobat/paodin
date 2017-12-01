@@ -4,6 +4,12 @@
     "short_name": "单词小卡片",
     "version": "2.2.5",
     "description": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出",
+    "applications": {
+        "gecko": {
+          "id": "solopea@gmail.com",
+          "strict_min_version": "56.0"
+        }
+    },
     "background": {
         "page": "background.html"
     },
@@ -26,8 +32,11 @@
         "translate.html"
     ],
     "omnibox": { "keyword" : "wd" },
-    "options_page": "options.html",
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+    "options_ui": {
+        "page": "options.html",
+        "browser_style": true
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://localhost/* https://ssl.google-analytics.com; object-src 'self'",
     "permissions": [
         "tabs",
         "clipboardRead",

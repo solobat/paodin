@@ -23,9 +23,7 @@ import SocialSharing  from 'vue-social-sharing'
 
 Vue.use(SocialSharing);
 
-const chrome = window.chrome;
-const bg = chrome.extension.getBackgroundPage();
-const manifest = chrome.runtime.getManifest();
+const manifest = browser.runtime.getManifest();
 const version = manifest.version;
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
@@ -71,7 +69,7 @@ function getI18nTexts(obj) {
             let subobj = texts[cate] = {};
 
             for (var key in obj[cate]) {
-                subobj[key] = chrome.i18n.getMessage(`${cate}_${key}`);
+                subobj[key] = browser.i18n.getMessage(`${cate}_${key}`);
             }
         }
     } catch (e) {
@@ -262,7 +260,7 @@ function render(config, i18nTexts) {
 
             loadWords() {
                 return new Promise((resolve, reject) => {
-                    chrome.runtime.sendMessage({
+                    browser.runtime.sendMessage({
                         action: 'get'
                     }, ({ data }) => {
                         if (data) {
@@ -428,7 +426,7 @@ function render(config, i18nTexts) {
             },
 
             handleEditorDeleteClick() {
-                chrome.runtime.sendMessage({
+                browser.runtime.sendMessage({
                     action: 'remove',
                     data: { id: this.wordForm.id }
                 }, () => {
@@ -445,7 +443,7 @@ function render(config, i18nTexts) {
             saveWord(word) {
                 if (word && word.name) {
                     return new Promise((resolve, reject) => {
-                        chrome.runtime.sendMessage({
+                        browser.runtime.sendMessage({
                             action: 'update',
                             data: JSON.parse(JSON.stringify(word))
                         }, (resp) => {
@@ -599,7 +597,7 @@ function render(config, i18nTexts) {
 
                 word.level = nextLevel;
 
-                chrome.runtime.sendMessage({
+                browser.runtime.sendMessage({
                     action: 'update',
                     data: JSON.parse(JSON.stringify(word))
                 }, () => {

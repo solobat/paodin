@@ -1,3 +1,5 @@
+import browser from 'webextension-polyfill'
+
 const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnfcjbgddcgjgkacd';
 
 let langZh = [
@@ -102,7 +104,7 @@ let langEn = [
 
 let results;
 
-if (chrome.i18n.getUILanguage().indexOf('zh') > -1) {
+if (browser.i18n.getUILanguage().indexOf('zh') > -1) {
     results = langZh;
 } else {
     results = langEn;
