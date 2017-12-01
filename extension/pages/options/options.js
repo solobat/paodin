@@ -30,6 +30,13 @@ const version = manifest.version;
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
 const stat = {
+    '2.2.6': {
+        star: 37,
+        comment: 9,
+        pay: 0,
+        user: 285,
+        points: (1) * 20 + (17) * 5
+    },
     '2.2.5': {
         star: 36,
         comment: 9,
