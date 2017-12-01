@@ -192,7 +192,7 @@ var App = {
 
         let menuEvent;
 
-        document.body.addEventListener('contextmenu', function(e) {
+        document.documentElement.addEventListener('contextmenu', function(e) {
             menuEvent = e;
         }, false);
 
@@ -263,7 +263,7 @@ var App = {
             '<div id="wordcard-main" class="wordcard-main" style="display:none;">',
             '</div>'
         ];
-        $('body').prepend(popup);
+        $('html').append(popup);
         this.el = $('#wordcard-main');
         this.bindEvents();
 
