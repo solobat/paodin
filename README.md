@@ -11,22 +11,26 @@
 
 #### 安装：
 - [Chrome 应用商店](https://chrome.google.com/webstore/detail/oegblnjiajbfeegijlnblepdodmnddbk)
-- [离线下载](http://owsjc7iz3.bkt.clouddn.com/wordcard-2.2.5.crx)。
+- [Firefox 附件组件](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%95%E8%AF%8D%E5%B0%8F%E5%8D%A1%E7%89%87-%E6%9F%A5%E8%AF%8D-%E6%94%B6%E9%9B%86-%E8%83%8C%E5%8D%95%E8%AF%8D/)
+- [crx 离线下载](http://owsjc7iz3.bkt.clouddn.com/wordcard-2.2.5.crx)。
 
----
 #### 功能:
 + 查单词/自动按词频打tag
 + 保存单词卡片
 + 单词卡片管理
 + 背单词
 
----
+
+#### 教程:
++ [怎样背英语单词才高效？](https://www.zhihu.com/question/19580414/answer/265649640)
++ [视频专辑](http://v.youku.com/v_show/id_XMzE4MzczNzYyNA==.html?spm=a2hzp.8253876.0.0&f=51352320)
+
+
 #### 截图:
 ![查询](http://owsjc7iz3.bkt.clouddn.com/command.png)
 ![选项](http://owsjc7iz3.bkt.clouddn.com/options.png)
 ![单词卡片](http://owsjc7iz3.bkt.clouddn.com/iframe.png)
 
----
 #### 许可:
 [![license-badge]][license-link]
 
