@@ -22,7 +22,7 @@
                                 <span class="add-txt"></span>
                                 <a class="ico-audio" @mouseover="playAudio" id="read-root" root="depression" language="en"></a>
                             </div>
-                            <a class="btn defitem active" v-for="(item, index) in translate.trans" :defindex="index">
+                            <a class="btn defitem active" v-for="(item, index) in translate.trans" @click="handleDefDelete(index)" :defindex="index">
                                 {{ item }}
                             </a>
                             <div class="add-btn">

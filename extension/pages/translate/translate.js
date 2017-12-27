@@ -169,13 +169,17 @@ function render({ word, surroundings, source, host }, parentWin) {
                 this.wordEditable = true;
             },
 
-            handleDefDelete() {
-                if (!this.newWordDef) {
-                    if (this.deleteTimes > 0) {
-                        this.translate.trans.pop();
-                        this.deleteTimes = 0;
-                    } else {
-                        this.deleteTimes = this.deleteTimes + 1;
+            handleDefDelete(index) {
+                if (typeof index === 'number') {
+                    this.translate.trans.splice(index, 1);
+                } else {
+                    if (!this.newWordDef) {
+                        if (this.deleteTimes > 0) {
+                            this.translate.trans.pop();
+                            this.deleteTimes = 0;
+                        } else {
+                            this.deleteTimes = this.deleteTimes + 1;
+                        }
                     }
                 }
             },
