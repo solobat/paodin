@@ -125,12 +125,16 @@ function render({ word, surroundings, source, host }, parentWin) {
                     if (data) {
                         this.orgWord = data;
                     }
-                    this.getTranslate();
-                    this.queryWordIndex();
+                    this.getTranslate().then(() => {
+                        // 收藏过的单词就不需要再查 cocoa 了
+                        if (!this.orgWord) {
+                            this.queryWordIndex();
+                        }
+                    });
                 });
             },
             getTranslate() {
-                Translate.translate(this.word).then(data => {
+                return Translate.translate(this.word).then(data => {
                     if (!data.basic) {
                         return false;
                     }
