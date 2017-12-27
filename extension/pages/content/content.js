@@ -10,6 +10,7 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
+import { isMac } from '../../js/common/utils'
 
 const chrome = window.chrome;
 var options = window.options;
@@ -184,9 +185,13 @@ var App = {
         var self = this;
 
         // 选中翻译
-        $(document).on('dblclick', function(e) {
+        $(document).on('dblclick', function(event) {
             if (self.config.dblclick2trigger) {
-                self.handleTextSelected(e);
+                const withCtrlOrCmd = self.config.withCtrlOrCmd;
+
+                if (!withCtrlOrCmd || (withCtrlOrCmd && (isMac ? event.metaKey : event.ctrlKey))) {
+                    self.handleTextSelected(event);
+                }
             }
         });
 
