@@ -38,16 +38,18 @@ function replaceAll(str, find, replace, useRaw) {
 let blockTags = ['LI', 'P', 'DIV', 'BODY'];
 
 function getBlock(node, deep) {
-    if (blockTags.indexOf(node.tagName) !== -1 || deep === 0) {
+    if (blockTags.indexOf(node.tagName.toUpperCase()) !== -1 || deep === 0) {
         return node;
     } else {
         return getBlock(node.parentElement, deep - 1);
     }
 }
 
+let menuEvent;
 var App = {
+    context: window,
     handleTextSelected: function(e) {
-        var selection = window.getSelection();
+        var selection = this.context.getSelection();
         var word = (selection.toString() || '').trim();
         var node = e.target;
 
@@ -70,7 +72,7 @@ var App = {
             return;
         }
 
-        this.highlight = new Highlight(node, word);
+        this.highlight = new Highlight(node, word, this.context);
         this.lookUp(e, word, node);
     },
 
@@ -126,8 +128,8 @@ var App = {
         var y_pos = e.pageY;
         var x_posView = e.clientX;
         var y_posView = e.clientY;
-        var winWidth = window.innerWidth;
-        var winHeight = window.innerHeight;
+        var winWidth = this.context.innerWidth;
+        var winHeight = this.context.innerHeight;
         var upDir = (y_posView > (winHeight / 2));
 
         if (upDir) {
@@ -181,6 +183,43 @@ var App = {
         });
     },
 
+    injectStyles(doc) {
+        var $head = $(doc).find('head');                
+
+        $head.append(`
+            <style>
+                .wc-highlight {
+                    margin: 0 5px;
+                    background-color: yellow;
+                    color: black;
+                }
+            </style>
+        `);    
+    },
+
+    checkIframes() {
+        const self = this;
+
+        $('iframe').each(function() {
+            const win = this.contentWindow;
+            const doc = this.contentDocument;
+            const $iframe = $(this);
+
+            if (!$iframe.hasClass('wordcard-init') && $iframe.is(':visible') 
+                && !$(doc).find('#wordcard-main').length) {
+                doc.documentElement.addEventListener('contextmenu', function(event) {
+                    menuEvent = event;
+                    self.context = win;
+                }, false);
+
+                self.injectStyles(doc);
+                $iframe.addClass('wordcard-init');
+            } else {
+                console.log('iframe invisible or has wordcard');
+            }
+        });
+    },
+
     bindEvents: function() {
         var self = this;
 
@@ -195,11 +234,16 @@ var App = {
             }
         });
 
-        let menuEvent;
-
-        document.documentElement.addEventListener('contextmenu', function(e) {
-            menuEvent = e;
+        document.documentElement.addEventListener('contextmenu', function(event) {
+            menuEvent = event;
+            self.context = window;
         }, false);
+
+        window.addEventListener('hashchange', function() {
+            setTimeout(function() {
+                self.checkIframes();
+            }, 5000);
+        });
 
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             let action = request.action;
@@ -271,12 +315,9 @@ var App = {
         $('html').append(popup);
         this.el = $('#wordcard-main');
         this.bindEvents();
-
-        // this.initHighlights();
     }
 };
 
-// TODO: host enable
 var host = window.location.hostname;
 
 getSyncConfig().then(config => {
