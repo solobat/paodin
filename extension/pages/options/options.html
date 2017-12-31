@@ -10,11 +10,8 @@
 <body>
     <header class="topbar">
         <div class="links">
-            <a href="https://weibo.com/u/1748383310" class="weibo" target="_blank">
-                <img src="/img/weibo.png" alt="">
-            </a>
-            <a href="https://www.zhihu.com/people/woodpea" class="weibo" target="_blank">
-                <img src="/img/zhihu-icon.png" alt="">
+            <a href="http://bbs.oksteward.com" class="steward_bbs" target="_blank">
+                <img src="/img/bbs.png" alt="">
             </a>
             <a href="https://github.com/solobat/wordcard" class="github" target="_blank">
                 <img src="/img/github.png" alt="">
@@ -25,12 +22,26 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="通用" name="general">
                 <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
-                    <el-form-item label="双击取词">
-                        <el-switch
-                            v-model="config.dblclick2trigger"
-                            on-color="#20a0ff">
-                        </el-switch>
-                    </el-form-item>
+                    <el-row>
+                      <el-col :span="6">
+                        <el-form-item label="双击取词">
+                            <el-switch
+                                v-model="config.dblclick2trigger"
+                                on-color="#20a0ff">
+                            </el-switch>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="6">
+                        <el-form-item label="按住 Ctrl / ⌘">
+                            <el-tooltip effect="dark" content="按住 Ctrl / ⌘ 时才双击取词" placement="top-start">
+                                <el-switch
+                                    v-model="config.withCtrlOrCmd"
+                                    on-color="#20a0ff">
+                                </el-switch>
+                            </el-tooltip>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
                     <el-form-item label="自动剪裁句子">
                         <el-tooltip class="item" effect="dark" content="自动将例句剪切至3句" placement="top-start">
                             <el-switch
@@ -307,8 +318,9 @@
                 <div class="text-panel">
                     <div>
                        <a href="http://list.youku.com/albumlist/show/id_51352320.html" target="_blank">单词小卡片视频专辑</a> 
+                       <a href="https://t.me/chromesteward" style="margin-left: 12px;" target="_blank">Telegram</a>
+                       <a href="http://bbs.oksteward.com" style="margin-left: 12px;" target="_blank">论坛</a>
                     </div>
-                    <div>使用过程中有疑问或建议，可以在微博上@我</div>
                     <hr>
                     此扩展可以帮助你在访问英文网站过程中，遇到不认识的单词，使用<em>右键菜单</em>查询： <br>
                     <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/command.png" alt="">
@@ -331,7 +343,6 @@
             </el-tab-pane>
             <el-tab-pane label="更新" name="update">
                 <div class="text-panel">
-                    加入 <a href="https://t.me/chromesteward" target="_blank">Telegram</a> 群，获取单词小卡片的第一手资料。
                     <h2>{{ appName }} v{{config.version}}</h2>
                     <section class="changelog">
                         <template v-for="update in changelog" v-if="!update.ext || update.ext === appName">
@@ -340,57 +351,9 @@
                         </template>
                     </section>
                     <div>
-                        <a href="http://list.youku.com/albumlist/show/id_51352320.html" target="_blank">单词小卡片视频专辑</a> 
                         <a :href="'http://owsjc7iz3.bkt.clouddn.com/' + appName + '-' + config.version + '.crx'">download crx</a>
                     </div>
                 </div>
-            </el-tab-pane>
-            <el-tab-pane label="关于" name="about">
-                    <div class="about-wrap text-panel">
-                        最近在使用Mac上的一款叫 <em>wokabulary</em> 的app背单词，喜欢它的同时，也觉得收集单词挺麻烦，于是就开发了<em>单词小卡片</em>这个扩展。
-                        <br>
-                        虽然个人精力有限，但此扩展还是会一直维护的
-                        <el-tooltip class="item" effect="dark" content="目前的规则是：(新赞 + 新star + 新打赏) * 20 + (新增用户 * 5) >= 500，就更新一版" placement="top-start">
-                            <em>[?]</em>
-                        </el-tooltip>
-                        。
-                        <br>
-                        如果觉得它还不错，希望可以给我
-                        <a :href="'https://chrome.google.com/webstore/detail/' + storeId + '/reviews?hl=zh-CN'">点赞评论</a><em>[{{stat[version].comment}}]</em>、
-                        <a href="https://github.com/solobat/Steward" target="_blank">star</a><em>[{{stat[version].star}}]</em>
-                        或通过下方的二维码 <span class="notice">请我喝杯咖啡</span><em>[{{stat[version].pay}}]</em>，这是对{{appName}}的最大鼓励。
-                        虽然一直在安静地开发，但也希望通过大家的口口相传，让更多的人知道
-                        <a :href="'https://chrome.google.com/webstore/detail/' + storeId">{{appName}}</a><em>[{{stat[version].user}}]</em>的存在。
-                        <social-sharing url="https://chrome.google.com/webstore/detail/oegblnjiajbfeegijlnblepdodmnddbk"
-                            title="单词小卡片chrome扩展 - 这是一款打通了从单词收集到背单词整个环节的免费开源Chrome扩展."
-                            description="功能包括网页取词、自动收集例句、根据 cocoa 20000 词汇打标签并保存为词条、单词编辑管理、分级式背单词单词库导出"
-                            quote="这是一款打通了从单词收集到背单词整个环节的 Chrome 扩展."
-                            hashtags="chrome扩展,单词,英语"
-                            twitter-user="fmlycls"
-                            inline-template>
-                            <div class="share-icons">
-                                <network network="weibo">
-                                    <i class="fa fa-weibo"></i>
-                                </network> 
-                                <network network="googleplus">
-                                    <i class="fa fa-google-plus"></i>
-                                </network>
-                                <network network="twitter">
-                                    <i class="fa fa-twitter"></i>
-                                </network>
-                            </div>
-                        </social-sharing>
-                        <div class="qrcodes">
-                            <div>
-                                <h3>微信</h3>
-                                <img src="http://owsjc7iz3.bkt.clouddn.com/IMG_2180.jpg" alt="" class="wx-pay qrcode">
-                            </div>
-                            <div>
-                                <h3>支付宝</h3>
-                                <img src="http://owsjc7iz3.bkt.clouddn.com/alipay3.jpg" alt="" class="ali-pay qrcode">
-                            </div>
-                        </div>
-                    </div>
             </el-tab-pane>
         </el-tabs>
     </div>

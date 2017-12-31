@@ -29,27 +29,6 @@ const manifest = chrome.runtime.getManifest();
 const version = manifest.version;
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
-const stat = {
-    '2.2.5': {
-        star: 36,
-        comment: 9,
-        pay: 0,
-        user: 268,
-        points: (2 + 1) * 20 + (49) * 5
-    },
-    '2.2.4': {
-        star: 34,
-        comment: 8,
-        pay: 0,
-        user: 219
-    },
-    '2.2.3': {
-        star: 33,
-        comment: 8,
-        pay: 0,
-        user: 177
-    }
-};
 
 Vue.use(ElementUI)
 
@@ -168,8 +147,7 @@ function render(config, i18nTexts) {
                     searchText: 'a'
                 },
                 wordRoots,
-                version,
-                stat
+                version
             }
         },
 

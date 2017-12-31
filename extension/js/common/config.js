@@ -8,6 +8,7 @@ export const defaultConfig = {
     disableUrls: [],
     urlMode: 'enableUrls',
     dblclick2trigger: false,
+    withCtrlOrCmd: false,
     autocut: true,
     sentenceNum: 3,
     alertOnOmniboxInputEntered: true,

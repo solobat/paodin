@@ -2,6 +2,14 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.6',
+        detail: `
+            点一个释义就删除;<br>
+            ctrl + 鼠标选中弹出查词;<br>
+            部分情况下的iframe 兼容处理
+        `
+    },
+    {
         version: 'v2.2.5',
         detail: `
             单词库最大容量提醒;<br>

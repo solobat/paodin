@@ -125,12 +125,16 @@ function render({ word, surroundings, source, host }, parentWin) {
                     if (data) {
                         this.orgWord = data;
                     }
-                    this.getTranslate();
-                    this.queryWordIndex();
+                    this.getTranslate().then(() => {
+                        // 收藏过的单词就不需要再查 cocoa 了
+                        if (!this.orgWord) {
+                            this.queryWordIndex();
+                        }
+                    });
                 });
             },
             getTranslate() {
-                Translate.translate(this.word).then(data => {
+                return Translate.translate(this.word).then(data => {
                     if (!data.basic) {
                         return false;
                     }
@@ -165,13 +169,17 @@ function render({ word, surroundings, source, host }, parentWin) {
                 this.wordEditable = true;
             },
 
-            handleDefDelete() {
-                if (!this.newWordDef) {
-                    if (this.deleteTimes > 0) {
-                        this.translate.trans.pop();
-                        this.deleteTimes = 0;
-                    } else {
-                        this.deleteTimes = this.deleteTimes + 1;
+            handleDefDelete(index) {
+                if (typeof index === 'number') {
+                    this.translate.trans.splice(index, 1);
+                } else {
+                    if (!this.newWordDef) {
+                        if (this.deleteTimes > 0) {
+                            this.translate.trans.pop();
+                            this.deleteTimes = 0;
+                        } else {
+                            this.deleteTimes = this.deleteTimes + 1;
+                        }
                     }
                 }
             },
