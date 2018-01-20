@@ -2,6 +2,10 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.7',
+        detail: `添加 JSON 格式导出下载`
+    },
+    {
         version: 'v2.2.6',
         detail: `
             点一个释义就删除;<br>
