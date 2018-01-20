@@ -609,19 +609,21 @@ function render(config, i18nTexts) {
                 _gaq.push(['_trackEvent', 'recite', 'click', 'newrecite']);
             },
 
-            handleExportClick() {
-                this.loadWords().then(words => this.exportWords(words));
+            handleExportClick(format) {
+                this.loadWords().then(words => this.exportWords(words, format));
             },
 
-            exportWords(words) {
-                if (!words.length) {
-                    this.$message.warn('没有可导出的词语！');
-                    
-                    return;
-                }
+            downloadAsJson(exportObj, exportName){
+                const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
+                const downloadAnchorNode = document.createElement('a');
 
-                words = JSON.parse(JSON.stringify(words));
-                
+                downloadAnchorNode.setAttribute('href', dataStr);
+                downloadAnchorNode.setAttribute('download', exportName + '.json');
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            },
+
+            downloadAsCsv(words) {
                 let csvContent = "data:text/csv;charset=utf-8,";
 
                 words.forEach(({ name, trans = [], sentence, tags = []}, index) => {
@@ -633,6 +635,23 @@ function render(config, i18nTexts) {
                 let encodedUri = encodeURI(csvContent);
 
                 window.open(encodedUri);
+            },
+
+            exportWords(words, format) {
+                if (!words.length) {
+                    this.$message.warn('没有可导出的词语！');
+                    
+                    return;
+                }
+
+                const obj = JSON.parse(JSON.stringify(words));
+
+                if (format === 'csv') {
+                    this.downloadAsCsv(obj);
+                } else if (format === 'json') {
+                    this.downloadAsJson(obj, 'wordcard-words');
+                }
+
                 _gaq.push(['_trackEvent', 'options_advanced', 'click', 'export']);
             }
         }
