@@ -12,6 +12,7 @@ export const defaultConfig = {
     autocut: true,
     sentenceNum: 3,
     alertOnOmniboxInputEntered: true,
+    cardFontSize: 'normal',
     version
 }
 

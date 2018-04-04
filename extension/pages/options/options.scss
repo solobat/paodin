@@ -305,14 +305,12 @@ a {
     }
 
     .word-card-trans {
-        font-size: 14px;
         line-height: 2;
         flex: 1;
     }
 
     .word-card-sentence {
         text-align: left;
-        font-size: 14px;
         flex: 2;
         overflow: scroll;
 
@@ -357,6 +355,48 @@ a {
 
         .voice-btn {
             cursor: pointer;
+        }
+    }
+    
+    &.card-size-normal {
+        .word-card-name {
+            font-size: 16px;
+        }
+
+        .word-card-trans {
+            font-size: 14px;
+        }
+
+        .word-card-sentence {
+            font-size: 14px;
+        }
+    }
+
+    &.card-size-big {
+        .word-card-name {
+            font-size: 18px;
+        }
+
+        .word-card-trans {
+            font-size: 16px;
+        }
+
+        .word-card-sentence {
+            font-size: 16px;
+        }
+    }
+
+    &.card-size-large {
+        .word-card-name {
+            font-size: 20px;
+        }
+
+        .word-card-trans {
+            font-size: 18px;
+        }
+
+        .word-card-sentence {
+            font-size: 18px;
         }
     }
 }

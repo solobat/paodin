@@ -12,7 +12,7 @@ import ga from '../../js/common/ga'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import { WORD_LEVEL } from '../../js/constant/options'
+import { WORD_LEVEL, CARD_FONTSIZE_OPTIONS } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
 import Translate from '../../js/translate'
@@ -98,6 +98,7 @@ function render(config, i18nTexts) {
                 storeId,
                 config,
                 i18nTexts,
+                CARD_FONTSIZE_OPTIONS,
                 // list
                 words: [],
                 filter: {
