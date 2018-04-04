@@ -161,7 +161,7 @@ var App = {
             marginLeft: '-345px'
         }, 200, function() {
             $('#wordcard-frame').attr('src', chrome.extension.getURL('translate.html')).fadeIn();
-            $('#wordcard-frame').load(function() {
+            $('#wordcard-frame').on('load', function() {
                 var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
                 iframeWindow.postMessage(data, '*');
             });
