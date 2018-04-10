@@ -149,7 +149,7 @@ var App = {
 
         var html = [
             '<a href="javascript:;" class="wordcard-close"></a>',
-            '<iframe id="wordcard-frame" name="wc-word" width="690" height="370" frameborder="0"></iframe>'
+            '<iframe id="wordcard-frame" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>'
         ].join('');
 
         this.el.html(html);
