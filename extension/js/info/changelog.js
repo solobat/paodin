@@ -2,6 +2,14 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.2.8',
+        detail: `
+            修复部分网站 star 图标显示错误的问题;<br>
+            背单词卡片字体大小可设置;<br>
+            支持仅导出单词本身。
+        `
+    },
+    {
         version: 'v2.2.7',
         detail: `添加 JSON 格式导出下载`
     },
