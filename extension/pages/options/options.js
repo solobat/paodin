@@ -20,6 +20,7 @@ import { getParameterByName } from '../../js/common/utils'
 import wordRoots from '../../js/constant/wordroots'
 import keyboardJS from 'keyboardjs'
 import SocialSharing  from 'vue-social-sharing'
+import API from '../../js/api'
 
 Vue.use(SocialSharing);
 
@@ -148,6 +149,16 @@ function render(config, i18nTexts) {
                     searchText: 'a'
                 },
                 wordRoots,
+                activeSyncNames: [],
+                minappForm: {
+                    userId: '',
+                    openId: ''
+                },
+                minappRules: {
+                    userId: Validator.text('用户ID'),
+                    openId: Validator.text('openId')
+                },
+                hasMinappChecked: false,
                 version
             }
         },
@@ -670,6 +681,27 @@ function render(config, i18nTexts) {
                 }
 
                 _gaq.push(['_trackEvent', 'options_advanced', 'click', 'export']);
+            },
+
+            async handleUserCheck(type) {
+                this.$refs.minappForm.validate(async valid => {
+                    if (valid) {
+                        const resp = await API.minapp.checkUser(Object.assign({}, this.minappForm));
+
+                        if (resp && resp.code === 0) {
+                            this.$message.success(`检查成功，hi, ${resp.data.nickname}`);
+                            this.hasMinappChecked = true;
+                        }
+                    }
+                });
+            },
+
+            handleSyncClick(type) {
+                this.$refs.minappForm.validate(valid => {
+                    if (valid) {
+                        this.$message.success('sync done!');
+                    }
+                });
             }
         }
     });
