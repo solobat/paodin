@@ -147,10 +147,11 @@ var App = {
             host: window.location.hostname
         };
 
-        var html = [
+        const iframeUrl = chrome.extension.getURL('translate.html');
+        var html = `
             '<a href="javascript:;" class="wordcard-close"></a>',
-            '<iframe id="wordcard-frame" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>'
-        ].join('');
+            '<iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>'
+        `;
 
         this.el.html(html);
         this.iframe = $('#wordcard-frame');
@@ -159,9 +160,8 @@ var App = {
             height: '370px',
             width: '690px',
             marginLeft: '-345px'
-        }, 200, function() {
-            $('#wordcard-frame').attr('src', chrome.extension.getURL('translate.html')).fadeIn();
-            $('#wordcard-frame').on('load', function() {
+        }, 200, () => {
+            this.iframe.on('load', function() {
                 var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
                 iframeWindow.postMessage(data, '*');
             });

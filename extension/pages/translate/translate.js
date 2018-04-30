@@ -319,5 +319,7 @@ function initAV() {
 initAV();
 
 window.addEventListener('message', function(event) {
-    render(event.data, event.source);
+    if (event.data) {
+        render(event.data, event.source);
+    }
 });
