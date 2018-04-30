@@ -693,7 +693,7 @@ function render(config, i18nTexts) {
                             this.$message.success(`身份验证成功，Hi, ${resp.data.nickname}`);
                             this.hasMinappChecked = true;
                         } else {
-                            this.$message.error('用户身份不正确!');
+                            this.$message.error('查找不到匹配的用户!');
                         }
                     }
                 });
