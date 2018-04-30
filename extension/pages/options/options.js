@@ -152,12 +152,10 @@ function render(config, i18nTexts) {
                 wordRoots,
                 activeSyncNames: [],
                 minappForm: {
-                    userId: '',
-                    openId: ''
+                    userKey: ''
                 },
                 minappRules: {
-                    userId: Validator.text('用户ID'),
-                    openId: Validator.text('openId')
+                    userKey: Validator.text('userKey')
                 },
                 hasMinappChecked: false,
                 syncPorcess: 0,
@@ -689,11 +687,13 @@ function render(config, i18nTexts) {
             async handleUserCheck(type) {
                 this.$refs.minappForm.validate(async valid => {
                     if (valid) {
-                        const resp = await API.minapp.checkUser(Object.assign({}, this.minappForm));
+                        const resp = await API.minapp.checkUser(this.minappForm.userKey);
 
-                        if (resp && resp.code === 0) {
-                            this.$message.success(`检查成功，hi, ${resp.data.nickname}`);
+                        if (resp && resp.code === 0 && resp.data) {
+                            this.$message.success(`身份验证成功，Hi, ${resp.data.nickname}`);
                             this.hasMinappChecked = true;
+                        } else {
+                            this.$message.error('用户身份不正确!');
                         }
                     }
                 });
@@ -734,12 +734,12 @@ function render(config, i18nTexts) {
                 }
             },
 
-            async batchSync(parts) {
+            async batchSync(userId, parts) {
                 return parts.reduce((tasks, part) => {
                     return tasks.then(results => {
                         return new Promise((resolve) => {
                             setTimeout(() => {
-                                resolve(API.minapp.sync(this.minappForm.userId, part).then((result) => {
+                                resolve(API.minapp.sync(userId, part).then((result) => {
                                     final.push(result);
                                     const percent = (final.length / parts.length * 100).toFixed(2);
 
@@ -760,8 +760,9 @@ function render(config, i18nTexts) {
                     this.syncing = true;
 
                     try {
-                        const result = await this.batchSync(parts);
-                        this.$message.success('sync done!');
+                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
+                        const result = await this.batchSync(userData.userId, parts);
+                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
                         
                         return list;
                     } catch (error) {

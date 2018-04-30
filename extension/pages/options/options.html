@@ -331,17 +331,15 @@
                 </div>
                 <el-collapse v-model="activeSyncNames">
                     <el-collapse-item title="云同步" name="1">
-                        <div>如果你使用单词小卡片小程序并授权，则可以使用此同步功能</div>
+                        <div>如果你使用单词小卡片小程序并授权，则可以使用此同步功能，用户身份码可以点击单词小卡片小程序个人头像获取</div>
                         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
                             <el-row>
-                              <el-col :span="8">
-                                <el-form-item label="UserId" prop="userId">
-                                    <el-input v-model="minappForm.userId" placeholder="userId" :disabled="hasMinappChecked"></el-input>
-                                </el-form-item>
-                              </el-col>
-                              <el-col :span="8">
-                                <el-form-item label="OpenId" prop="openId">
-                                    <el-input v-model="minappForm.openId" placeholder="openId" :disabled="hasMinappChecked"></el-input>
+                              <el-col :span="16">
+                                <el-form-item label="用户身份" prop="userKey">
+                                    <el-input v-model="minappForm.userKey" 
+                                        placeholder="请输入" :disabled="hasMinappChecked"
+                                        style="width: 400px;">
+                                    </el-input>
                                 </el-form-item>
                               </el-col>
                               <el-col :span="8">

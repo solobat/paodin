@@ -5,10 +5,21 @@ const ax = axios.create({
     timeout: 5000
 });
 
-export async function checkUser(params) {
+export function pasreUserKey(userKey) {
+    const userId = userKey.substr(0, 8);
+    const openId = userKey.substr(8);
+
+    return {
+        userId,
+        openId
+    };
+}
+
+export async function checkUser(userKey = '') {
     try {
+        const userData = pasreUserKey(userKey);
         const res = await ax.get('/user', {
-            params
+            params: userData
         }); 
 
         return res.data;

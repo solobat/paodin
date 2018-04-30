@@ -149,8 +149,8 @@ var App = {
 
         const iframeUrl = chrome.extension.getURL('translate.html');
         var html = `
-            '<a href="javascript:;" class="wordcard-close"></a>',
-            '<iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>'
+            <a href="javascript:;" class="wordcard-close"></a>
+            <iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>
         `;
 
         this.el.html(html);
