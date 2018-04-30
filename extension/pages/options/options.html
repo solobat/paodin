@@ -336,17 +336,21 @@
                             <el-row>
                               <el-col :span="8">
                                 <el-form-item label="UserId" prop="userId">
-                                    <el-input v-model="minappForm.userId" placeholder="userId"></el-input>
+                                    <el-input v-model="minappForm.userId" placeholder="userId" :disabled="hasMinappChecked"></el-input>
                                 </el-form-item>
                               </el-col>
                               <el-col :span="8">
                                 <el-form-item label="OpenId" prop="openId">
-                                    <el-input v-model="minappForm.openId" placeholder="openId"></el-input>
+                                    <el-input v-model="minappForm.openId" placeholder="openId" :disabled="hasMinappChecked"></el-input>
                                 </el-form-item>
                               </el-col>
                               <el-col :span="8">
                                   <el-button v-if="!hasMinappChecked" type="primary" @click.native="handleUserCheck('minapp')">检查</el-button>
-                                  <el-button v-if="hasMinappChecked" type="primary" @click.native="handleSyncClick('minapp')">开始同步</el-button>
+                                  <template v-if="!syncing">
+                                    <el-button v-if="hasMinappChecked" type="primary" @click.native="handleSyncClick('minapp')">开始同步</el-button>
+                                    <el-button v-if="hasMinappChecked" type="primary" @click.native="hasMinappChecked = false">取消</el-button>
+                                  </template>
+                                  <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="syncPorcess"></el-progress>
                               </el-col>
                             </el-row>
                         </el-form>

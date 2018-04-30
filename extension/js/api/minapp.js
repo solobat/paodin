@@ -16,3 +16,16 @@ export async function checkUser(params) {
         return error;        
     }
 }
+
+export async function sync(userId, words) {
+    try {
+        const res = await ax.post('/sync', {
+            userId,
+            words
+        }); 
+
+        return res.data;
+    } catch (error) {
+        return error;
+    }
+}

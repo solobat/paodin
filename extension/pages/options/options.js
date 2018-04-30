@@ -30,6 +30,7 @@ const manifest = chrome.runtime.getManifest();
 const version = manifest.version;
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
+let final = [];
 
 Vue.use(ElementUI)
 
@@ -159,6 +160,8 @@ function render(config, i18nTexts) {
                     openId: Validator.text('openId')
                 },
                 hasMinappChecked: false,
+                syncPorcess: 0,
+                syncing: false,
                 version
             }
         },
@@ -696,10 +699,86 @@ function render(config, i18nTexts) {
                 });
             },
 
-            handleSyncClick(type) {
-                this.$refs.minappForm.validate(valid => {
-                    if (valid) {
+            async makeWordsSynced(newWords = []) {
+                const words = newWords.map(word => {
+                    return { id: word.id, name: word.name, synced: true };
+                });
+                return new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage({
+                        action: 'batchUpdate',
+                        data: words
+                    }, ({ data }) => {
+                        resolve(data);
+                    });
+                });
+            },
+
+            partial(list, chunk = 5) {
+                let i, j, parts = [];
+
+                for (i = 0,j = list.length; i < j; i += chunk) {
+                    parts.push(list.slice(i, i + chunk));
+                }
+
+                return parts;
+            },
+
+            async getShouldSyncWords() {
+                const words = await this.loadWords();
+                const newWords = words.filter(word => !word.synced);
+
+                if (newWords.length) {
+                    return JSON.parse(JSON.stringify(newWords))
+                } else {
+                    return;
+                }
+            },
+
+            async batchSync(parts) {
+                return parts.reduce((tasks, part) => {
+                    return tasks.then(results => {
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve(API.minapp.sync(this.minappForm.userId, part).then((result) => {
+                                    final.push(result);
+                                    const percent = (final.length / parts.length * 100).toFixed(2);
+
+                                    this.syncPorcess = Number(percent);
+                                }));
+                            }, 200);
+                        });
+                    }).catch(console.error);
+                }, Promise.resolve());
+            },
+
+            async syncToMinapp() {
+                const list = await this.getShouldSyncWords();
+
+                if (list) {
+                    const parts = this.partial(list);
+
+                    this.syncing = true;
+
+                    try {
+                        const result = await this.batchSync(parts);
                         this.$message.success('sync done!');
+                        
+                        return list;
+                    } catch (error) {
+                        console.log(error);
+                    } finally {
+                        this.syncing = false;
+                    }
+                } else {
+                    this.$message.warning('没有需要同步的单词了.');
+                }
+            },
+
+            async handleSyncClick(type) {
+                this.$refs.minappForm.validate(async valid => {
+                    if (valid) {
+                        const syncedList = await this.syncToMinapp();
+                        const resp = await this.makeWordsSynced(syncedList);
                     }
                 });
             }

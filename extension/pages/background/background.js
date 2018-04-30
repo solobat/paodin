@@ -62,6 +62,7 @@ var wordsHelper = {
     },
 
     update: function(attrs) {
+        debugger
         var word = Words.set(attrs, {
             add: false,
             remove: false
@@ -69,6 +70,14 @@ var wordsHelper = {
 
         word.save();
         return word;
+    },
+
+    batchUpdate: function(words) {
+        if (words && words.length) {
+            words.forEach(word => {
+                this.update(word);
+            });
+        }
     },
 
     review(id, gotit) {
@@ -185,6 +194,14 @@ function msgHandler(req, sender, resp) {
         var word = wordsHelper.update(data);
         resp({
             msg: 'update ok...',
+            data: {}
+        });
+    }
+
+    if (action === 'batchUpdate') {
+        var results = wordsHelper.batchUpdate(data);
+        resp({
+            msg: 'batchupdate ok...',
             data: {}
         });
     }
