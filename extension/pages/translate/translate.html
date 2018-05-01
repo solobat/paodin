@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="col-footer"> 
-                        <span class="by">Translation by 有道</span>
+                        <span class="by">Translation by {{ meta.engine }}</span>
                         <span class="saveCard" @click="handleSaveClick">
                             <i v-if="assit.orgWord" class="el-icon-star-on"></i>
                             <i v-else class="el-icon-star-off"></i>
