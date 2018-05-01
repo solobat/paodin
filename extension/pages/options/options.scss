@@ -159,6 +159,7 @@ a {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    position: relative;
     border-bottom: 1px solid #ededed;
     padding-bottom: 5px;
 
@@ -444,4 +445,14 @@ a {
     .fa-twitter {
         background-image: url(/img/twitter.png);
     }
+}
+
+.icon-synced {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: url(/img/synced.png) no-repeat center;
+    background-size: 100% 100%;
+    width: 20px;
+    height: 20px;
 }
