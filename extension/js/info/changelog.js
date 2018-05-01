@@ -127,12 +127,6 @@ let langEn = [
 
 ];
 
-let results;
-
-if (chrome.i18n.getUILanguage().indexOf('zh') > -1) {
-    results = langZh;
-} else {
-    results = langEn;
-}
+let results = langZh;
 
 export default results;

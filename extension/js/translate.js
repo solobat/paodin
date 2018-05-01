@@ -27,9 +27,7 @@ export default {
         if (voiceUrl.startsWith('http')) {
             this.playAudioUrl(voiceUrl);
         } else {
-            const word = voiceUrl;
-
-            return chrome.tts.speak(word, {'lang': 'en-US'});
+         
         }
     },
 

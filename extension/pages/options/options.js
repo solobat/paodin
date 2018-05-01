@@ -11,7 +11,6 @@ import './options.scss'
 import ga from '../../js/common/ga'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
-import { getSyncConfig } from '../../js/common/config'
 import { WORD_LEVEL, CARD_FONTSIZE_OPTIONS } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
@@ -25,10 +24,8 @@ import API from '../../js/api'
 
 Vue.use(SocialSharing);
 
-const chrome = window.chrome;
-const bg = chrome.extension.getBackgroundPage();
-const manifest = chrome.runtime.getManifest();
-const version = manifest.version;
+const chrome = browser;
+const version = '2.3';
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
 let final = [];
@@ -36,7 +33,10 @@ let final = [];
 Vue.use(ElementUI)
 
 function init() {
-    getSyncConfig().then(config => {
+    chrome.runtime.sendMessage({
+        action: 'getConfig'
+    }, resp => {
+        const config = resp.data;
         console.log(config);
         let i18nTexts = getI18nTexts();
         
@@ -350,7 +350,7 @@ function render(config, i18nTexts) {
 
                 browser.storage.sync.set({
                     config: newConfig
-                }).then(resp => {
+                }, resp => {
                     if (!silent) {
                         this.$message('保存成功');
                     }

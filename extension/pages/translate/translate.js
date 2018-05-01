@@ -9,6 +9,8 @@ import './translate.scss'
 import AV from 'leancloud-storage'
 import * as PageConfig from './translate.config.js'
 
+const chrome = window.browser;
+
 Vue.use(ElementUI)
 
 const AVHelper = {
@@ -248,7 +250,7 @@ function initApp({ word, surroundings, source, host, engine }) {
             handleDeleteClick() {
                 var self = this;
     
-                chrome.extension.sendRequest({
+                chrome.runtime.sendMessage({
                         'action': 'remove',
                         'data': {
                             id: self.wordId

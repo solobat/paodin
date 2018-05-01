@@ -5,6 +5,7 @@
 
   // A wrapper around the `chrome.storage.*` API that uses
   // `$.Deferred` objects for greater flexibility.
+  const chrome = browser
   function Wrapper(type) {
     type = ''+type || 'local';
 

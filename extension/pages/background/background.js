@@ -16,8 +16,8 @@ import { getSyncConfig } from '../../js/common/config'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
-const browser = window.chrome;
 const MAX_WORDS_NUM = 442;
+const chrome = window.browser;
 
 let Words = new WordList();
 let config;
@@ -260,6 +260,13 @@ function msgHandler(req, sender, resp) {
         resp({
             msg: `单词小卡片最多只能容纳${MAX_WORDS_NUM}个单词`,
             data: storageVaild
+        });
+    }
+
+    if (action === 'getConfig') {
+        resp({
+            msg: 'get config ok',
+            data: config
         });
     }
 }

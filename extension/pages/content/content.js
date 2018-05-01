@@ -12,7 +12,7 @@ import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
 import { isMac } from '../../js/common/utils'
 
-const chrome = window.chrome;
+const chrome = window.browser;
 var options = window.options;
 
 const enReg = /^[^\u4e00-\u9fa5]+$/i;
@@ -129,7 +129,7 @@ var App = {
     },
 
     initIframe() {
-        const iframeUrl = chrome.extension.getURL('translate.html');
+        const iframeUrl = browser.extension.getURL('translate.html');
         var html = `
             <a href="javascript:;" class="wordcard-close"></a>
             <iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>
@@ -310,7 +310,7 @@ var App = {
     initHighlights() {
         let self = this;
 
-        chrome.extension.sendRequest({
+        chrome.runtime.sendMessage({
             'action': 'get',
             'data': {}
         },

@@ -1,13 +1,12 @@
 import browser from 'webextension-polyfill'
 
-const manifest = chrome.runtime.getManifest();
-const version = manifest.version;
+const version = '2.3';
 
 export const defaultConfig = {
     enableUrls: [],
     disableUrls: [],
     urlMode: 'enableUrls',
-    dblclick2trigger: false,
+    dblclick2trigger: true,
     withCtrlOrCmd: false,
     autocut: true,
     sentenceNum: 3,
@@ -19,16 +18,20 @@ export const defaultConfig = {
 
 // merge config && save
 export function getSyncConfig() {
-    return browser.storage.sync.get('config').then(({ config }) => {
-        if (!config) {
-            config = defaultConfig;
-        } else {
-            config = Object.assign({}, defaultConfig, config);
-        }
+    return new Promise((resolve, reject) => {
+        browser.storage.sync.get('config', function({ config }) {
+            if (!config) {
+                config = defaultConfig;
+            } else {
+                config = Object.assign({}, defaultConfig, config);
+            }
 
+            resolve(config);
+        });
+    }).then(config => {
         browser.storage.sync.set({
             config
-        });
+        }, function() {});
 
         return config;
     });

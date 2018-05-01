@@ -3,7 +3,7 @@
  * @author solopea@gmail.com
  */
 
-const chrome = window.chrome;
+const chrome = window.browser;
 // get user's options
 let options = {
     autoplay: true,

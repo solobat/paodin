@@ -49,9 +49,21 @@ export function getWords() {
 }
 
 export function getParameterByName(name, search = window.location.search) {
-    let urlsearch = new URLSearchParams(search);
+    if (typeof URLSearchParams !== 'undefined') {
+        let urlsearch = new URLSearchParams(search);
 
-    return urlsearch.get(name);
+        return urlsearch.get(name);
+    } else {
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( window.location.href );
+        if( results == null ) {
+            return "";
+        }  else {
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+    }
 }
 
 export const events = {
