@@ -19,3 +19,11 @@ export const CARD_FONTSIZE_OPTIONS = [{
     label: '大',
     value: 'large'
 }];
+
+export const TRANSLATE_ENGINS = [{
+    label: '百度',
+    value: 'baidu'
+}, {
+    label: 'Google',
+    value: 'google'
+}];

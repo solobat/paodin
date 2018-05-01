@@ -245,7 +245,7 @@ function msgHandler(req, sender, resp) {
         let newLevel = wordsHelper.review(id, gotit);
 
         if (word) {
-            Translate.playAudioByWord(word);
+            Translate.playAudio(word);
         }
 
         resp({

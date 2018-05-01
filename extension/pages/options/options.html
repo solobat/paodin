@@ -24,6 +24,18 @@
                 <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
                     <el-row>
                       <el-col :span="6">
+                          <el-form-item label="翻译引擎">
+                              <el-select v-model="config.engine" placeholder="请选择">
+                                <el-option v-for="(item, index) in TRANSLATE_ENGINS" :key="index"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                              </el-select>
+                          </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="6">
                         <el-form-item label="双击取词">
                             <el-switch
                                 v-model="config.dblclick2trigger"

@@ -3,6 +3,7 @@ import * as Engine from 'translation.js'
 
 export default {
     translate: function(word, type) {
+        console.log(`engine is: ${type}`);
         return this.getTranslation(word, type);
     },
 
@@ -15,18 +16,20 @@ export default {
             return {
                 explains: resp.dict,
                 trans: resp.result,
-                phonetic: resp.phonetic
+                phonetic: resp.phonetic || [{
+                    name: '美'
+                }]
             };
         });
     },
 
-    playAudio: function(voiceUrl, type = 'baidu') {
+    playAudio: function(voiceUrl = '') {
         if (voiceUrl.startsWith('http')) {
             this.playAudioUrl(voiceUrl);
         } else {
             const word = voiceUrl;
 
-            return Engine[type].audio(word);
+            return chrome.tts.speak(word, {'lang': 'en-US'});
         }
     },
 

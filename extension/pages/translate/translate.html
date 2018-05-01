@@ -20,7 +20,7 @@
                                 <input type="text" v-model="meta.word" id="lookup-root" @blur="updateWord" @dblclick="enbaleWordInput" class="title" :readonly="!assit.wordEditable"/>
                                 <span class="voice-item" v-if="assit.translate.phonetic && assit.translate.phonetic.length"
                                      v-for="(item, index) in assit.translate.phonetic" :key="index">
-                                    <span>[{{item.name}}]</span><span class="ico-audio" @mouseover="playAudio(item.ttsURI)"></span>
+                                    <span>[{{item.name}}]</span><span class="ico-audio" @mouseover="playAudio(item.ttsURI || meta.word)"></span>
                                 </span>
                                 <span class="add-txt"></span>
                             </div>

@@ -160,7 +160,8 @@ var App = {
             word: word,
             surroundings: this.getSurroundings(word, node),
             source: window.location.href,
-            host: window.location.hostname
+            host: window.location.hostname,
+            engine: this.config.engine
         };
 
         if (!this.iframe) {

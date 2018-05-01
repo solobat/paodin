@@ -16,6 +16,7 @@ import { WORD_LEVEL, CARD_FONTSIZE_OPTIONS } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
 import Translate from '../../js/translate'
+import { TRANSLATE_ENGINS } from '../../js/constant/options'
 import { getParameterByName } from '../../js/common/utils'
 import wordRoots from '../../js/constant/wordroots'
 import keyboardJS from 'keyboardjs'
@@ -101,6 +102,7 @@ function render(config, i18nTexts) {
                 config,
                 i18nTexts,
                 CARD_FONTSIZE_OPTIONS,
+                TRANSLATE_ENGINS,
                 // list
                 words: [],
                 filter: {
@@ -565,7 +567,7 @@ function render(config, i18nTexts) {
             },
 
             playVoice() {
-                Translate.playAudioByWord(this.curRecitedWord.name);
+                Translate.playAudio(this.curRecitedWord.name);
                 _gaq.push(['_trackEvent', 'recite', 'click', 'voice']);
             },
 

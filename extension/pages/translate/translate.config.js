@@ -8,7 +8,9 @@ export function getDefaultAssit() {
         tagInputValue: '',
         deleteTimes: 0,
         translate: {
-            phonetic: [],
+            phonetic: [{
+                name: '美'
+            }],
             trans: [],
             explains: []
         },
