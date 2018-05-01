@@ -1,52 +1,36 @@
 import $ from 'jquery'
-import API from './common/api'
+import * as Engine from 'translation.js'
 
 export default {
-    translate: function(word) {
-        return this.getTranslation(word);
+    translate: function(word, type) {
+        return this.getTranslation(word, type);
     },
 
-    getTranslation: function(word) {
-        return new Promise(function(resolve, reject) {
-            var url = API.translate + word;
-
-            $.get(url, function(data) {
-                resolve(data);
-            });
+    getTranslation: function(word, type = 'baidu') {
+        return Engine[type].translate({
+            text: word,
+            from: 'en',
+            to: 'zh-CN'
+        }).then(resp => {
+            return {
+                explains: resp.dict,
+                trans: resp.result,
+                phonetic: resp.phonetic
+            };
         });
     },
 
-    getImg: function(wordText) {
-        return new Promise(function(resolve, reject) {
-            $.getJSON(API.img.replace('{{word}}', wordText)).done(function(res) {
-                var data = res.responseData.results;
-                if (!data || !data.length) {
-                    resolve([]);
-                    return;
-                }
+    playAudio: function(voiceUrl, type = 'baidu') {
+        if (voiceUrl.startsWith('http')) {
+            this.playAudioUrl(voiceUrl);
+        } else {
+            const word = voiceUrl;
 
-                var imgList = data.map(function(item) {
-                    return item.url;
-                });
-
-                resolve(imgList);
-            });
-        });
+            return Engine[type].audio(word);
+        }
     },
 
-    playAudio: function(word) {
-        word = word || this.word;
-
-        this.playAudioByWord(word);
-    },
-
-    getAudioUrl: function(word) {
-        var index = Math.floor(Math.random() * API.audio.length);
-
-        return API.audio[index].replace('{{word}}', word);
-    },
-
-    playAudioByWord: function(word) {
+    playAudioUrl: function(voiceUrl) {
         var $audio = $('#wc-audio');
 
         if (!$audio.length) {
@@ -55,7 +39,6 @@ export default {
         }
 
         var audioElem = $audio.get(0);
-        var voiceUrl = this.getAudioUrl(word);
 
         $audio.attr('src', voiceUrl);
 

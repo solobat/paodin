@@ -18,9 +18,11 @@
                         <div id="lookup-area-inner">
                             <div class="head">
                                 <input type="text" v-model="meta.word" id="lookup-root" @blur="updateWord" @dblclick="enbaleWordInput" class="title" :readonly="!assit.wordEditable"/>
-                                <span>[{{ assit.translate.phonetic }}]</span>
+                                <span class="voice-item" v-if="assit.translate.phonetic && assit.translate.phonetic.length"
+                                     v-for="(item, index) in assit.translate.phonetic" :key="index">
+                                    <span>[{{item.name}}]</span><span class="ico-audio" @mouseover="playAudio(item.ttsURI)"></span>
+                                </span>
                                 <span class="add-txt"></span>
-                                <a class="ico-audio" @mouseover="playAudio" id="read-root" root="depression" language="en"></a>
                             </div>
                             <a class="btn defitem active" v-for="(item, index) in assit.translate.trans" @click="handleDefDelete(index)" :defindex="index">
                                 {{ item }}

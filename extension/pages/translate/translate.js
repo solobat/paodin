@@ -141,17 +141,7 @@ function initApp({ word, surroundings, source, host }) {
                 });
             },
             getTranslate() {
-                return Translate.translate(this.meta.word).then(data => {
-                    if (!data.basic) {
-                        return false;
-                    }
-        
-                    let results = {
-                        phonetic: data.basic['us-phonetic'],
-                        trans: data.translation || [],
-                        explains: data.basic.explains
-                    };
-
+                return Translate.translate(this.meta.word).then(results => {
                     // FIXME: orgWord may only have id attr
                     if (this.assit.orgWord) {
                         let { trans = [], tags = [] } = this.assit.orgWord;
@@ -161,15 +151,11 @@ function initApp({ word, surroundings, source, host }) {
                     }
 
                     this.assit.translate = results;
-        
-                    setTimeout(() => {
-                        Translate.playAudio(this.meta.word);
-                    }, 1000);
                 });
             },
 
-            playAudio() {
-                Translate.playAudio(this.meta.word);
+            playAudio(url) {
+                Translate.playAudio(url);
             },
 
             enbaleWordInput() {
