@@ -48,9 +48,13 @@ function getBlock(node, deep) {
 let menuEvent;
 var App = {
     context: window,
+    iframeLoaded: false,
     handleTextSelected: function(e) {
         var selection = this.context.getSelection();
         var word = (selection.toString() || '').trim();
+        if (!e) {
+            debugger
+        }
         var node = e.target;
 
         if (!word) {
@@ -123,6 +127,17 @@ var App = {
         return this.autocutSentenceIfNeeded(word, wordContent);
     },
 
+    initIframe() {
+        const iframeUrl = chrome.extension.getURL('translate.html');
+        var html = `
+            <a href="javascript:;" class="wordcard-close"></a>
+            <iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>
+        `;
+
+        this.el.html(html);
+        this.iframe = $('#wordcard-frame');
+    },
+
     lookUp: function(e, word, node) {
         var x_pos = e.pageX;
         var y_pos = e.pageY;
@@ -147,33 +162,40 @@ var App = {
             host: window.location.hostname
         };
 
-        const iframeUrl = chrome.extension.getURL('translate.html');
-        var html = `
-            <a href="javascript:;" class="wordcard-close"></a>
-            <iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>
-        `;
+        if (!this.iframe) {
+            this.initIframe();
+        }
 
-        this.el.html(html);
-        this.iframe = $('#wordcard-frame');
-
-        this.el.show().animate({
+        this.el.css({
             height: '370px',
             width: '690px',
             marginLeft: '-345px'
-        }, 200, () => {
-            this.iframe.on('load', function() {
-                var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
-                iframeWindow.postMessage(data, '*');
-            });
-        });
+        }).show();
+        this.noticeIframe(data);
         this.isOpen = true;
+    },
+
+    noticeIframe(data) {
+        function notice() {
+            var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
+            
+            iframeWindow.postMessage(data, '*');
+        }
+
+        if (!this.iframeLoaded) {
+            this.iframe.on('load', () => {
+                notice();
+                this.iframeLoaded = true;
+            });
+        } else {
+            setTimeout(notice, 25);
+        }
     },
 
     closePopup: function() {
         var self = this;
 
         this.isOpen = false;
-        this.iframe.hide();
         this.el.animate({
             height: '80px',
             width: '80px',
