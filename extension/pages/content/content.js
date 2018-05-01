@@ -10,6 +10,7 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
+import { isMac } from '../../js/common/utils'
 
 var options = window.options;
 
@@ -36,17 +37,24 @@ function replaceAll(str, find, replace, useRaw) {
 let blockTags = ['LI', 'P', 'DIV', 'BODY'];
 
 function getBlock(node, deep) {
-    if (blockTags.indexOf(node.tagName) !== -1 || deep === 0) {
+    if (blockTags.indexOf(node.tagName.toUpperCase()) !== -1 || deep === 0) {
         return node;
     } else {
         return getBlock(node.parentElement, deep - 1);
     }
 }
 
+let menuEvent;
 var App = {
+    context: window,
+    iframeLoaded: false,
     handleTextSelected: function(e) {
-        var selection = window.getSelection();
+        var selection = this.context.getSelection();
         var word = (selection.toString() || '').trim();
+        if (!e) {
+            console.error('no selection...');
+            debugger
+        }
         var node = e.target;
 
         if (!word) {
@@ -68,7 +76,7 @@ var App = {
             return;
         }
 
-        this.highlight = new Highlight(node, word);
+        this.highlight = new Highlight(node, word, this.context);
         this.lookUp(e, word, node);
     },
 
@@ -119,13 +127,24 @@ var App = {
         return this.autocutSentenceIfNeeded(word, wordContent);
     },
 
+    initIframe() {
+        const iframeUrl = chrome.extension.getURL('translate.html');
+        var html = `
+            <a href="javascript:;" class="wordcard-close"></a>
+            <iframe id="wordcard-frame" src="${iframeUrl}" style="max-width: initial;" name="wc-word" width="690" height="370" frameborder="0"></iframe>
+        `;
+
+        this.el.html(html);
+        this.iframe = $('#wordcard-frame');
+    },
+
     lookUp: function(e, word, node) {
         var x_pos = e.pageX;
         var y_pos = e.pageY;
         var x_posView = e.clientX;
         var y_posView = e.clientY;
-        var winWidth = window.innerWidth;
-        var winHeight = window.innerHeight;
+        var winWidth = this.context.innerWidth;
+        var winHeight = this.context.innerHeight;
         var upDir = (y_posView > (winHeight / 2));
 
         if (upDir) {
@@ -140,42 +159,79 @@ var App = {
             word: word,
             surroundings: this.getSurroundings(word, node),
             source: window.location.href,
-            host: window.location.hostname
+            host: window.location.hostname,
+            engine: this.config.engine
         };
 
-        var html = [
-            '<a href="javascript:;" class="wordcard-close"></a>',
-            '<iframe id="wordcard-frame" name="wc-word" width="690" height="370" frameborder="0"></iframe>'
-        ].join('');
+        if (!this.iframe) {
+            this.initIframe();
+        }
 
-        this.el.html(html);
-        this.iframe = $('#wordcard-frame');
-
-        this.el.show().animate({
+        this.el.css({
             height: '370px',
             width: '690px',
             marginLeft: '-345px'
-        }, 200, function() {
-            $('#wordcard-frame').attr('src', browser.extension.getURL('translate.html')).fadeIn();
-            $('#wordcard-frame').load(function() {
-                var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
-                iframeWindow.postMessage(data, '*');
-            });
-        });
+        }).show();
+        this.noticeIframe(data);
         this.isOpen = true;
     },
 
-    closePopup: function() {
-        var self = this;
+    noticeIframe(data) {
+        function notice() {
+            var iframeWindow = document.getElementById('wordcard-frame').contentWindow;
+            
+            iframeWindow.postMessage(data, '*');
+        }
 
+        if (!this.iframeLoaded) {
+            this.iframe.on('load', () => {
+                notice();
+                this.iframeLoaded = true;
+            });
+        } else {
+            setTimeout(notice, 25);
+        }
+    },
+
+    closePopup: function() {
         this.isOpen = false;
-        this.iframe.hide();
-        this.el.animate({
-            height: '80px',
-            width: '80px',
-            marginLeft: '-40px'
-        }, 200, function() {
-            self.el.hide();
+        this.el.hide();
+    },
+
+    injectStyles(doc) {
+        var $head = $(doc).find('head');                
+
+        $head.append(`
+            <style>
+                .wc-highlight {
+                    margin: 0 5px;
+                    background-color: yellow;
+                    color: black;
+                }
+            </style>
+        `);    
+    },
+
+    checkIframes() {
+        const self = this;
+
+        $('iframe').each(function() {
+            const win = this.contentWindow;
+            const doc = this.contentDocument;
+            const $iframe = $(this);
+
+            if (!$iframe.hasClass('wordcard-init') && $iframe.is(':visible') 
+                && !$(doc).find('#wordcard-main').length) {
+                doc.documentElement.addEventListener('contextmenu', function(event) {
+                    menuEvent = event;
+                    self.context = win;
+                }, false);
+
+                self.injectStyles(doc);
+                $iframe.addClass('wordcard-init');
+            } else {
+                console.log('iframe invisible or has wordcard');
+            }
         });
     },
 
@@ -183,19 +239,28 @@ var App = {
         var self = this;
 
         // 选中翻译
-        $(document).on('dblclick', function(e) {
+        $(document).on('dblclick', function(event) {
             if (self.config.dblclick2trigger) {
-                self.handleTextSelected(e);
+                const withCtrlOrCmd = self.config.withCtrlOrCmd;
+
+                if (!withCtrlOrCmd || (withCtrlOrCmd && (isMac ? event.metaKey : event.ctrlKey))) {
+                    self.handleTextSelected(event);
+                }
             }
         });
 
-        let menuEvent;
-
-        document.documentElement.addEventListener('contextmenu', function(e) {
-            menuEvent = e;
+        document.documentElement.addEventListener('contextmenu', function(event) {
+            menuEvent = event;
+            self.context = window;
         }, false);
 
-        browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        window.addEventListener('hashchange', function() {
+            setTimeout(function() {
+                self.checkIframes();
+            }, 5000);
+        });
+
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             let action = request.action;
 
             if (action === 'menuitemclick') {
@@ -265,12 +330,9 @@ var App = {
         $('html').append(popup);
         this.el = $('#wordcard-main');
         this.bindEvents();
-
-        // this.initHighlights();
     }
 };
 
-// TODO: host enable
 var host = window.location.hostname;
 
 getSyncConfig().then(config => {

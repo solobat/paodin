@@ -12,14 +12,16 @@ import ga from '../../js/common/ga'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import { WORD_LEVEL } from '../../js/constant/options'
+import { WORD_LEVEL, CARD_FONTSIZE_OPTIONS } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
 import Translate from '../../js/translate'
+import { TRANSLATE_ENGINS } from '../../js/constant/options'
 import { getParameterByName } from '../../js/common/utils'
 import wordRoots from '../../js/constant/wordroots'
 import keyboardJS from 'keyboardjs'
 import SocialSharing  from 'vue-social-sharing'
+import API from '../../js/api'
 
 Vue.use(SocialSharing);
 
@@ -27,27 +29,7 @@ const manifest = browser.runtime.getManifest();
 const version = manifest.version;
 const appName = 'wordcard';
 const storeId = 'oegblnjiajbfeegijlnblepdodmnddbk';
-const stat = {
-    '2.2.5': {
-        star: 36,
-        comment: 9,
-        pay: 0,
-        user: 268,
-        points: (2 + 1) * 20 + (49) * 5
-    },
-    '2.2.4': {
-        star: 34,
-        comment: 8,
-        pay: 0,
-        user: 219
-    },
-    '2.2.3': {
-        star: 33,
-        comment: 8,
-        pay: 0,
-        user: 177
-    }
-};
+let final = [];
 
 Vue.use(ElementUI)
 
@@ -117,6 +99,8 @@ function render(config, i18nTexts) {
                 storeId,
                 config,
                 i18nTexts,
+                CARD_FONTSIZE_OPTIONS,
+                TRANSLATE_ENGINS,
                 // list
                 words: [],
                 filter: {
@@ -166,8 +150,17 @@ function render(config, i18nTexts) {
                     searchText: 'a'
                 },
                 wordRoots,
-                version,
-                stat
+                activeSyncNames: [],
+                minappForm: {
+                    userKey: ''
+                },
+                minappRules: {
+                    userKey: Validator.text('userKey')
+                },
+                hasMinappChecked: false,
+                syncPorcess: 0,
+                syncing: false,
+                version
             }
         },
 
@@ -572,7 +565,7 @@ function render(config, i18nTexts) {
             },
 
             playVoice() {
-                Translate.playAudioByWord(this.curRecitedWord.name);
+                Translate.playAudio(this.curRecitedWord.name);
                 _gaq.push(['_trackEvent', 'recite', 'click', 'voice']);
             },
 
@@ -629,19 +622,26 @@ function render(config, i18nTexts) {
                 _gaq.push(['_trackEvent', 'recite', 'click', 'newrecite']);
             },
 
-            handleExportClick() {
-                this.loadWords().then(words => this.exportWords(words));
+            handleExportClick(format) {
+                this.loadWords().then(words => this.exportWords(words, format));
             },
 
-            exportWords(words) {
-                if (!words.length) {
-                    this.$message.warn('没有可导出的词语！');
-                    
-                    return;
-                }
+            download(url, name) {
+                const downloadAnchorNode = document.createElement('a');
 
-                words = JSON.parse(JSON.stringify(words));
-                
+                downloadAnchorNode.setAttribute('href', url);
+                downloadAnchorNode.setAttribute('download', name);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            },
+
+            downloadAsJson(exportObj, exportName){
+                const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj));
+
+                this.download(dataStr, exportName + '.json');
+            },
+
+            downloadAsCsv(words) {
                 let csvContent = "data:text/csv;charset=utf-8,";
 
                 words.forEach(({ name, trans = [], sentence, tags = []}, index) => {
@@ -652,8 +652,136 @@ function render(config, i18nTexts) {
 
                 let encodedUri = encodeURI(csvContent);
 
-                window.open(encodedUri);
+                this.download(encodedUri, 'wordcard-words.csv');
+            },
+
+            downloadAsText(words = []) {
+                let textContent = "data:text/plain;charset=utf-8,";
+                const data = words.map(word => word.name);
+
+                let encodedUri = encodeURI(`${textContent}${data.join('\n')}`);
+
+                this.download(encodedUri, 'wordcard-words.txt');
+            },
+
+            exportWords(words, format) {
+                if (!words.length) {
+                    this.$message.warn('没有可导出的词语！');
+                    
+                    return;
+                }
+
+                const obj = JSON.parse(JSON.stringify(words));
+
+                if (format === 'csv') {
+                    this.downloadAsCsv(obj);
+                } else if (format === 'json') {
+                    this.downloadAsJson(obj, 'wordcard-words');
+                } else if (format === 'words') {
+                    this.downloadAsText(obj);
+                }
+
                 _gaq.push(['_trackEvent', 'options_advanced', 'click', 'export']);
+            },
+
+            async handleUserCheck(type) {
+                this.$refs.minappForm.validate(async valid => {
+                    if (valid) {
+                        const resp = await API.minapp.checkUser(this.minappForm.userKey);
+
+                        if (resp && resp.code === 0 && resp.data) {
+                            this.$message.success(`身份验证成功，Hi, ${resp.data.nickname}`);
+                            this.hasMinappChecked = true;
+                        } else {
+                            this.$message.error('查找不到匹配的用户!');
+                        }
+                    }
+                });
+            },
+
+            async makeWordsSynced(newWords = []) {
+                const words = newWords.map(word => {
+                    return { id: word.id, name: word.name, synced: true };
+                });
+                return new Promise((resolve, reject) => {
+                    chrome.runtime.sendMessage({
+                        action: 'batchUpdate',
+                        data: words
+                    }, ({ data }) => {
+                        resolve(data);
+                    });
+                });
+            },
+
+            partial(list, chunk = 5) {
+                let i, j, parts = [];
+
+                for (i = 0,j = list.length; i < j; i += chunk) {
+                    parts.push(list.slice(i, i + chunk));
+                }
+
+                return parts;
+            },
+
+            async getShouldSyncWords() {
+                const words = await this.loadWords();
+                const newWords = words.filter(word => !word.synced);
+
+                if (newWords.length) {
+                    return JSON.parse(JSON.stringify(newWords))
+                } else {
+                    return;
+                }
+            },
+
+            async batchSync(userId, parts) {
+                return parts.reduce((tasks, part) => {
+                    return tasks.then(results => {
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve(API.minapp.sync(userId, part).then((result) => {
+                                    final.push(result);
+                                    const percent = (final.length / parts.length * 100).toFixed(2);
+
+                                    this.syncPorcess = Number(percent);
+                                }));
+                            }, 200);
+                        });
+                    }).catch(console.error);
+                }, Promise.resolve());
+            },
+
+            async syncToMinapp() {
+                const list = await this.getShouldSyncWords();
+
+                if (list) {
+                    const parts = this.partial(list);
+
+                    this.syncing = true;
+
+                    try {
+                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
+                        const result = await this.batchSync(userData.userId, parts);
+                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
+                        
+                        return list;
+                    } catch (error) {
+                        console.log(error);
+                    } finally {
+                        this.syncing = false;
+                    }
+                } else {
+                    this.$message.warning('没有需要同步的单词了.');
+                }
+            },
+
+            async handleSyncClick(type) {
+                this.$refs.minappForm.validate(async valid => {
+                    if (valid) {
+                        const syncedList = await this.syncToMinapp();
+                        const resp = await this.makeWordsSynced(syncedList);
+                    }
+                });
             }
         }
     });

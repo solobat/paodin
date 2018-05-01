@@ -6,14 +6,15 @@ import { selectText } from './common/utils'
 import $ from 'jquery'
 
 export default class Highlight {
-    constructor(target, word) {
+    constructor(target, word, context) {
+        this.context = context || window;
         if (this.shouldHighlight(target)) {
             return this.create(word);
         }
     }
 
     hasWords() {
-        var selection = window.getSelection();
+        var selection = this.context.getSelection();
         var frag = selection.getRangeAt(0).cloneContents();
 
         return !!frag.querySelector('.wc-highlight');
@@ -31,9 +32,9 @@ export default class Highlight {
     }
 
     create() {
-        var range = window.getSelection().getRangeAt(0);
+        var range = this.context.getSelection().getRangeAt(0);
         var selectionContents = range.extractContents();
-        var elem = document.createElement('em');
+        var elem = this.context.document.createElement('em');
 
         elem.appendChild(selectionContents);
         elem.setAttribute('class', 'wc-highlight');
@@ -54,7 +55,7 @@ export default class Highlight {
 
             utils.selectText(elem);
 
-            var range = window.getSelection().getRangeAt(0);
+            var range = this.context.getSelection().getRangeAt(0);
             var selectionContents = range.extractContents();
 
             elem.remove();

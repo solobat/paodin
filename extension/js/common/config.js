@@ -7,10 +7,13 @@ export const defaultConfig = {
     enableUrls: [],
     disableUrls: [],
     urlMode: 'enableUrls',
-    dblclick2trigger: true,
+    dblclick2trigger: false,
+    withCtrlOrCmd: false,
     autocut: true,
     sentenceNum: 3,
     alertOnOmniboxInputEntered: true,
+    cardFontSize: 'normal',
+    engine: 'google',
     version
 }
 

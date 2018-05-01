@@ -4,6 +4,33 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3',
+        detail: `
+            引入多翻译引擎，目前支持 Google / Baidu，默认 Google，可以选项页更改；<br>
+            支持单词<em>同步</em>到小程序版单词小卡片，具体操作在 选项 -> 高级 -> 云同步。
+        `
+    },
+    {
+        version: 'v2.2.8',
+        detail: `
+            修复部分网站 star 图标显示错误的问题;<br>
+            背单词卡片字体大小可设置;<br>
+            支持仅导出单词本身。
+        `
+    },
+    {
+        version: 'v2.2.7',
+        detail: `添加 JSON 格式导出下载`
+    },
+    {
+        version: 'v2.2.6',
+        detail: `
+            点一个释义就删除;<br>
+            ctrl + 鼠标选中弹出查词;<br>
+            部分情况下的iframe 兼容处理
+        `
+    },
+    {
         version: 'v2.2.5',
         detail: `
             单词库最大容量提醒;<br>
