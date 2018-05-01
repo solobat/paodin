@@ -53,6 +53,7 @@ var App = {
         var selection = this.context.getSelection();
         var word = (selection.toString() || '').trim();
         if (!e) {
+            console.error('no selection...');
             debugger
         }
         var node = e.target;
@@ -193,16 +194,8 @@ var App = {
     },
 
     closePopup: function() {
-        var self = this;
-
         this.isOpen = false;
-        this.el.animate({
-            height: '80px',
-            width: '80px',
-            marginLeft: '-40px'
-        }, 200, function() {
-            self.el.hide();
-        });
+        this.el.hide();
     },
 
     injectStyles(doc) {
