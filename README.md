@@ -30,6 +30,10 @@
 ![选项](http://owsjc7iz3.bkt.clouddn.com/options.png)
 ![单词卡片](http://owsjc7iz3.bkt.clouddn.com/iframe.png)
 
+#### 沟通/交流
++ [Telegram](https://t.me/okwordcard)
++ QQ 群: 314501729
+
 #### 许可:
 [![license-badge]][license-link]
 
