@@ -431,6 +431,11 @@ function render(config, i18nTexts) {
                 _gaq.push(['_trackEvent', 'wordeditor', 'click', 'delete']);
             },
 
+            handleSyncedClick(word) {
+                word.synced = false;
+                this.saveWord(word);
+            },
+
             onWordFormSubmit() {
 
             },

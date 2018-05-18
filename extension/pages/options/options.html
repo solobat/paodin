@@ -137,7 +137,7 @@
                                     <div class="word-tags">
                                         <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
                                     </div> 
-                                    <i class="icon-synced" v-if="word.synced"></i>
+                                    <i class="icon-synced" @click.stop="handleSyncedClick(word)" v-if="word.synced"></i>
                                 </div>
                             </div>
                             <el-collapse-transition>
