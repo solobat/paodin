@@ -22,6 +22,8 @@ import wordRoots from '../../js/constant/wordroots'
 import keyboardJS from 'keyboardjs'
 import SocialSharing  from 'vue-social-sharing'
 import API from '../../js/api'
+import { Base64 } from 'js-base64'
+import URI from 'urijs'
 
 Vue.use(SocialSharing);
 
@@ -253,13 +255,27 @@ function render(config, i18nTexts) {
                 _gaq.push(['_trackEvent', 'options_tab', 'click', tab.name]);
             },
 
+            handleWords(list) {
+                list.forEach(item => {
+                    if (item.pos) {
+                        const { url, offset, path } = item.pos;
+                        const tag = Base64.encodeURI(JSON.stringify({ offset, path }));
+                        const link = URI(url).removeSearch('wc_tag').addSearch('wc_tag', tag);
+
+                        item.link = link.href();
+                    }
+                });
+
+                return list;
+            },
+
             loadWords() {
                 return new Promise((resolve, reject) => {
                     chrome.runtime.sendMessage({
                         action: 'get'
                     }, ({ data }) => {
                         if (data) {
-                            this.words = data;
+                            this.words = this.handleWords(data);
 
                             resolve(data);
                         } else {
@@ -434,6 +450,12 @@ function render(config, i18nTexts) {
             handleSyncedClick(word) {
                 word.synced = false;
                 this.saveWord(word);
+            },
+
+            handleWordLinkClick(link) {
+                chrome.tabs.create({
+                    url: link
+                });
             },
 
             onWordFormSubmit() {

@@ -10,8 +10,35 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import { isMac } from '../../js/common/utils'
+import { isMac, getParameterByName } from '../../js/common/utils'
+import { Base64 } from 'js-base64'
 
+$.fn.extend({
+    getPath: function () {
+        var path, node = this;
+        while (node.length) {
+            var realNode = node[0], name = realNode.localName;
+            if (!name) break;
+            name = name.toLowerCase();
+
+            var parent = node.parent();
+
+            var sameTagSiblings = parent.children(name);
+            if (sameTagSiblings.length > 1) { 
+                var allSiblings = parent.children();
+                var index = allSiblings.index(realNode) + 1;
+                if (index > 1) {
+                    name += ':nth-child(' + index + ')';
+                }
+            }
+
+            path = name + (path ? '>' + path : '');
+            node = parent;
+        }
+
+        return path;
+    }
+});
 const chrome = window.chrome;
 var options = window.options;
 
@@ -43,6 +70,18 @@ function getBlock(node, deep) {
     } else {
         return getBlock(node.parentElement, deep - 1);
     }
+}
+
+function getPosition(selection) {
+    const path = $(selection.baseNode.parentElement).getPath();
+    const offset = [selection.baseOffset, selection.extentOffset];
+    const pos = {
+        url: window.location.href,
+        path,
+        offset
+    };
+
+    return pos;
 }
 
 let menuEvent;
@@ -77,8 +116,10 @@ var App = {
             return;
         }
 
+        const pos = getPosition(selection);
+
         this.highlight = new Highlight(node, word, this.context);
-        this.lookUp(e, word, node);
+        this.lookUp(e, word, node, pos);
     },
 
     autocutSentenceIfNeeded(word, sentence) {
@@ -139,7 +180,7 @@ var App = {
         this.iframe = $('#wordcard-frame');
     },
 
-    lookUp: function(e, word, node) {
+    lookUp: function(e, word, node, pos) {
         var x_pos = e.pageX;
         var y_pos = e.pageY;
         var x_posView = e.clientX;
@@ -161,7 +202,8 @@ var App = {
             surroundings: this.getSurroundings(word, node),
             source: window.location.href,
             host: window.location.hostname,
-            engine: this.config.engine
+            engine: this.config.engine,
+            pos
         };
 
         if (!this.iframe) {
@@ -307,18 +349,37 @@ var App = {
         });
     },
 
-    initHighlights() {
-        let self = this;
+    initHighlight(pos, goto) {
+        const node = $(pos.path)[0];
+        const range = document.createRange();
+        
+        range.setStart(node.firstChild, pos.offset[0]);
+        range.setEnd(node.firstChild, pos.offset[1]);
 
-        chrome.extension.sendRequest({
-            'action': 'get',
-            'data': {}
-        },
-        function(resp) {
-            if (resp.data && resp.data.length) {
-                self.searchAndHighlight(resp.data);
+        const selectionContents = range.extractContents();
+        const elem = document.createElement('em');
+
+        elem.appendChild(selectionContents);
+        elem.setAttribute('class', 'wc-highlight');
+        range.insertNode(elem);
+
+        if (goto) {
+            node.scrollIntoView();
+        }
+    },
+
+    initHighlights() {
+        const tag = getParameterByName('wc_tag');
+
+        if (tag) {
+            try {
+                const pos = JSON.parse(Base64.decode(tag));
+
+                this.initHighlight(pos, true);
+            } catch (error) {
+                console.log(error);
             }
-        });
+        }
     },
 
     init: function(config) {
@@ -331,6 +392,7 @@ var App = {
         $('html').append(popup);
         this.el = $('#wordcard-main');
         this.bindEvents();
+        this.initHighlights();
     }
 };
 

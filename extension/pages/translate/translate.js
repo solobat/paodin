@@ -61,7 +61,7 @@ const AVHelper = {
 let vm;
 let parentWin;
 
-function initApp({ word, surroundings, source, host, engine }) {
+function initApp({ word, surroundings, source, host, engine, pos }) {
     vm = new Vue({
         el: '#main',
         data: function() {
@@ -71,7 +71,8 @@ function initApp({ word, surroundings, source, host, engine }) {
                     surroundings,
                     source,
                     host,
-                    engine
+                    engine,
+                    pos
                 },
                 assit: PageConfig.getDefaultAssit()
             }
@@ -267,7 +268,8 @@ function initApp({ word, surroundings, source, host, engine }) {
                     trans: this.assit.translate.trans || [],
                     tags: this.assit.wordTags,
                     host: this.meta.host,
-                    source: this.meta.source
+                    source: this.meta.source,
+                    pos: this.meta.pos
                 };
 
                 chrome.runtime.sendMessage({

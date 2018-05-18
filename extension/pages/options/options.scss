@@ -447,12 +447,21 @@ a {
     }
 }
 
-.icon-synced {
+.word-icon {
     position: absolute;
     right: 5px;
     top: 5px;
-    background: url(/img/synced.png) no-repeat center;
+    background: url() no-repeat center;
     background-size: 100% 100%;
     width: 20px;
     height: 20px;
+    cursor: pointer;
+}
+
+.icon-synced {
+    background-image: url(/img/synced.png);
+}
+
+.icon-link {
+    background-image: url(/img/link.png);
 }
