@@ -64,38 +64,33 @@ let menuEvent;
 var App = {
     context: window,
     iframeLoaded: false,
+    checkValid(word, node) {
+        if (!node || ['INPUT', 'TEXTAREA'].indexOf(node.tagName) !== -1
+        || !word || word.length < 3 || numReg.test(word) || !enReg.test(word)) {
+            return false;
+        } else {
+            return true;
+        }
+    },
     handleTextSelected: function(e) {
-        var selection = this.context.getSelection();
-        var word = (selection.toString() || '').trim();
-        if (!e) {
-            console.error('no selection...');
-            debugger
-        }
-        var node = e.target;
+        const selection = this.context.getSelection();
+        const word = (selection.toString() || '').trim();
+        let node;
 
-        if (!word) {
+        if (e === 'fromExternal' && selection) {
+            node = selection.baseNode.parentElement;
+        } else if (e) {
+            node = e.target;
+        }
+
+        if (this.checkValid(word, node)) {
+            const pos = getPosition(selection);
+
+            this.highlight = new Highlight(node, word, this.context);
+            this.lookUp(e, word, node, pos);
+        } else {
             return;
         }
-
-        // 数字或三个字母下的不翻译
-        // 纯英文才翻译
-        if (word.length < 3 || numReg.test(word)) {
-            return;
-        }
-
-        if (!enReg.test(word)) {
-            return;
-        }
-
-        // input内部不翻译
-        if (['INPUT', 'TEXTAREA'].indexOf(node.tagName) !== -1) {
-            return;
-        }
-
-        const pos = getPosition(selection);
-
-        this.highlight = new Highlight(node, word, this.context);
-        this.lookUp(e, word, node, pos);
     },
 
     autocutSentenceIfNeeded(word, sentence) {
@@ -286,6 +281,8 @@ var App = {
                 self.handleTextSelected(menuEvent);
             } else if (action === 'config') {
                 this.config = request.data;
+            } else if (action === 'lookup') {
+                this.handleTextSelected('fromExternal');
             }
         });
 

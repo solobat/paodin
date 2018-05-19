@@ -269,6 +269,14 @@ function msgHandler(req, sender, resp) {
             data: storageVaild
         });
     }
+
+    if (action === 'lookup') {
+        console.log('lookup');
+        browser.tabs.query({active: true, currentWindow: true}, function(tabs){
+            browser.tabs.sendMessage(tabs[0].id, {action: "lookup"}, function(response) {});  
+        });
+        resp({ msg: 'pass ok' });
+    }
 }
 
 ['onMessage', 'onMessageExternal'].forEach((msgType) => {
