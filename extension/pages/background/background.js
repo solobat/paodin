@@ -283,6 +283,14 @@ function msgHandler(req, sender, resp) {
     browser.runtime[msgType].addListener(msgHandler);
 });
 
+chrome.commands.onCommand.addListener(function(command) {
+    if (command === 'lookup_in_selection') {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "lookup" }, function() {});
+        });    
+    }
+});
+
 function filterWords(words, filter) {
     let { wordSearchText, levels = [], tags = [] } = filter;
 

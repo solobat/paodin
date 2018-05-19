@@ -37,5 +37,17 @@
         "notifications",
         "tts",
         "<all_urls>"
-    ]
+    ],
+    "commands": {
+        "lookup_in_selection": {
+            "suggested_key": {
+                "windows": "Ctrl+Shift+L",
+                "mac": "Command+Shift+L",
+                "chromeos": "Ctrl+Shift+L",
+                "linux": "Ctrl+Shift+L"
+            },
+            "description": "查询选中的单词",
+            "global": true
+        }
+    }
 }

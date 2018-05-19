@@ -301,6 +301,10 @@ var App = {
                 self.closePopup();
             }
         }, false);
+
+        document.addEventListener('closeWordcardPopup', function() {
+            self.closePopup();
+        });
     },
 
     searchAndHighlight(words) {
