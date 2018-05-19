@@ -12,33 +12,8 @@ import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
 import { isMac, getParameterByName } from '../../js/common/utils'
 import { Base64 } from 'js-base64'
+import CssSelectorGenerator from 'css-selector-generator'
 
-$.fn.extend({
-    getPath: function () {
-        var path, node = this;
-        while (node.length) {
-            var realNode = node[0], name = realNode.localName;
-            if (!name) break;
-            name = name.toLowerCase();
-
-            var parent = node.parent();
-
-            var sameTagSiblings = parent.children(name);
-            if (sameTagSiblings.length > 1) { 
-                var allSiblings = parent.children();
-                var index = allSiblings.index(realNode) + 1;
-                if (index > 1) {
-                    name += ':nth-child(' + index + ')';
-                }
-            }
-
-            path = name + (path ? '>' + path : '');
-            node = parent;
-        }
-
-        return path;
-    }
-});
 const chrome = window.chrome;
 var options = window.options;
 
@@ -73,7 +48,8 @@ function getBlock(node, deep) {
 }
 
 function getPosition(selection) {
-    const path = $(selection.baseNode.parentElement).getPath();
+    const gen = new CssSelectorGenerator();
+    const path = gen.getSelector(selection.baseNode.parentElement);
     const offset = [selection.baseOffset, selection.extentOffset];
     const pos = {
         url: window.location.href,
