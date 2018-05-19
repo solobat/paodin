@@ -2,6 +2,15 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.1',
+        detail: `
+            记录单词的网页以及页面位置；<br>
+            支持批量删除选中的单词；<br>
+            点击 icon 可更改同步状态；<br>
+            支持快捷键查询选中的单词。
+        `
+    },
+    {
         version: 'v2.3',
         detail: `
             引入多翻译引擎，目前支持 Google / Baidu，默认 Google，可以选项页更改；<br>
