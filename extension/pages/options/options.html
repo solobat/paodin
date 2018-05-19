@@ -110,7 +110,7 @@
                                         @click.native="handleLevelFilterClick(level)">{{level}}</el-tag>
                                 </div>
                             </div>
-                            <div class="filter-item">
+                            <div class="filter-item filter-item-tags">
                                 <div class="field-label">
                                     <span class="label-text">标签</span>
                                     <el-button type="primary" size="mini" @click="filter.tags = []">复位</el-button>
@@ -124,7 +124,8 @@
                                 </div>
                             </div>
                             <div class="other-info">
-                                {{filteredWords.length}} 个 / 共{{words.length}}个单词
+                                <div class="word-nums">{{filteredWords.length}} 个 / 共{{words.length}}个单词</div>
+                                <div class="batch-delete-btn" @click="handleBatchDeleteClick">批量删除</div>
                             </div>
                         </div>
                     </el-col>

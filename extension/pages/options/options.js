@@ -375,6 +375,41 @@ function render(config, i18nTexts) {
                 _gaq.push(['_trackEvent', 'general', 'click', 'save']);
             },
 
+            resetFilter() {
+                this.filter = {
+                    wordSearchText: '',
+                    levels: [],
+                    tags: []
+                };
+            },
+
+            handleBatchDeleteClick() {
+                const words = this.filteredWords;
+
+                if (words.length) {
+                    this.$confirm('此操作将永久删除这些单词, 是否继续?', '提示').then(() => {
+                        this.batchDelete();
+                    }).catch(() => {
+                        console.log('cancel');
+                    });
+                } else {
+                    this.$message.warning('没有要删除的单词!');
+                }
+            },
+
+            batchDelete() {
+                const ids = this.filteredWords.map(word => word.id);
+
+                chrome.runtime.sendMessage({
+                    action: 'batchDelete',
+                    data: { ids }
+                }, () => {
+                    this.$message('批量删除成功!');
+                    this.resetFilter();
+                    this.loadWords();
+                });
+            },
+
             handleWordClick(word) {
                 this.wordEditorVisible = true;
                 this.wordForm = {

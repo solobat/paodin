@@ -190,6 +190,13 @@ function msgHandler(req, sender, resp) {
         resp({ msg: 'remove ok...' });
     }
 
+    if (action === 'batchDelete') {
+        data.ids.forEach(id => {
+            wordsHelper.remove(id);
+        });
+        resp({ msg: 'batch remove ok...' });
+    }
+
     if (action === 'update') {
         var word = wordsHelper.update(data);
         resp({
