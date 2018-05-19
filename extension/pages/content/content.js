@@ -77,7 +77,7 @@ var App = {
         const word = (selection.toString() || '').trim();
         let node;
 
-        if (e === 'fromExternal' && selection) {
+        if (e === 'fromExternal' && selection && selection.baseNode) {
             node = selection.baseNode.parentElement;
         } else if (e) {
             node = e.target;
