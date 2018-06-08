@@ -47,6 +47,54 @@ function getBlock(node, deep) {
     }
 }
 
+const BLOCK_RULES = [{
+    match: '.pdfViewer',
+    node: '.pdfViewer',
+    url: 'mozilla.github.io/pdf.js/web/viewer.html'
+}];
+
+function checkRuleValid(rule) {
+    let valid;
+
+    if (rule.url) {
+        if (window.location.href.indexOf(rule.url) !== -1) {
+            valid = true;
+        } else {
+            valid = false;
+        }
+    } else {
+        valid = true;
+    }
+
+    return valid;
+}
+
+function getBlockElem(elem, upNum) {
+    let retNode;
+
+    BLOCK_RULES.forEach(rule => {
+        const valid = checkRuleValid(rule);
+
+        if (valid) {
+            const matchedNode = $(rule.match)[0];
+
+            if (matchedNode) {
+                if (rule.match === rule.node) {
+                    retNode = matchedNode;
+                } else {
+                    retNode = $(rule.node)[0];
+                }
+            }
+        }
+    });
+
+    if (retNode) {
+        return retNode;
+    } else {
+        return getBlock(elem, upNum);
+    }
+}
+
 function getPosition(selection) {
     const gen = new CssSelectorGenerator();
     const path = gen.getSelector(selection.baseNode.parentElement);
@@ -131,7 +179,7 @@ var App = {
             elem = elem.parentElement;
         }
 
-        elem = getBlock(elem, upNum);
+        elem = getBlockElem(elem, upNum);
 
         if (elem !== document) {
             wordContent = elem.innerText;
