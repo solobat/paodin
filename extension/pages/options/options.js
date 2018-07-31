@@ -162,6 +162,8 @@ function render(config, i18nTexts) {
                     userKey: Validator.text('userKey')
                 },
                 hasMinappChecked: false,
+
+                // sync
                 syncPorcess: 0,
                 syncing: false,
                 version
@@ -787,9 +789,9 @@ function render(config, i18nTexts) {
                 return parts;
             },
 
-            async getShouldSyncWords() {
+            async getShouldSyncWords(filterFn) {
                 const words = await this.loadWords();
-                const newWords = words.filter(word => !word.synced);
+                const newWords = filterFn ? words.filter(filterFn) : words;
 
                 if (newWords.length) {
                     return JSON.parse(JSON.stringify(newWords))
@@ -798,12 +800,12 @@ function render(config, i18nTexts) {
                 }
             },
 
-            async batchSync(userId, parts) {
+            async batchSync(syncMethod, parts) {
                 return parts.reduce((tasks, part) => {
                     return tasks.then(results => {
                         return new Promise((resolve) => {
                             setTimeout(() => {
-                                resolve(API.minapp.sync(userId, part).then((result) => {
+                                resolve(syncMethod(part).then((result) => {
                                     final.push(result);
                                     const percent = (final.length / parts.length * 100).toFixed(2);
 
@@ -815,22 +817,21 @@ function render(config, i18nTexts) {
                 }, Promise.resolve());
             },
 
-            async syncToMinapp() {
-                const list = await this.getShouldSyncWords();
+            async syncToCloud(syncMethod, filterFn, chunk) {
+                const list = await this.getShouldSyncWords(filterFn);
 
                 if (list) {
-                    const parts = this.partial(list);
+                    const parts = this.partial(list, chunk);
 
                     this.syncing = true;
 
                     try {
-                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
-                        const result = await this.batchSync(userData.userId, parts);
-                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
+                        const result = await this.batchSync(syncMethod, parts);
                         
                         return list;
                     } catch (error) {
                         console.log(error);
+                        this.$message.error('同步失败，请稍后再试，或去论坛反馈');
                     } finally {
                         this.syncing = false;
                     }
@@ -839,13 +840,78 @@ function render(config, i18nTexts) {
                 }
             },
 
-            async handleSyncClick(type) {
+            async shouldSyncToMinapp() {
                 this.$refs.minappForm.validate(async valid => {
                     if (valid) {
-                        const syncedList = await this.syncToMinapp();
+                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
+                        const syncMethod = (part) => {
+                            return API.minapp.sync(userData.userId, part);
+                        };
+                        const filterFn = word => !word.synced;
+                        const syncedList = await this.syncToCloud(syncMethod, filterFn, 5);
                         const resp = await this.makeWordsSynced(syncedList);
+
+                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
                     }
                 });
+            },
+
+            async syncToShanbay() {
+                const syncMethod = async (part) => {
+                    const word = part[0].name;
+                    const { data } = await API.shanbay.translate(word);
+
+                    return API.shanbay.addToVocabulary(data.id);
+                };
+
+                await this.syncToCloud(syncMethod, null, 1);
+                this.$message.success('单词已经全部同步到扇贝!');
+            },
+
+            shouldSyncToShanbay() {
+                chrome.cookies.get({ url: 'http://www.shanbay.com', name: 'auth_token' }, cookie => {
+                    if (cookie) {
+                        this.syncToShanbay();
+                    } else {
+                        chrome.tabs.create({ url: 'https://www.shanbay.com/web/account/login' })
+                    }
+                })
+            },
+
+            async syncToYoudao() {
+                const syncMethod = async (part) => {
+                    const word = part[0].name;
+
+                    return API.youdao.addToVocabulary(word);
+                };
+
+                await this.syncToCloud(syncMethod, null, 1);
+                this.$message.success('单词已经全部同步到有道!');
+            },
+
+            shouldSyncToYoudao() {
+                const url = 'http://dict.youdao.com';
+                const loginURL = 'http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist%3Fkeyfrom%3Dnull';
+
+                chrome.cookies.get({ url, name: 'DICT_SESS' }, async cookie => {
+                    if (cookie) {
+                        this.syncToYoudao();
+                    } else {
+                        chrome.tabs.create({
+                            url: loginURL
+                        })
+                    }
+                })
+            },
+
+            handleSyncClick(type) {
+                if (type === 'minapp') {
+                    this.shouldSyncToMinapp();
+                } else if (type === 'shanbay') {
+                    this.shouldSyncToShanbay();
+                } else if (type === 'youdao') {
+                    this.shouldSyncToYoudao();
+                }
             }
         }
     });

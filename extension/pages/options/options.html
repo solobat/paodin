@@ -347,7 +347,7 @@
                     <el-button type="primary" @click="handleExportClick('words')">仅单词导出</el-button>
                 </div>
                 <el-collapse v-model="activeSyncNames">
-                    <el-collapse-item title="云同步" name="1">
+                    <el-collapse-item title="同步到小程序" name="1">
                         <div>单词小卡片小程序用户可以使用此功能，用户身份码从小程序个人头像点击获取</div>
                         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
                             <el-row>
@@ -369,6 +369,16 @@
                               </el-col>
                             </el-row>
                         </el-form>
+                    </el-collapse-item>
+                    <el-collapse-item name="2" title="同步到有道">
+                        <div>使用此功能前，需要先登录有道网站</div>
+                        <el-button v-if="!syncing" type="primary" @click.native="handleSyncClick('youdao')">开始同步</el-button>
+                        <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="syncPorcess"></el-progress>
+                    </el-collapse-item>
+                    <el-collapse-item name="3" title="同步到扇贝">
+                        <div>使用此功能前，需要先登录扇贝网站</div>
+                        <el-button v-if="!syncing" type="primary" @click.native="handleSyncClick('shanbay')">开始同步</el-button>
+                        <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="syncPorcess"></el-progress>
                     </el-collapse-item>
                 </el-collapse>
             </el-tab-pane>
