@@ -346,7 +346,7 @@
                     <el-button type="primary" @click="handleExportClick('json')">JSON 导出</el-button>
                     <el-button type="primary" @click="handleExportClick('words')">仅单词导出</el-button>
                 </div>
-                <el-collapse v-model="activeSyncNames">
+                <el-collapse v-model="activeSyncNames" accordion>
                     <el-collapse-item title="同步到小程序" name="1">
                         <div>单词小卡片小程序用户可以使用此功能，用户身份码从小程序个人头像点击获取</div>
                         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
