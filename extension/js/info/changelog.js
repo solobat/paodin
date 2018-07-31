@@ -2,6 +2,13 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.2',
+        detail: `
+            新增保存到扇贝单词本;<br>
+            新增保存到有道单词本。
+        `
+    },
+    {
         version: 'v2.3.1',
         detail: `
             记录单词的网页以及页面位置；<br>
