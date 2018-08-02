@@ -495,6 +495,12 @@ function render(config, i18nTexts) {
                 });
             },
 
+            handleRootClick(word) {
+                chrome.tabs.create({
+                    url: `http://www.cgdict.com/index.php?app=cigen&ac=word&w=${word.name}`
+                });
+            },
+
             onWordFormSubmit() {
 
             },

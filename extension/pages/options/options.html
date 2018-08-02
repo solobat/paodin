@@ -139,8 +139,15 @@
                                         <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
                                     </div> 
                                     <div class="word-icons">
-                                        <i class="word-icon icon-link" @click.stop="handleWordLinkClick(word.link)" v-if="word.link"></i>
-                                        <i class="word-icon icon-synced" @click.stop="handleSyncedClick(word)" v-if="word.synced"></i>
+                                        <el-tooltip effect="dark" content="查看单词的词根词缀" placement="top-start">
+                                            <i class="word-icon icon-root" @click.stop="handleRootClick(word)"></i>
+                                        </el-tooltip>
+                                        <el-tooltip effect="dark" content="查看单词的来源位置" placement="top-start">
+                                            <i class="word-icon icon-link" @click.stop="handleWordLinkClick(word.link)" v-if="word.link"></i>
+                                        </el-tooltip>
+                                        <el-tooltip effect="dark" content="已同步到单词小卡片，点击重置" placement="top-start">
+                                            <i class="word-icon icon-synced" @click.stop="handleSyncedClick(word)" v-if="word.synced"></i>
+                                        </el-tooltip>
                                     </div>
                                 </div>
                             </div>
