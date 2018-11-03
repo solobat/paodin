@@ -361,8 +361,35 @@ var App = {
         }
     },
 
-    init: function(config) {
+    detectLang() {
+        const lang = document.documentElement.lang || 'en';
+
+        if (lang.indexOf('-') !== -1) {
+            if (lang.startsWith('zh')) {
+                if (lang.toLowerCase === 'zh-tw') {
+                    return 'zh-TW';
+                } else {
+                    return 'zh-CN';
+                }
+            } else {
+                return lang.split('-')[0];
+            }
+        } else {
+            return lang;
+        }
+    },
+
+    mergeConfig(config) {
+        if (config.autoSetFrom) {
+            config.from = this.detectLang();
+        }
+
         this.config = config;
+        console.log(config);
+    },
+
+    init: function(config) {
+        this.mergeConfig(config);
 
         var popup = [
             '<div id="wordcard-main" class="wordcard-main" style="display:none;">',

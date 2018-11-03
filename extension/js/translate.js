@@ -7,7 +7,7 @@ export default {
         return this.getTranslation(word, type, from, to);
     },
 
-    getTranslation: function(word, type = 'baidu', from = 'en', to = 'zh-CN') {
+    getTranslation: function(word, type = 'baidu', from, to) {
         return Engine[type].translate({
             text: word,
             from,

@@ -14,7 +14,8 @@ export const defaultConfig = {
     alertOnOmniboxInputEntered: true,
     cardFontSize: 'normal',
     from: 'en',
-    to: 'zh-CN',
+    to: chrome.i18n.getUILanguage(),
+    autoSetFrom: true,
     engine: 'google',
     version
 }

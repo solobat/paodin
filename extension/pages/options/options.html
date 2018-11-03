@@ -38,7 +38,7 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="源语言">
-                                <el-select v-model="config.from" filterable placeholder="请选择">
+                                <el-select :disabled="config.autoSetFrom" v-model="config.from" filterable placeholder="请选择">
                                     <el-option v-for="(item, index) in codeList" :key="index"
                                         :label="item"
                                         :value="item">
@@ -61,6 +61,14 @@
                         </el-col>
                     </el-row>
                     <el-row>
+                        <el-col :span="6">
+                            <el-form-item label="自动设置源语言">
+                                <el-switch
+                                    v-model="config.autoSetFrom"
+                                    on-color="#20a0ff">
+                                </el-switch>
+                            </el-form-item>
+                        </el-col>
                       <el-col :span="6">
                         <el-form-item label="双击取词">
                             <el-switch
