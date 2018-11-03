@@ -2,6 +2,13 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.3',
+        detail: `
+            支持多语言查词，自动归类单词本，以及单词本筛选;<br>
+            修复某个网站样式污染问题。
+        `
+    },
+    {
         version: 'v2.3.2',
         detail: `
             新增保存到扇贝单词本;<br>
