@@ -26,16 +26,39 @@
             <el-tab-pane label="通用" name="general">
                 <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
                     <el-row>
-                      <el-col :span="6">
-                          <el-form-item label="翻译引擎">
-                              <el-select v-model="config.engine" placeholder="请选择">
-                                <el-option v-for="(item, index) in TRANSLATE_ENGINS" :key="index"
-                                    :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                              </el-select>
-                          </el-form-item>
-                      </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="翻译引擎">
+                                <el-select v-model="config.engine" placeholder="请选择">
+                                    <el-option v-for="(item, index) in TRANSLATE_ENGINS" :key="index"
+                                        :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="源语言">
+                                <el-select v-model="config.from" filterable placeholder="请选择">
+                                    <el-option v-for="(item, index) in codeList" :key="index"
+                                        :label="item"
+                                        :value="item">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="目标语言">
+                                <el-select v-model="config.to" filterable placeholder="请选择">
+                                    <el-option v-for="(item, index) in codeList" :key="index"
+                                        :label="item"
+                                        :value="item">
+                                    </el-option>
+                                </el-select>
+                                <el-tooltip effect="dark" content="点击查看语种代码" placement="top-start">
+                                    <a class="code-help" href="https://cloud.google.com/translate/docs/languages" target="_blank">?</a>
+                                </el-tooltip>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-row>
                       <el-col :span="6">

@@ -2,16 +2,16 @@ import $ from 'jquery'
 import * as Engine from 'translation.js'
 
 export default {
-    translate: function(word, type) {
+    translate: function(word, type, from, to) {
         console.log(`engine is: ${type}`);
-        return this.getTranslation(word, type);
+        return this.getTranslation(word, type, from, to);
     },
 
-    getTranslation: function(word, type = 'baidu') {
+    getTranslation: function(word, type = 'baidu', from = 'en', to = 'zh-CN') {
         return Engine[type].translate({
             text: word,
-            from: 'en',
-            to: 'zh-CN'
+            from,
+            to
         }).then(resp => {
             return {
                 explains: resp.dict,

@@ -13,6 +13,8 @@ export const defaultConfig = {
     sentenceNum: 3,
     alertOnOmniboxInputEntered: true,
     cardFontSize: 'normal',
+    from: 'en',
+    to: 'zh-CN',
     engine: 'google',
     version
 }

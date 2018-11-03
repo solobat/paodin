@@ -61,7 +61,7 @@ const AVHelper = {
 let vm;
 let parentWin;
 
-function initApp({ word, surroundings, source, host, engine, pos }) {
+function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
     vm = new Vue({
         el: '#main',
         data: function() {
@@ -72,6 +72,8 @@ function initApp({ word, surroundings, source, host, engine, pos }) {
                     source,
                     host,
                     engine,
+                    from,
+                    to,
                     pos
                 },
                 assit: PageConfig.getDefaultAssit()
@@ -143,7 +145,8 @@ function initApp({ word, surroundings, source, host, engine, pos }) {
                 });
             },
             getTranslate() {
-                return Translate.translate(this.meta.word, this.meta.engine).then(results => {
+                return Translate.translate(this.meta.word, this.meta.engine,
+                    this.meta.from, this.meta.to).then(results => {
                     // FIXME: orgWord may only have id attr
                     if (this.assit.orgWord) {
                         let { trans = [], tags = [] } = this.assit.orgWord;
@@ -269,6 +272,8 @@ function initApp({ word, surroundings, source, host, engine, pos }) {
                     tags: this.assit.wordTags,
                     host: this.meta.host,
                     source: this.meta.source,
+                    from: this.meta.from,
+                    to: this.meta.to,
                     pos: this.meta.pos
                 };
 

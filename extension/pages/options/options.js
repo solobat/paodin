@@ -24,6 +24,7 @@ import SocialSharing  from 'vue-social-sharing'
 import API from '../../js/api'
 import { Base64 } from 'js-base64'
 import URI from 'urijs'
+import { codeList } from '../../js/constant/code'
 
 Vue.use(SocialSharing);
 
@@ -102,6 +103,7 @@ function render(config, i18nTexts) {
                 appName,
                 storeId,
                 config,
+                codeList,
                 i18nTexts,
                 CARD_FONTSIZE_OPTIONS,
                 TRANSLATE_ENGINS,

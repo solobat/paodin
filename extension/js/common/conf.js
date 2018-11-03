@@ -10,7 +10,9 @@ let options = {
     timetoclose: 3000,
     onlyen: true,
     noinput: true,
-    speakletter: false
+    speakletter: false,
+    from: 'en',
+    to: 'zh-CN'
 };
 
 export function getOptions() {

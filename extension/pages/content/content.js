@@ -66,7 +66,7 @@ var App = {
     iframeLoaded: false,
     checkValid(word, node) {
         if (!node || ['INPUT', 'TEXTAREA'].indexOf(node.tagName) !== -1
-        || !word || word.length < 3 || numReg.test(word) || !enReg.test(word)) {
+        || !word || numReg.test(word)) {
             return false;
         } else {
             return true;
@@ -174,6 +174,8 @@ var App = {
             source: window.location.href,
             host: window.location.hostname,
             engine: this.config.engine,
+            from: this.config.from,
+            to: this.config.to,
             pos
         };
 
