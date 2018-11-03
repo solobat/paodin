@@ -142,8 +142,15 @@
                                         <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
                                     </div> 
                                     <div class="word-icons">
-                                        <i class="word-icon icon-link" @click.stop="handleWordLinkClick(word.link)" v-if="word.link"></i>
-                                        <i class="word-icon icon-synced" @click.stop="handleSyncedClick(word)" v-if="word.synced"></i>
+                                        <el-tooltip effect="dark" content="查看单词的词根词缀" placement="top-start">
+                                            <i class="word-icon icon-root" @click.stop="handleRootClick(word)"></i>
+                                        </el-tooltip>
+                                        <el-tooltip effect="dark" content="查看单词的来源位置" placement="top-start">
+                                            <i class="word-icon icon-link" @click.stop="handleWordLinkClick(word.link)" v-if="word.link"></i>
+                                        </el-tooltip>
+                                        <el-tooltip effect="dark" content="已同步到单词小卡片，点击重置" placement="top-start">
+                                            <i class="word-icon icon-synced" @click.stop="handleSyncedClick(word)" v-if="word.synced"></i>
+                                        </el-tooltip>
                                     </div>
                                 </div>
                             </div>
@@ -349,8 +356,8 @@
                     <el-button type="primary" @click="handleExportClick('json')">JSON 导出</el-button>
                     <el-button type="primary" @click="handleExportClick('words')">仅单词导出</el-button>
                 </div>
-                <el-collapse v-model="activeSyncNames">
-                    <el-collapse-item title="云同步" name="1">
+                <el-collapse v-model="activeSyncNames" accordion>
+                    <el-collapse-item title="同步到小程序" name="1">
                         <div>单词小卡片小程序用户可以使用此功能，用户身份码从小程序个人头像点击获取</div>
                         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
                             <el-row>
@@ -372,6 +379,16 @@
                               </el-col>
                             </el-row>
                         </el-form>
+                    </el-collapse-item>
+                    <el-collapse-item name="2" title="同步到有道">
+                        <div>使用此功能前，需要先登录有道网站</div>
+                        <el-button v-if="!syncing" type="primary" @click.native="handleSyncClick('youdao')">开始同步</el-button>
+                        <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="syncPorcess"></el-progress>
+                    </el-collapse-item>
+                    <el-collapse-item name="3" title="同步到扇贝">
+                        <div>使用此功能前，需要先登录扇贝网站</div>
+                        <el-button v-if="!syncing" type="primary" @click.native="handleSyncClick('shanbay')">开始同步</el-button>
+                        <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="syncPorcess"></el-progress>
                     </el-collapse-item>
                 </el-collapse>
             </el-tab-pane>
