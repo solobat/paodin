@@ -109,10 +109,12 @@ function render(config, i18nTexts) {
                 TRANSLATE_ENGINS,
                 // list
                 words: [],
+                langPairs: [],
                 filter: {
                     wordSearchText: '',
                     levels: [],
-                    tags: []
+                    tags: [],
+                    langPair: ''
                 },
                 tags: [],
                 allTags: [],
@@ -135,7 +137,8 @@ function render(config, i18nTexts) {
                 wordrecitevisible: false,
                 reciteFilter: {
                     levels: [],
-                    tags: []
+                    tags: [],
+                    langPair: ''
                 },
                 reciteStage: 0,
                 recitedWordIndex: 0,
@@ -229,12 +232,15 @@ function render(config, i18nTexts) {
 
             words() {
                 let allTags = [];
+                let langPairs = [];
 
-                this.words.forEach(({ tags = [] }) => {
+                this.words.forEach(({ tags = [], from = 'en', to = 'zh-CN' }) => {
                     allTags = allTags.concat(tags);
+                    langPairs.push(`${from},${to}`);
                 });
 
                 this.tags = _.uniq(allTags);
+                this.langPairs = _.uniq(langPairs);
                 this.allTags = this.tags.map(tag => {
                     return {
                         label: tag,
@@ -290,7 +296,7 @@ function render(config, i18nTexts) {
             },
 
             filterWords(filter, type = 'list') {
-                let { wordSearchText, levels, tags } = filter;
+                let { wordSearchText, levels, tags, langPair } = filter;
 
                 if (!this.words.length) {
                     return [];
@@ -326,6 +332,14 @@ function render(config, i18nTexts) {
                         });
 
                         return hasTag;
+                    });
+                }
+
+                if (langPair && langPair.indexOf(',') !== -1) {
+                    results = results.filter(({ from = 'en', to = 'zh-CN' }) => {
+                        const arr = langPair.split(',');
+
+                        return from === arr[0] && to === arr[1];
                     });
                 }
 

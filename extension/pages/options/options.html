@@ -126,6 +126,21 @@
                             </div>
                             <div class="filter-item">
                                 <div class="field-label">
+                                    <span class="label-text">单词本</span>
+                                    <el-button type="primary" size="mini" @click="filter.langPair = ''">复位</el-button>
+                                </div>
+                                <div class="filter-tags">
+                                    <el-select v-model="filter.langPair" placeholder="请选择">
+                                        <el-option v-for="(item, index) in langPairs"
+                                        :key="index"
+                                        :label="item"
+                                        :value="item">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <div class="field-label">
                                     <span class="label-text">记忆级别</span>
                                     <el-button type="primary" size="mini" @click="filter.levels = []">复位</el-button>
                                 </div>
@@ -165,7 +180,7 @@
                                         <el-tag style="margin-right: 5px;" type="success" v-for="(tag, index) in word.tags" :key="index">{{tag}}</el-tag>
                                     </div> 
                                     <div class="word-icons">
-                                        <el-tooltip effect="dark" content="查看单词的词根词缀" placement="top-start">
+                                        <el-tooltip v-if="word.from === 'en' || !word.from" effect="dark" content="查看单词的词根词缀" placement="top-start">
                                             <i class="word-icon icon-root" @click.stop="handleRootClick(word)"></i>
                                         </el-tooltip>
                                         <el-tooltip effect="dark" content="查看单词的来源位置" placement="top-start">
@@ -257,6 +272,20 @@
                     <div class="filter-items">
                         <div class="filter-results">
                             <em>{{schemedWords.length}}</em> 个 / 共{{words.length}}个单词
+                        </div>
+                        <div class="filter-item">
+                            <div class="field-label">
+                                <span class="label-text">单词本</span>
+                            </div>
+                            <div class="filter-tags">
+                                <el-select v-model="reciteFilter.langPair" placeholder="请选择">
+                                    <el-option v-for="(item, index) in langPairs"
+                                    :key="index"
+                                    :label="item"
+                                    :value="item">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div class="filter-item">
                             <div class="field-label">
