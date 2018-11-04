@@ -146,9 +146,14 @@ let langZh = [
     }
 ];
 
-// TODO: translate
 let langEn = [
-
+    {
+         version: 'v2.3.3',
+         detail: `
+            Support multi-language search, automatic categorization of vocabularies, and can filter by vocabulary;<br>
+            Fix a site style pollution issue.
+         `
+     }
 ];
 
 let results;

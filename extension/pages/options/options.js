@@ -212,7 +212,7 @@ function render(config, i18nTexts) {
                 let { right, wrong } = this.reciteResult;
 
                 return {
-                    labels: [i18n.item.right, i.item.wrong],
+                    labels: [i18n.item.right, i18n.item.wrong],
                     datasets: [
                         {
                             backgroundColor: ['#1ebe8d', '#e80d39'],

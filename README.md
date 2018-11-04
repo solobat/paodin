@@ -5,8 +5,8 @@
 [中文](./doc/README_CN.md)
 
 #### Installation:
-- [Chrome App Store] (https://chrome.google.com/webstore/detail/oegblnjiajbfeegijlnblepdodmnddbk)
-- [Offline download] (http://owsjc7iz3.bkt.clouddn.com/wordcard-2.3.3.crx).
+- [Chrome App Store](https://chrome.google.com/webstore/detail/oegblnjiajbfeegijlnblepdodmnddbk)
+- [Offline download](http://owsjc7iz3.bkt.clouddn.com/wordcard-2.3.3.crx).
 
 #### Features:
 + Check words / automatically add tag for the word by frequency

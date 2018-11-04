@@ -35,7 +35,7 @@
     "options_base_delete": { "message": "Delete" },
     "options_base_cancel": { "message": "Cancel" },
     "options_base_save": {
-        "message": "save"
+        "message": "Save"
     },
     "options_tab_general": {
         "message": "General"
@@ -121,6 +121,8 @@
     "options_wordsrecite_submit": {
         "message": "Begin Quiz"
     },
+    "options_wordsrecite_newquiz": { "message": "New Quiz" },
+    "options_wordsrecite_result": { "message": "Quiz Result" },
     "options_advanced_export": {
         "message": "Export"
     },

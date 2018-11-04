@@ -53,6 +53,8 @@
 
     "options_wordsrecite_title": { "message": "测验方案" },
     "options_wordsrecite_submit": { "message": "开始测验" },
+    "options_wordsrecite_newquiz": { "message": "新测验" },
+    "options_wordsrecite_result": { "message": "测验结果" },
 
     "options_advanced_export": { "message": "导出" },
     "options_advanced_onlywords": { "message": "仅单词" },
