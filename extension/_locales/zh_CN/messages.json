@@ -1,6 +1,8 @@
 {
     "extName": { "message": "单词小卡片: 查词/收集/背单词" },
+    "extShortName": { "message": "单词小卡片" },
     "extDesc": { "message": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出" },
+    "extCmdDesc": { "message": "查询选中的单词" },
 
     
     "background_msg_maxwords_tips": { "message": "单词小卡片最多只能容纳{{max}}个单词" },

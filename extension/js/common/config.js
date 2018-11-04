@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill'
+import { getLangCode } from './utils'
 
 const manifest = chrome.runtime.getManifest();
 const version = manifest.version;
@@ -14,7 +15,7 @@ export const defaultConfig = {
     alertOnOmniboxInputEntered: true,
     cardFontSize: 'normal',
     from: 'en',
-    to: chrome.i18n.getUILanguage(),
+    to: getLangCode(chrome.i18n.getUILanguage()),
     autoSetFrom: true,
     engine: 'google',
     version

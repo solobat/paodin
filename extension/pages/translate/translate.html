@@ -9,6 +9,7 @@
 <body>
     <div class="wc-lightbox-content" id="main" v-cloak>
         <div class="top-row" @dblclick="handleSaveClick">
+            {{ meta.from }} --> {{ meta.to }}
             <a class="close" @click="handleCloseClick">X</a>
         </div>
         <div id="popup-lookup">
@@ -47,7 +48,7 @@
                                     v-if="assit.tagInputVisible"
                                     v-model="assit.tagInputValue"
                                     :fetch-suggestions="tagsQuerySearch"
-                                    placeholder="请输入内容"
+                                    placeholder="Please input"
                                     ref="saveTagInput"
                                     @select="handleTagSelect"
                                     @keyup.enter.native="handleTagInputConfirm"

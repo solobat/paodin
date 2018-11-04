@@ -435,7 +435,7 @@ function setupOmnibox() {
 
 function setup() {
     let parentMenu = browser.contextMenus.create({
-        title : "单词小卡片",
+        title : chrome.i18n.getMessage('extShortName'),
         contexts: ['selection'],
         onclick : function(info, tab) {
             browser.tabs.query({active: true, currentWindow: true}, function(tabs){

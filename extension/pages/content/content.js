@@ -10,7 +10,7 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import { isMac, getParameterByName } from '../../js/common/utils'
+import { isMac, getParameterByName, getLangCode } from '../../js/common/utils'
 import { Base64 } from 'js-base64'
 import CssSelectorGenerator from 'css-selector-generator'
 
@@ -363,19 +363,7 @@ var App = {
     detectLang() {
         const lang = document.documentElement.lang || 'en';
 
-        if (lang.indexOf('-') !== -1) {
-            if (lang.startsWith('zh')) {
-                if (lang.toLowerCase === 'zh-tw') {
-                    return 'zh-TW';
-                } else {
-                    return 'zh-CN';
-                }
-            } else {
-                return lang.split('-')[0];
-            }
-        } else {
-            return lang;
-        }
+        return getLangCode(lang);
     },
 
     mergeConfig(config) {

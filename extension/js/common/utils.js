@@ -118,3 +118,19 @@ export function simTemplate(tpl, data) {
         return typeof data[$1] !== 'undefined' ? data[$1] : '';
     });
 }
+
+export function getLangCode(lang) {
+    if (lang.indexOf('-') !== -1) {
+        if (lang.startsWith('zh')) {
+            if (lang.toLowerCase === 'zh-tw') {
+                return 'zh-TW';
+            } else {
+                return 'zh-CN';
+            }
+        } else {
+            return lang.split('-')[0];
+        }
+    } else {
+        return lang;
+    }
+}

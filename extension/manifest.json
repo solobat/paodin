@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "单词小卡片: 查词/收集/背单词",
-    "short_name": "单词小卡片",
+    "name": "__MSG_extName__",
+    "short_name": "__MSG_extShortName__",
     "version": "2.3.3",
     "description": "__MSG_extDesc__",
     "background": {
@@ -48,7 +48,7 @@
                 "chromeos": "Ctrl+Shift+L",
                 "linux": "Ctrl+Shift+L"
             },
-            "description": "查询选中的单词",
+            "description": "__extCmdDesc__",
             "global": true
         }
     }
