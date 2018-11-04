@@ -17,6 +17,7 @@ export const defaultConfig = {
     from: 'en',
     to: getLangCode(chrome.i18n.getUILanguage()),
     autoSetFrom: true,
+    precisionFirst: false,
     engine: 'google',
     version
 }

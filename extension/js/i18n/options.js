@@ -30,6 +30,8 @@ export const general = {
     holdCtrlTips: chrome.i18n.getMessage('options_general_hold_ctrl_tips'),
     autocutSentence: chrome.i18n.getMessage('options_general_autocut_sentence'),
     autocutSentenceTips: chrome.i18n.getMessage('options_general_autocut_sentence_tips'),
+    precisionFirst: chrome.i18n.getMessage('options_general_precision_first'),
+    precisionFirstTips: chrome.i18n.getMessage('options_general_precision_first_tips'),
     cardFontSize: chrome.i18n.getMessage('options_general_card_fontsize'),
     ominboxEnterShowSentence: chrome.i18n.getMessage('options_general_omnibox_enter_show_sentence')
 }

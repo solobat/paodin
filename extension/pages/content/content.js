@@ -13,6 +13,7 @@ import { getSyncConfig } from '../../js/common/config'
 import { isMac, getParameterByName, getLangCode } from '../../js/common/utils'
 import { Base64 } from 'js-base64'
 import CssSelectorGenerator from 'css-selector-generator'
+import * as Engine from 'translation.js'
 
 const chrome = window.chrome;
 var options = window.options;
@@ -151,12 +152,8 @@ var App = {
         this.iframe = $('#wordcard-frame');
     },
 
-    lookUp: function(e, word, node, pos) {
-        var x_pos = e.pageX;
-        var y_pos = e.pageY;
-        var x_posView = e.clientX;
+    prepareBox(e) {
         var y_posView = e.clientY;
-        var winWidth = this.context.innerWidth;
         var winHeight = this.context.innerHeight;
         var upDir = (y_posView > (winHeight / 2));
 
@@ -167,6 +164,20 @@ var App = {
             this.el.removeClass('top')
                 .addClass('bottom');
         }
+
+        if (!this.iframe) {
+            this.initIframe();
+        }
+
+        this.el.css({
+            height: '370px',
+            width: '690px',
+            marginLeft: '-345px'
+        }).show();
+    },
+
+    lookUp: function(e, word, node, pos) {
+        this.prepareBox(e);
 
         var data = {
             word: word,
@@ -179,17 +190,25 @@ var App = {
             pos
         };
 
-        if (!this.iframe) {
-            this.initIframe();
+        const notice = () => {
+            this.noticeIframe(data);
+            this.isOpen = true;
         }
 
-        this.el.css({
-            height: '370px',
-            width: '690px',
-            marginLeft: '-345px'
-        }).show();
-        this.noticeIframe(data);
-        this.isOpen = true;
+        if (this.config.precisionFirst) {
+            Engine.google.detect({
+                text: data.word,
+                com: chrome.i18n.getUILanguage() !== 'zh-CN'
+            }).then(lang => {
+                data.from = lang;
+                notice();
+            }).catch(error => {
+                console.error(error);
+                notice();
+            });
+        } else {
+            notice();
+        }
     },
 
     noticeIframe(data) {
@@ -205,7 +224,7 @@ var App = {
                 this.iframeLoaded = true;
             });
         } else {
-            setTimeout(notice, 25);
+            setTimeout(notice, 100);
         }
     },
 
@@ -372,7 +391,6 @@ var App = {
         }
 
         this.config = config;
-        console.log(config);
     },
 
     init: function(config) {
