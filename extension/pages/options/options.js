@@ -25,6 +25,7 @@ import API from '../../js/api'
 import { Base64 } from 'js-base64'
 import URI from 'urijs'
 import { codeList } from '../../js/constant/code'
+import * as i18n from '../../js/i18n/options'
 
 Vue.use(SocialSharing);
 
@@ -96,6 +97,7 @@ function render(config, i18nTexts) {
         el: '#app',
         data: function() {
             return {
+                i18n,
                 // tab
                 activeName,
                 // base info
@@ -130,8 +132,8 @@ function render(config, i18nTexts) {
                     level: 0
                 },
                 wordRules: {
-                    name: Validator.text('单词'),
-                    trans: Validator.text('翻译')
+                    name: Validator.text(i18n.item.word),
+                    trans: Validator.text(i18n.item.translate)
                 },
                 // recite
                 wordrecitevisible: false,
@@ -210,7 +212,7 @@ function render(config, i18nTexts) {
                 let { right, wrong } = this.reciteResult;
 
                 return {
-                    labels: ['正确', '错误'],
+                    labels: [i18n.item.right, i.item.wrong],
                     datasets: [
                         {
                             backgroundColor: ['#1ebe8d', '#e80d39'],
@@ -386,7 +388,7 @@ function render(config, i18nTexts) {
                     config: newConfig
                 }).then(resp => {
                     if (!silent) {
-                        this.$message('保存成功');
+                        this.$message(i18n.msg.saveok);
                     }
                 });
 
@@ -405,13 +407,13 @@ function render(config, i18nTexts) {
                 const words = this.filteredWords;
 
                 if (words.length) {
-                    this.$confirm('此操作将永久删除这些单词, 是否继续?', '提示').then(() => {
+                    this.$confirm(i18n.msg.deletewordsConfirm, i18n.item.tips).then(() => {
                         this.batchDelete();
                     }).catch(() => {
                         console.log('cancel');
                     });
                 } else {
-                    this.$message.warning('没有要删除的单词!');
+                    this.$message.warning(i18n.msg.nowordsToDelete);
                 }
             },
 
@@ -422,7 +424,7 @@ function render(config, i18nTexts) {
                     action: 'batchDelete',
                     data: { ids }
                 }, () => {
-                    this.$message('批量删除成功!');
+                    this.$message(i18n.msg.batchDeleteOk);
                     this.resetFilter();
                     this.loadWords();
                 });
@@ -494,7 +496,7 @@ function render(config, i18nTexts) {
                     action: 'remove',
                     data: { id: this.wordForm.id }
                 }, () => {
-                    this.$message('删除成功!');
+                    this.$message(i18n.msg.deleteOk);
                     this.resetWordEditor();
                 });
                 _gaq.push(['_trackEvent', 'wordeditor', 'click', 'delete']);
@@ -549,7 +551,7 @@ function render(config, i18nTexts) {
             handleEditorSubmit() {
                 this.$refs.wordForm.validate((valid) => {
                     if (!valid) {
-                        this.$message.error('信息填写有问题');
+                        this.$message.error(i18n.msg.formError);
                         return;
                     }
                     
@@ -585,7 +587,7 @@ function render(config, i18nTexts) {
                     this.reciteWord();
                 } else {
                     this.$message({
-                        message: '没有选中任何单词!',
+                        message: i18n.msg.wordsChoosedNothing,
                         type: 'warning'
                     });
                 }
@@ -754,7 +756,7 @@ function render(config, i18nTexts) {
 
             exportWords(words, format) {
                 if (!words.length) {
-                    this.$message.warn('没有可导出的词语！');
+                    this.$message.warn(i18n.msg.noWordsToExport);
                     
                     return;
                 }

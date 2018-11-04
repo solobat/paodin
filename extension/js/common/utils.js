@@ -112,3 +112,9 @@ export const events = {
         return this;
     }
 }
+
+export function simTemplate(tpl, data) {
+    return tpl.replace(/\{\{([A-Za-z0-9_]+)\}\}/g, function(m, $1) {
+        return typeof data[$1] !== 'undefined' ? data[$1] : '';
+    });
+}

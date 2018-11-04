@@ -3,17 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>单词小卡片 设置选项</title>
+    <title>Wordcard Settings</title>
     <link rel="stylesheet" href="css/base.css">
 </head>
 
 <body>
     <header class="topbar">
         <div class="links">
-            <a href="https://minapp.com/miniapp/4333/" title="单词小卡片小程序" class="steward_bbs" target="_blank">
+            <a v-if="i18n.lang === 'zh-CN'" href="https://minapp.com/miniapp/4333/" title="单词小卡片小程序" class="steward_bbs" target="_blank">
                 <img src="/img/icon-mp.png" alt="">
             </a>
-            <a href="http://bbs.oksteward.com" class="steward_bbs" target="_blank">
+            <a v-if="i18n.lang === 'zh-CN'" href="http://bbs.oksteward.com" class="steward_bbs" target="_blank">
                 <img src="/img/bbs.png" alt="">
             </a>
             <a href="https://github.com/solobat/wordcard" class="github" target="_blank">
@@ -23,12 +23,12 @@
     </header>
     <div id="app" class="wordcard" v-cloak>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="通用" name="general">
+            <el-tab-pane :label="i18n.tabs.general" name="general">
                 <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="翻译引擎">
-                                <el-select v-model="config.engine" placeholder="请选择">
+                            <el-form-item :label="i18n.general.engine">
+                                <el-select v-model="config.engine" :placeholder="i18n.base.choose">
                                     <el-option v-for="(item, index) in TRANSLATE_ENGINS" :key="index"
                                         :label="item.label"
                                         :value="item.value">
@@ -37,8 +37,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="源语言">
-                                <el-select :disabled="config.autoSetFrom" v-model="config.from" filterable placeholder="请选择">
+                            <el-form-item :label="i18n.general.source">
+                                <el-select :disabled="config.autoSetFrom" v-model="config.from" filterable :placeholder="i18n.base.choose">
                                     <el-option v-for="(item, index) in codeList" :key="index"
                                         :label="item"
                                         :value="item">
@@ -47,14 +47,14 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="目标语言">
-                                <el-select v-model="config.to" filterable placeholder="请选择">
+                            <el-form-item :label="i18n.general.target">
+                                <el-select v-model="config.to" filterable :placeholder="i18n.base.choose">
                                     <el-option v-for="(item, index) in codeList" :key="index"
                                         :label="item"
                                         :value="item">
                                     </el-option>
                                 </el-select>
-                                <el-tooltip effect="dark" content="点击查看语种代码" placement="top-start">
+                                <el-tooltip effect="dark" :content="i18n.general.langTips" placement="top-start">
                                     <a class="code-help" href="https://cloud.google.com/translate/docs/languages" target="_blank">?</a>
                                 </el-tooltip>
                             </el-form-item>
@@ -62,7 +62,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="自动设置源语言">
+                            <el-form-item :label="i18n.general.autoSource">
                                 <el-switch
                                     v-model="config.autoSetFrom"
                                     on-color="#20a0ff">
@@ -70,7 +70,7 @@
                             </el-form-item>
                         </el-col>
                       <el-col :span="6">
-                        <el-form-item label="双击取词">
+                        <el-form-item :label="i18n.general.dblclickTrigger">
                             <el-switch
                                 v-model="config.dblclick2trigger"
                                 on-color="#20a0ff">
@@ -78,8 +78,8 @@
                         </el-form-item>
                       </el-col>
                       <el-col :span="6">
-                        <el-form-item label="按住 Ctrl / ⌘">
-                            <el-tooltip effect="dark" content="按住 Ctrl / ⌘ 时才双击取词" placement="top-start">
+                        <el-form-item :label="i18n.general.holdCtrl">
+                            <el-tooltip effect="dark" :content="i18n.general.holdCtrlTips" placement="top-start">
                                 <el-switch
                                     v-model="config.withCtrlOrCmd"
                                     on-color="#20a0ff">
@@ -90,8 +90,8 @@
                     </el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="自动剪裁句子">
-                                <el-tooltip class="item" effect="dark" content="自动将例句剪切至3句" placement="top-start">
+                            <el-form-item :label="i18n.general.autocutSentence">
+                                <el-tooltip class="item" effect="dark" :content="i18n.general.autocutSentenceTips" placement="top-start">
                                     <el-switch
                                         v-model="config.autocut"
                                         on-color="#20a0ff">
@@ -100,8 +100,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="卡片字体大小">
-                                <el-select v-model="config.cardFontSize" placeholder="请选择">
+                            <el-form-item :label="i18n.general.cardFontSize">
+                                <el-select v-model="config.cardFontSize" :placeholder="i18n.base.choose">
                                     <el-option
                                         v-for="item in CARD_FONTSIZE_OPTIONS"
                                         :key="item.value"
@@ -112,33 +112,33 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item label="Omnibox Enter时显示例句">
+                    <el-form-item :label="i18n.general.ominboxEnterShowSentence">
                         <el-switch
                             v-model="config.alertOnOmniboxInputEntered"
                             on-color="#20a0ff">
                         </el-switch>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click.native.prevent="handleConfigSubmit">Save</el-button>
+                        <el-button type="primary" @click.native.prevent="handleConfigSubmit">{{ i18n.base.save }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane label="单词列表" name="words">
+            <el-tab-pane :label="i18n.tabs.words" name="words">
                 <el-row>
                     <el-col :span="6">
                         <div class="word-filter filter-panel">
                             <div class="filter-item">
-                                <div class="field-label">搜索</div>
+                                <div class="field-label">{{ i18n.words.search }}</div>
                                 <el-input placeholder="Search" icon="search" v-model="filter.wordSearchText">
                                 </el-input>
                             </div>
                             <div class="filter-item">
                                 <div class="field-label">
-                                    <span class="label-text">单词本</span>
-                                    <el-button type="primary" size="mini" @click="filter.langPair = ''">复位</el-button>
+                                    <span class="label-text">{{ i18n.words.vocabulary }}</span>
+                                    <el-button type="primary" size="mini" @click="filter.langPair = ''">{{ i18n.words.reset }}</el-button>
                                 </div>
                                 <div class="filter-tags">
-                                    <el-select v-model="filter.langPair" placeholder="请选择">
+                                    <el-select v-model="filter.langPair" :placeholder="i18n.base.choose">
                                         <el-option v-for="(item, index) in langPairs"
                                         :key="index"
                                         :label="item"
@@ -149,8 +149,8 @@
                             </div>
                             <div class="filter-item">
                                 <div class="field-label">
-                                    <span class="label-text">记忆级别</span>
-                                    <el-button type="primary" size="mini" @click="filter.levels = []">复位</el-button>
+                                    <span class="label-text">{{ i18n.words.level }}</span>
+                                    <el-button type="primary" size="mini" @click="filter.levels = []">{{ i18n.words.reset }}</el-button>
                                 </div>
                                 <div class="filter-tags">
                                     <el-tag style="margin-right: 10px;" v-for="level in [0, 1, 2, 3, 4, 5]" 
@@ -161,8 +161,8 @@
                             </div>
                             <div class="filter-item filter-item-tags">
                                 <div class="field-label">
-                                    <span class="label-text">标签</span>
-                                    <el-button type="primary" size="mini" @click="filter.tags = []">复位</el-button>
+                                    <span class="label-text">{{ i18n.words.tag }}</span>
+                                    <el-button type="primary" size="mini" @click="filter.tags = []">{{ i18n.words.reset }}</el-button>
                                 </div>
                                 <div class="filter-tags">
                                     <el-tag style="margin-right: 10px;margin-bottom: 5px;" 
@@ -173,8 +173,8 @@
                                 </div>
                             </div>
                             <div class="other-info">
-                                <div class="word-nums">{{filteredWords.length}} 个 / 共{{words.length}}个单词</div>
-                                <div class="batch-delete-btn" @click="handleBatchDeleteClick">批量删除</div>
+                                <div class="word-nums">{{ i18n.words.count(filteredWords.length, words.length) }}</div>
+                                <div class="batch-delete-btn" @click="handleBatchDeleteClick">{{ i18n.words.batchdelete }}</div>
                             </div>
                         </div>
                     </el-col>
@@ -272,21 +272,21 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="背单词" name="wordsrecite">
+            <el-tab-pane :label="i18n.tabs.wordsrecite" name="wordsrecite">
                 <section class="scheme-filter" v-if="!wordrecitevisible && !allRecited">
                     <header>
-                        <h2>测验方案</h2>
+                        <h2>{{ i18n.wordsrecite.title }}</h2>
                     </header>
                     <div class="filter-items">
                         <div class="filter-results">
-                            <em>{{schemedWords.length}}</em> 个 / 共{{words.length}}个单词
+                            {{ i18n.words.count(schemedWords.length, words.length) }}
                         </div>
                         <div class="filter-item">
                             <div class="field-label">
-                                <span class="label-text">单词本</span>
+                                <span class="label-text"> {{ i18n.words.vocabulary }} </span>
                             </div>
                             <div class="filter-tags">
-                                <el-select v-model="reciteFilter.langPair" placeholder="请选择">
+                                <el-select v-model="reciteFilter.langPair" clearable :placeholder="i18n.base.choose">
                                     <el-option v-for="(item, index) in langPairs"
                                     :key="index"
                                     :label="item"
@@ -297,7 +297,7 @@
                         </div>
                         <div class="filter-item">
                             <div class="field-label">
-                                <span class="label-text">记忆级别</span>
+                                <span class="label-text"> {{ i18n.words.level }} </span>
                             </div>
                             <div class="filter-tags">
                                 <el-tag style="margin-right: 10px;" v-for="level in [0, 1, 2, 3, 4, 5]" 
@@ -308,7 +308,7 @@
                         </div>
                         <div class="filter-item">
                             <div class="field-label">
-                                <span class="label-text">标签</span>
+                                <span class="label-text"> {{ i18n.words.tag }} </span>
                             </div>
                             <div class="filter-tags">
                                 <el-tag style="margin-right: 10px;margin-bottom: 5px;" 
@@ -321,7 +321,7 @@
                     </div>
                     <footer>
                         <div class="action-btns">
-                            <el-button size="small" @click="beginRecite">开始测验</el-button>
+                            <el-button size="small" @click="beginRecite"> {{ i18n.wordsrecite.submit }} </el-button>
                         </div>
                     </footer>
                 </section>
@@ -365,7 +365,7 @@
                     </footer>
                 </section>
             </el-tab-pane>
-            <el-tab-pane label="词根表" name="wordroots">
+            <el-tab-pane v-if="i18n.lang === 'zh-CN'" :label="i18n.tabs.wordroots" name="wordroots">
                 <el-row>
                     <el-col :span="6">
                         <div class="filter-panel">
@@ -410,13 +410,13 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="高级" name="advanced">
+            <el-tab-pane :label="i18n.tabs.advanced" name="advanced">
                 <div class="panel-content" style="padding: 10px 0;">
-                    <el-button type="primary" @click="handleExportClick('csv')">CSV 导出</el-button>
-                    <el-button type="primary" @click="handleExportClick('json')">JSON 导出</el-button>
-                    <el-button type="primary" @click="handleExportClick('words')">仅单词导出</el-button>
+                    <el-button type="primary" @click="handleExportClick('csv')">CSV {{ i18n.advanced.export }} </el-button>
+                    <el-button type="primary" @click="handleExportClick('json')">JSON {{ i18n.advanced.export }} </el-button>
+                    <el-button type="primary" @click="handleExportClick('words')">{{ i18n.advanced.onlywords }} {{ i18n.advanced.export }} </el-button>
                 </div>
-                <el-collapse v-model="activeSyncNames" accordion>
+                <el-collapse v-if="i18n.lang === 'zh-CN'" v-model="activeSyncNames" accordion>
                     <el-collapse-item title="同步到小程序" name="1">
                         <div>单词小卡片小程序用户可以使用此功能，用户身份码从小程序个人头像点击获取</div>
                         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
@@ -452,37 +452,37 @@
                     </el-collapse-item>
                 </el-collapse>
             </el-tab-pane>
-            <el-tab-pane label="帮助" name="help">
+            <el-tab-pane :label="i18n.tabs.help" name="help">
                 <div class="text-panel">
                     <div>
-                       <a href="http://list.youku.com/albumlist/show/id_51352320.html" target="_blank">单词小卡片视频专辑</a> 
+                       <a v-if="i18n.lang === 'zh-CN'" href="http://list.youku.com/albumlist/show/id_51352320.html" target="_blank">单词小卡片视频专辑</a> 
                        <a href="https://t.me/okwordcard" style="margin-left: 12px;" target="_blank">Telegram</a>
-                       <a href="http://bbs.oksteward.com" style="margin-left: 12px;" target="_blank">论坛</a>
+                       <a v-if="i18n.lang === 'zh-CN'" href="http://bbs.oksteward.com" style="margin-left: 12px;" target="_blank">论坛</a>
                     </div>
-                    <div>
+                    <div v-if="i18n.lang === 'zh-CN'">
                         <span>QQ群: 314501729</span>
+                        <hr>
+                        此扩展可以帮助你在访问英文网站过程中，遇到不认识的单词，使用<em>右键菜单</em>查询： <br>
+                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/command.png" alt="">
+                        <br>
+                        如果你想更方便地查词，可以在设置页设置<em>双击取词</em> ：<br>
+                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/options.png" alt="">
+                        同时，通过点击左下角的
+                        <i class="el-icon-star-on"></i>
+                        按钮将单词、释义、例句保存成单词小卡片，
+                        你还可以为单词打上各种 <em>标签</em> ，以方便筛选复习. <br>
+                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/iframe.png" alt="">
+                        收集的单词可以在设置/单词列表中查看并编辑<br>
+                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/wordlist.png" alt="">
+                        你还可以筛选中不同类型/状态的单词<br>
+                        <img src="http://owsjc7iz3.bkt.clouddn.com/filterwords.png" alt="" class="eg-img">
+                        并记忆或测验它们<br>
+                        <img src="http://owsjc7iz3.bkt.clouddn.com/recitewords.png" alt="" class="eg-img">
+                        如果你还在使用其它背单词app，那你还可以将这里收集到的单词导出成 <em>csv</em> 文件，然后导入app中。
                     </div>
-                    <hr>
-                    此扩展可以帮助你在访问英文网站过程中，遇到不认识的单词，使用<em>右键菜单</em>查询： <br>
-                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/command.png" alt="">
-                    <br>
-                    如果你想更方便地查词，可以在设置页设置<em>双击取词</em> ：<br>
-                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/options.png" alt="">
-                    同时，通过点击左下角的
-                    <i class="el-icon-star-on"></i>
-                    按钮将单词、释义、例句保存成单词小卡片，
-                    你还可以为单词打上各种 <em>标签</em> ，以方便筛选复习. <br>
-                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/iframe.png" alt="">
-                    收集的单词可以在设置/单词列表中查看并编辑<br>
-                    <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/wordlist.png" alt="">
-                    你还可以筛选中不同类型/状态的单词<br>
-                    <img src="http://owsjc7iz3.bkt.clouddn.com/filterwords.png" alt="" class="eg-img">
-                    并记忆或测验它们<br>
-                    <img src="http://owsjc7iz3.bkt.clouddn.com/recitewords.png" alt="" class="eg-img">
-                    如果你还在使用其它背单词app，那你还可以将这里收集到的单词导出成 <em>csv</em> 文件，然后导入app中。
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="更新" name="update">
+            <el-tab-pane :label="i18n.tabs.update" name="update">
                 <div class="text-panel">
                     <h2>{{ appName }} v{{config.version}}</h2>
                     <section class="changelog">

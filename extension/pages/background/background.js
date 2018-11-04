@@ -13,6 +13,7 @@ import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
 import { WORD_LEVEL } from '../../js/constant/options'
 import { getSyncConfig } from '../../js/common/config'
+import * as i18n from '../../js/i18n/background'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
@@ -265,7 +266,7 @@ function msgHandler(req, sender, resp) {
         let storageVaild = wordsHelper.getWords().length < MAX_WORDS_NUM; 
         console.log(`storageVaild is: ${storageVaild}`);
         resp({
-            msg: `单词小卡片最多只能容纳${MAX_WORDS_NUM}个单词`,
+            msg: i18n.msg.maxWords,
             data: storageVaild
         });
     }

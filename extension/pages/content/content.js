@@ -254,7 +254,6 @@ var App = {
     bindEvents: function() {
         var self = this;
 
-        // 选中翻译
         $(document).on('dblclick', function(event) {
             if (self.config.dblclick2trigger) {
                 const withCtrlOrCmd = self.config.withCtrlOrCmd;

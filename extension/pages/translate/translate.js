@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-default/index.css'
 import './translate.scss'
 import AV from 'leancloud-storage'
 import * as PageConfig from './translate.config.js'
+import * as i18n from '../../js/i18n/translate'
 
 Vue.use(ElementUI)
 
@@ -137,7 +138,6 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
                         this.assit.orgWord = data;
                     }
                     this.getTranslate().then(() => {
-                        // 收藏过的单词就不需要再查 cocoa 了
                         if (!this.assit.orgWord) {
                             this.queryWordIndex();
                         }
@@ -288,9 +288,9 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
 
             handleSaveClick() {
                 if (this.assit.orgWord) {
-                    this.$confirm('会覆盖单词库里的单词，确定要继续吗?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
+                    this.$confirm(i18n.msg.forceSaveTips, i18n.item.tips, {
+                        confirmButtonText: i18n.item.confirm,
+                        cancelButtonText: i18n.item.cancel,
                         type: 'warning'
                     }).then(() => {
                         this.save();

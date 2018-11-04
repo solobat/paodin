@@ -10,18 +10,18 @@ export const WORD_LEVEL = {
 }
 
 export const CARD_FONTSIZE_OPTIONS = [{
-    label: '普通',
+    label: 'Normal',
     value: 'normal'
 }, {
-    label: '较大',
+    label: 'Big',
     value: 'big'
 }, {
-    label: '大',
+    label: 'Large',
     value: 'large'
 }];
 
 export const TRANSLATE_ENGINS = [{
-    label: '百度',
+    label: 'Baidu',
     value: 'baidu'
 }, {
     label: 'Google',

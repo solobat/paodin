@@ -100,6 +100,7 @@ const config = {
     new CopyWebpackPlugin([
       {from: 'extension/img', to: 'img'},
       {from: 'extension/css', to: 'css'},
+      {from: 'extension/_locales', to: '_locales'},
       {from: 'extension/manifest.json'}
     ]),
     new ImageminPlugin({test: /\.(jpe?g|png|gif|svg)$/i})
