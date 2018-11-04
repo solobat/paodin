@@ -138,7 +138,7 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
                         this.assit.orgWord = data;
                     }
                     this.getTranslate().then(() => {
-                        if (!this.assit.orgWord) {
+                        if (!this.assit.orgWord && this.meta.from === 'en') {
                             this.queryWordIndex();
                         }
                     });
