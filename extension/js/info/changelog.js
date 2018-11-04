@@ -2,6 +2,13 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.4',
+        detail: `
+            支持自动探测网站语言;<br>
+            国际化。
+        `
+    },
+    {
         version: 'v2.3.3',
         detail: `
             支持多语言查词，自动归类单词本，以及单词本筛选;<br>
@@ -147,6 +154,13 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.3.4',
+        detail: `
+            Support automatic detection of website language;<br>
+            i18n.
+        `
+    },
     {
          version: 'v2.3.3',
          detail: `
