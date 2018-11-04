@@ -160,7 +160,7 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
             },
 
             playAudio(url) {
-                Translate.playAudio(url);
+                Translate.playAudio(url, this.meta.from);
             },
 
             enbaleWordInput() {

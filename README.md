@@ -22,6 +22,10 @@
 + Automatically generate vocabularies based on words
 + Memory words
 
+#### Screenshot:
+![Query](https://i.imgur.com/w71e712.png)
+![Word Card](https://i.imgur.com/DwzNsTe.png)
+
 #### Communication
 + [Telegram](https://t.me/okwordcard)
 

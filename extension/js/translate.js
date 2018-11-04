@@ -11,25 +11,27 @@ export default {
         return Engine[type].translate({
             text: word,
             from,
+            com: chrome.i18n.getUILanguage() !== 'zh-CN',
             to
         }).then(resp => {
+            console.log(resp);
             return {
                 explains: resp.dict,
                 trans: resp.result,
                 phonetic: resp.phonetic || [{
-                    name: '美'
+                    name: ''
                 }]
             };
         });
     },
 
-    playAudio: function(voiceUrl = '') {
+    playAudio: function(voiceUrl = '', tl = 'en-US') {
         if (voiceUrl.startsWith('http')) {
             this.playAudioUrl(voiceUrl);
         } else {
             const word = voiceUrl;
 
-            return chrome.tts.speak(word, {'lang': 'en-US'});
+            return chrome.tts.speak(word, {'lang': tl});
         }
     },
 
