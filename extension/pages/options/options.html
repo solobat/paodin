@@ -8,20 +8,20 @@
 </head>
 
 <body>
-    <header class="topbar">
-        <div class="links">
-            <a v-if="i18n.lang === 'zh-CN'" href="https://minapp.com/miniapp/4333/" title="单词小卡片小程序" class="steward_bbs" target="_blank">
-                <img src="/img/icon-mp.png" alt="">
-            </a>
-            <a v-if="i18n.lang === 'zh-CN'" href="http://bbs.oksteward.com" class="steward_bbs" target="_blank">
-                <img src="/img/bbs.png" alt="">
-            </a>
-            <a href="https://github.com/solobat/wordcard" class="github" target="_blank">
-                <img src="/img/github.png" alt="">
-            </a>
-        </div>
-    </header>
     <div id="app" class="wordcard" v-cloak>
+        <header class="topbar">
+            <div class="links">
+                <a v-if="i18n.lang === 'zh-CN'" href="https://minapp.com/miniapp/4333/" title="单词小卡片小程序" class="steward_bbs" target="_blank">
+                    <img src="/img/icon-mp.png" alt="">
+                </a>
+                <a v-if="i18n.lang === 'zh-CN'" href="http://bbs.oksteward.com" class="steward_bbs" target="_blank">
+                    <img src="/img/bbs.png" alt="">
+                </a>
+                <a href="https://github.com/solobat/wordcard" class="github" target="_blank">
+                    <img src="/img/github.png" alt="">
+                </a>
+            </div>
+        </header>
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane :label="i18n.tabs.general" name="general">
                 <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
@@ -204,14 +204,14 @@
                                 <div class="word-editor" v-show="wordEditorVisible" @keyup.esc="handleEditorCancelClick">
                                     <el-row>
                                         <el-col :span="20">
-                                            <el-form ref="wordForm" :rules="wordRules" :model="wordForm" label-width="60px" @submit.prevent="onWordFormSubmit">
-                                                <el-form-item label="英文:" prop="name">
+                                            <el-form ref="wordForm" :rules="wordRules" :model="wordForm" label-width="80px" @submit.prevent="onWordFormSubmit">
+                                                <el-form-item :label="i18n.item.word + ':'" prop="name">
                                                     <el-input type="text" v-model="wordForm.name"></el-input>
                                                 </el-form-item>
-                                                <el-form-item label="翻译:" prop="trans">
+                                                <el-form-item :label="i18n.item.translate + ':'" prop="trans">
                                                     <el-input type="text" v-model="wordForm.trans"></el-input>
                                                 </el-form-item>
-                                                <el-form-item label="标记:">
+                                                <el-form-item :label="i18n.item.tag + ':'">
                                                     <el-tag
                                                         style="margin-right: 5px;"
                                                         :key="tag"
@@ -227,7 +227,6 @@
                                                         v-if="tagInputVisible"
                                                         v-model="tagInputValue"
                                                         :fetch-suggestions="tagsQuerySearch"
-                                                        placeholder="请输入内容"
                                                         ref="saveTagInput"
                                                         :trigger-on-focus="false"
                                                         @select="handleTagSelect"
@@ -236,22 +235,22 @@
                                                     ></el-autocomplete>
                                                     <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ New Tag</el-button>
                                                 </el-form-item>
-                                                <el-form-item label="例句:">
-                                                    <el-input type="textarea" :rows="3" placeholder="请输入内容"
+                                                <el-form-item :label="i18n.item.sentence + ':'">
+                                                    <el-input type="textarea" :rows="3"
                                                         v-model="wordForm.sentence">
                                                     </el-input>
                                                 </el-form-item>
                                                 <div class="form-btns">
-                                                    <el-button size="small" @click="handleEditorCancelClick">取消</el-button>
-                                                    <el-button size="small" @click="handleEditorDeleteClick">删除</el-button>
+                                                    <el-button size="small" @click="handleEditorCancelClick"> {{ i18n.base.cancel }} </el-button>
+                                                    <el-button size="small" @click="handleEditorDeleteClick"> {{ i18n.base.delete }} </el-button>
                                                 </div>
                                             </el-form>
                                         </el-col>
                                         <el-col :span="4">
                                             <div class="form-aside">
                                                 <div class="form-aside-fields">
-                                                    <div class="el-form-item__label">级别:</div>
-                                                    <el-select v-model="wordForm.level" placeholder="请选择" size="small">
+                                                    <div class="el-form-item__label"> {{ i18n.words.level }} :</div>
+                                                    <el-select v-model="wordForm.level" :placeholder="i18n.base.choose" size="small">
                                                         <el-option
                                                             v-for="item in levels"
                                                             :key="item.value"
@@ -261,7 +260,7 @@
                                                     </el-select>
                                                 </div>
                                                 <div class="form-aside-btns">
-                                                    <el-button type="primary" size="small" @click.native.prevent="handleEditorSubmit">保存</el-button>
+                                                    <el-button type="primary" size="small" @click.native.prevent="handleEditorSubmit"> {{ i18n.base.save }} </el-button>
                                                 </div>
                                             </div>
                                         </el-col>
@@ -353,14 +352,14 @@
                 </section>
                 <section class="recite-results" v-if="allRecited">
                     <header>
-                        <h2>结果</h2>
+                        <h2>{{ i18n.wordsrecite.result }}</h2>
                     </header>
                     <div>
                         <pie style="width: 300px;height: 200px; margin: 0 auto" :chart-data="reciteResultData"></pie>
                     </div>
                     <footer>
                         <div class="action-btns">
-                            <el-button size="small" @click="beginNewReciteFilter">新测验</el-button>
+                            <el-button size="small" @click="beginNewReciteFilter"> {{ i18n.wordsrecite.newquiz }} </el-button>
                         </div>
                     </footer>
                 </section>

@@ -4,6 +4,8 @@ export const lang = chrome.i18n.getUILanguage();
 
 export const base = {
     choose: chrome.i18n.getMessage('options_base_choose'),
+    'delete': chrome.i18n.getMessage('options_base_delete'),
+    cancel: chrome.i18n.getMessage('options_base_cancel'),
     save: chrome.i18n.getMessage('options_base_save')
 } 
 
@@ -44,7 +46,9 @@ export const words = {
 
 export const wordsrecite = {
     title: chrome.i18n.getMessage('options_wordsrecite_title'),
-    submit: chrome.i18n.getMessage('options_wordsrecite_submit')
+    submit: chrome.i18n.getMessage('options_wordsrecite_submit'),
+    result: chrome.i18n.getMessage('options_wordsrecite_result'),
+    newquiz: chrome.i18n.getMessage('options_wordsrecite_newquiz'),
 }
 
 export const advanced = {
@@ -55,6 +59,8 @@ export const advanced = {
 export const item = {
     word: chrome.i18n.getMessage('options_item_word'),
     translate: chrome.i18n.getMessage('options_item_translate'),
+    tag: chrome.i18n.getMessage('options_item_tag'),
+    sentence: chrome.i18n.getMessage('options_item_sentence'),
     right: chrome.i18n.getMessage('options_item_right'),
     wrong: chrome.i18n.getMessage('options_item_wrong'),
     tips: chrome.i18n.getMessage('options_item_tips'),

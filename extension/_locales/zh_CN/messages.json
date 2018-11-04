@@ -18,6 +18,8 @@
     
 
     "options_base_choose": { "message": "请选择" },
+    "options_base_delete": { "message": "删除" },
+    "options_base_cancel": { "message": "取消" },
     "options_base_save": { "message": "保存" },
 
     "options_tab_general": { "message": "通用" },
@@ -57,6 +59,8 @@
 
     "options_item_word": { "message": "单词" },
     "options_item_translate": { "message": "翻译" },
+    "options_item_tag": { "message": "标签" },
+    "options_item_sentence": { "message": "例句" },
     "options_item_right": { "message": "正确" },
     "options_item_wrong": { "message": "错误" },
     "options_item_tips": { "message": "提示" },

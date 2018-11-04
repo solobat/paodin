@@ -32,6 +32,8 @@
     "options_base_choose": {
         "message": "Please select"
     },
+    "options_base_delete": { "message": "Delete" },
+    "options_base_cancel": { "message": "Cancel" },
     "options_base_save": {
         "message": "save"
     },
@@ -78,7 +80,7 @@
         "message": "Hold Ctrl / ⌘"
     },
     "options_general_hold_ctrl_tips": {
-        "message": "Do not double-click the word when you hold down Ctrl / Command"
+        "message": "Just hold down Ctrl / ⌘ and double click to translate"
     },
     "options_general_autocut_sentence": {
         "message": "Automatic cropping sentences"
@@ -131,6 +133,8 @@
     "options_item_translate": {
         "message": "Translation"
     },
+    "options_item_tag": { "message": "Tag" },
+    "options_item_sentence": { "message": "Sentences" },
     "options_item_right": {
         "message": "Correct"
     },
@@ -150,7 +154,7 @@
         "message": "There are no words to delete!"
     },
     "options_msg_batchdelete_ok": {
-        "message": "Bulk delete success"
+        "message": "Bulk delete successfully!"
     },
     "options_msg_delete_ok": {
         "message": "Delete successful!"
