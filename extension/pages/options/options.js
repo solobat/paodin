@@ -8,7 +8,6 @@ import ElementUI from 'element-ui'
 import _ from 'underscore'
 import 'element-ui/lib/theme-default/index.css'
 import './options.scss'
-import ga from '../../js/common/ga'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
@@ -43,8 +42,7 @@ function init() {
     getSyncConfig().then(config => {
         console.log(config);
         let i18nTexts = getI18nTexts();
-        
-        ga();
+
         render(config, i18nTexts);
     });
 }
@@ -264,7 +262,6 @@ function render(config, i18nTexts) {
         },
         methods: {
             handleClick: function(tab) {
-                _gaq.push(['_trackEvent', 'options_tab', 'click', tab.name]);
             },
 
             handleWords(list) {
@@ -357,8 +354,6 @@ function render(config, i18nTexts) {
                 } else {
                     filter.levels.push(level);
                 }
-
-                _gaq.push(['_trackEvent', 'wordlist', 'click', 'filter', 'level']);
             },
 
             handleTagFilterClick(tag, type = 'list') {
@@ -370,14 +365,10 @@ function render(config, i18nTexts) {
                 } else {
                     filter.tags.push(tag);
                 }
-
-                _gaq.push(['_trackEvent', 'wordlist', 'click', 'filter', 'tag']);
             },
 
             handleConfigSubmit() {
                 this.saveConfig();
-
-                _gaq.push(['_trackEvent', 'options_general', 'save']);
             },
 
             saveConfig: function(silent) {
@@ -391,8 +382,6 @@ function render(config, i18nTexts) {
                         this.$message(i18n.msg.saveok);
                     }
                 });
-
-                _gaq.push(['_trackEvent', 'general', 'click', 'save']);
             },
 
             resetFilter() {
@@ -440,13 +429,10 @@ function render(config, i18nTexts) {
                     tags: word.tags,
                     level: word.level
                 };
-
-                _gaq.push(['_trackEvent', 'wordlist', 'click', 'word']);
             },
 
             handleTagClose(tag) {
                 this.wordForm.tags.splice(this.wordForm.tags.indexOf(tag), 1);
-                _gaq.push(['_trackEvent', 'wordeditor', 'input', 'tagClose']);
             },
 
             createFilter(queryString) {
@@ -473,8 +459,6 @@ function render(config, i18nTexts) {
                 }
                 this.tagInputVisible = false;
                 this.tagInputValue = '';
-
-                _gaq.push(['_trackEvent', 'wordeditor', 'input', 'addtag']);
             },
 
             showTagInput() {
@@ -482,13 +466,10 @@ function render(config, i18nTexts) {
                 this.$nextTick(_ => {
                     this.$refs.saveTagInput.$refs.input.$refs.input.focus();
                 });
-
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'taginput']);
             },
 
             handleEditorCancelClick() {
                 this.wordEditorVisible = false;
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'cancel']);
             },
 
             handleEditorDeleteClick() {
@@ -499,7 +480,6 @@ function render(config, i18nTexts) {
                     this.$message(i18n.msg.deleteOk);
                     this.resetWordEditor();
                 });
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'delete']);
             },
 
             handleSyncedClick(word) {
@@ -570,7 +550,6 @@ function render(config, i18nTexts) {
                         this.resetWordEditor();
                     });
                 });
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'save']);
             },
 
             resetWordEditor() {
@@ -591,8 +570,6 @@ function render(config, i18nTexts) {
                         type: 'warning'
                     });
                 }
-                
-                _gaq.push(['_trackEvent', 'recite', 'click', 'begin']);
             },
 
             reciteWord() {
@@ -656,7 +633,6 @@ function render(config, i18nTexts) {
 
             playVoice() {
                 Translate.playAudio(this.curRecitedWord.name);
-                _gaq.push(['_trackEvent', 'recite', 'click', 'voice']);
             },
 
             wordRecited(gotit) {
@@ -686,8 +662,6 @@ function render(config, i18nTexts) {
                 }, () => {
                     this.goNextStep();
                 });
-
-                _gaq.push(['_trackEvent', 'recite', 'click', gotit ? 'right' : 'wrong']);
             },
 
             beginNewReciteFilter() {
@@ -708,8 +682,6 @@ function render(config, i18nTexts) {
                     right: 0,
                     wrong: 0
                 };
-
-                _gaq.push(['_trackEvent', 'recite', 'click', 'newrecite']);
             },
 
             handleExportClick(format) {
@@ -770,8 +742,6 @@ function render(config, i18nTexts) {
                 } else if (format === 'words') {
                     this.downloadAsText(obj);
                 }
-
-                _gaq.push(['_trackEvent', 'options_advanced', 'click', 'export']);
             },
 
             async handleUserCheck(type) {
