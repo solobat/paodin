@@ -2,6 +2,14 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.5',
+        detail: `
+            根据域名自动保存 lang pair 记录;<br>
+            点击高亮弹出翻译框，使用 cmd/ctrl + 点击移除高亮;<br>
+            一些优化及 bug 修复。
+        `
+    },
+    {
         version: 'v2.3.4',
         detail: `
             支持自动探测网站语言;<br>
@@ -154,6 +162,14 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.3.5',
+        detail: `
+            Automatically save lang pair records based on host;<br>
+            Click on the highlight will show popup box and use cmd/ctrl + click to remove the highlight;<br>
+            Some optimizations and bug fixes.
+        `
+    },
     {
         version: 'v2.3.4',
         detail: `
