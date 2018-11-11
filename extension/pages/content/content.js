@@ -74,9 +74,9 @@ var App = {
             return true;
         }
     },
-    handleTextSelected: function(e) {
+    handleTextSelected: function(e, actionType) {
         const selection = this.context.getSelection();
-        const word = (selection.toString() || '').trim();
+        let word = (selection.toString() || '').trim();
         let node;
 
         if (e === 'fromExternal' && selection && selection.baseNode) {
@@ -85,10 +85,17 @@ var App = {
             node = e.target;
         }
 
+        if (actionType === 'click') {
+            word = e.target.innerText;
+            node = e.target.parentElement;
+        }
+
         if (this.checkValid(word, node)) {
             const pos = getPosition(selection);
 
-            this.highlight = new Highlight(node, word, this.context);
+            if (actionType !== 'click') {
+                this.highlight = new Highlight(node, word, this.context);
+            }
             this.lookUp(e, word, node, pos);
         } else {
             return;
@@ -314,6 +321,8 @@ var App = {
         $(document).on('click', function(e) {
             if (self.isOpen && e.target.id !== 'wordcard-main') {
                 self.closePopup();
+            } else if ($(e.target).hasClass('wc-highlight')) {
+                self.handleTextSelected(e, 'click');
             }
         });
 

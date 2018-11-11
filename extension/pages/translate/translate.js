@@ -248,7 +248,7 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
             },
 
             toggleEdit() {
-                this.assit.sentenceEditable = !this.sentenceEditable;
+                this.assit.sentenceEditable = !this.assit.sentenceEditable;
             },
 
             saveSentence() {

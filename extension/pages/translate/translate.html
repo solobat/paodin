@@ -8,8 +8,8 @@
 
 <body>
     <div class="wc-lightbox-content" id="main" v-cloak>
-        <div class="top-row" @dblclick.self="handleSaveClick">
-            <el-row>
+        <div class="top-row">
+            <el-row @dblclick.self="handleSaveClick">
                 <el-col :span="4">
                     <el-select v-model="meta.from" filterable>
                         <el-option v-for="(item, index) in codeList" :key="index"
@@ -26,6 +26,12 @@
                             :value="item">
                         </el-option>
                     </el-select>
+                </el-col>
+                <el-col :span="2" :offset="1">
+                    <div style="margin-top: 7px;" class="saveCard" @click="handleSaveClick">
+                        <i v-if="assit.orgWord" class="el-icon-star-on"></i>
+                        <i v-else class="el-icon-star-off"></i>
+                    </div>
                 </el-col>
             </el-row>
             <a class="close" @click="handleCloseClick">X</a>
@@ -104,10 +110,6 @@
                     </div>
                     <div class="col-footer"> 
                         <span class="by">Translation by {{ meta.engine }}</span>
-                        <span class="saveCard" @click="handleSaveClick">
-                            <i v-if="assit.orgWord" class="el-icon-star-on"></i>
-                            <i v-else class="el-icon-star-off"></i>
-                        </span>
                     </div>
                 </div>
             </div>
