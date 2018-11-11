@@ -10,7 +10,7 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import { isMac, getParameterByName, getLangCode } from '../../js/common/utils'
+import { isMac, getParameterByName, getLangCode, selectText } from '../../js/common/utils'
 import { Base64 } from 'js-base64'
 import CssSelectorGenerator from 'css-selector-generator'
 import * as Engine from 'translation.js'
@@ -60,6 +60,15 @@ function getPosition(selection) {
     };
 
     return pos;
+}
+
+function removeHighlight(elem) {
+    selectText(elem);
+
+    const text = elem.firstChild;
+
+    elem.after(text);
+    elem.remove();
 }
 
 let menuEvent;
@@ -318,11 +327,23 @@ var App = {
             self.closePopup();
         });
 
-        $(document).on('click', function(e) {
-            if (self.isOpen && e.target.id !== 'wordcard-main') {
+        function isPressHelperKey(metaKey, ctrlKey) {
+            if (isMac) {
+                return metaKey;
+            } else {
+                return ctrlKey;
+            }
+        }
+
+        $(document).on('click', function(event) {
+            if (self.isOpen && event.target.id !== 'wordcard-main') {
                 self.closePopup();
-            } else if ($(e.target).hasClass('wc-highlight')) {
-                self.handleTextSelected(e, 'click');
+            } else if ($(event.target).hasClass('wc-highlight')) {
+                if (!isPressHelperKey(event.metaKey, event.ctrlKey)) {
+                    self.handleTextSelected(event, 'click');
+                } else {
+                    removeHighlight(event.target);
+                }
             }
         });
 
