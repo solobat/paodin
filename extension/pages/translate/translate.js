@@ -9,6 +9,8 @@ import './translate.scss'
 import AV from 'leancloud-storage'
 import * as PageConfig from './translate.config.js'
 import * as i18n from '../../js/i18n/translate'
+import { codeList } from '../../js/constant/code'
+import { updateUserLang } from '../../js/helper/lang'
 
 Vue.use(ElementUI)
 
@@ -67,6 +69,7 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
         el: '#main',
         data: function() {
             return {
+                codeList,
                 meta: {
                     word,
                     surroundings,
@@ -85,9 +88,27 @@ function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
             this.lookup();
         },
 
+        watch: {
+            'meta.from': function() {
+                this.updateLang();
+            },
+            'meta.to': function() {
+                this.updateLang();
+            }
+        },
+
         methods: {
+            updateLang() {
+                const { host, from, to } = this.meta;
+
+                updateUserLang(host, from, to);
+                this.rerender();
+            },
+
             rerender(meta) {
-                this.meta = meta;
+                if (meta) {
+                    this.meta = meta;
+                }
                 this.assit = PageConfig.getDefaultAssit();
                 this.$nextTick(() => {
                     this.lookup();

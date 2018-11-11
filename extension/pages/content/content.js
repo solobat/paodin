@@ -14,6 +14,7 @@ import { isMac, getParameterByName, getLangCode } from '../../js/common/utils'
 import { Base64 } from 'js-base64'
 import CssSelectorGenerator from 'css-selector-generator'
 import * as Engine from 'translation.js'
+import { getUserLang, LANG_STORAGE_KEY } from '../../js/helper/lang'
 
 const chrome = window.chrome;
 var options = window.options;
@@ -325,6 +326,17 @@ var App = {
         document.addEventListener('closeWordcardPopup', function() {
             self.closePopup();
         });
+
+        chrome.storage.onChanged.addListener((changes, namespace) => {
+            const change = changes[LANG_STORAGE_KEY];
+
+            if (change && change.newValue[window.location.host]) {
+                const pair = change.newValue[window.location.host];
+
+                this.config.from = pair.from;
+                this.config.to = pair.to;
+            }
+        });
     },
 
     searchAndHighlight(words) {
@@ -390,7 +402,14 @@ var App = {
             config.from = this.detectLang();
         }
 
-        this.config = config;
+        getUserLang(window.location.host).then(pair => {
+            if (pair) {
+                config.from = pair.from;
+                config.to = pair.to;
+            }
+
+            this.config = config;
+        });
     },
 
     init: function(config) {

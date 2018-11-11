@@ -8,8 +8,26 @@
 
 <body>
     <div class="wc-lightbox-content" id="main" v-cloak>
-        <div class="top-row" @dblclick="handleSaveClick">
-            {{ meta.from }} --> {{ meta.to }}
+        <div class="top-row" @dblclick.self="handleSaveClick">
+            <el-row>
+                <el-col :span="4">
+                    <el-select v-model="meta.from" filterable>
+                        <el-option v-for="(item, index) in codeList" :key="index"
+                            :label="item"
+                            :value="item">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col :span="1">&nbsp;</el-col>
+                <el-col :span="4">
+                    <el-select v-model="meta.to" filterable>
+                        <el-option v-for="(item, index) in codeList" :key="index"
+                            :label="item"
+                            :value="item">
+                        </el-option>
+                    </el-select>
+                </el-col>
+            </el-row>
             <a class="close" @click="handleCloseClick">X</a>
         </div>
         <div id="popup-lookup">
