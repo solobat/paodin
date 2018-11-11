@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --config config/webpack.config.js",
     "dev": "npm run watch",
-    "watch": "webpack --watch",
+    "watch": "webpack --watch --config config/webpack.config.js",
     "prod": "bash build/build.sh",
-    "build:minified": "cross-env NODE_ENV=production webpack",
+    "build:minified": "cross-env NODE_ENV=production webpack --config config/webpack.config.js",
     "cleaninstall": "rm -rf node_modules && npm i"
   },
   "author": "",
