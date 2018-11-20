@@ -2,6 +2,12 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.5.1',
+        detail: `
+            放开单词同步的语言区限制 
+        `
+    },
+    {
         version: 'v2.3.5',
         detail: `
             根据域名自动保存 lang pair 记录;<br>
@@ -162,6 +168,12 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.3.5.1',
+        detail: `
+            Add word sync for zh-CN users.
+        `
+    },
     {
         version: 'v2.3.5',
         detail: `
