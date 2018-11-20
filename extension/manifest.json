@@ -51,15 +51,6 @@
         "<all_urls>"
     ],
     "commands": {
-        "lookup_in_selection": {
-            "suggested_key": {
-                "windows": "Ctrl+Shift+L",
-                "mac": "Command+Shift+L",
-                "chromeos": "Ctrl+Shift+L",
-                "linux": "Ctrl+Shift+L"
-            },
-            "description": "__extCmdDesc__",
-            "global": true
-        }
+     
     }
 }
