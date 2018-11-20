@@ -103,6 +103,8 @@ a {
 }
 
 .filter-panel {
+    display: flex;
+    flex-direction: column;
     position: relative;    
     box-sizing: border-box;
     padding: 20px;
@@ -114,15 +116,23 @@ a {
         margin-bottom: 30px;
     }
 
+    .filter-item-tags {
+        flex: 1;
+    }
+
     .other-info {
-        position: absolute;
-        width: 100%;
-        bottom: 20px;
+        display: flex;
+        justify-content: space-between;
         color: #999;
 
         a {
             color: #4698fb;
         }
+    }
+
+    .batch-delete-btn {
+        color: #ff4949;
+        cursor: pointer;
     }
 }
 
@@ -447,12 +457,36 @@ a {
     }
 }
 
-.icon-synced {
+.word-icons {
     position: absolute;
     right: 5px;
     top: 5px;
-    background: url(/img/synced.png) no-repeat center;
+}
+
+.word-icon {
+    display: inline-block;
+    margin-left: 10px;
+    background: url() no-repeat center;
     background-size: 100% 100%;
     width: 20px;
     height: 20px;
+    cursor: pointer;
+}
+
+.icon-synced {
+    background-image: url(/img/synced.png);
+}
+
+.icon-link {
+    background-image: url(/img/link.png);
+}
+
+.icon-root {
+    background-image: url(/img/root.png);
+}
+
+.code-help {
+    color: #3a6dd0;
+    font-size: 18px;
+    text-decoration: underline;
 }

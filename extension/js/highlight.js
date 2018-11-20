@@ -43,25 +43,6 @@ export default class Highlight {
         return elem;
     }
 
-    remove() {
-        var $elem = $('em.wc-highlight');
-        if (!$elem.length) {
-            return;
-        }
-        // TODO: optimize
-        // remove all by ID ?
-        $elem.each(function() {
-            var elem = this;
-
-            utils.selectText(elem);
-
-            var range = this.context.getSelection().getRangeAt(0);
-            var selectionContents = range.extractContents();
-
-            elem.remove();
-            range.insertNode(selectionContents);
-        });
-    }
     getAllTextNode(el) {
         var n;
         var a = [];

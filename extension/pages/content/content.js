@@ -10,7 +10,11 @@ import Highlight from '../../js/highlight'
 import $ from 'jquery'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
-import { isMac } from '../../js/common/utils'
+import { isMac, getParameterByName, getLangCode, selectText } from '../../js/common/utils'
+import { Base64 } from 'js-base64'
+import CssSelectorGenerator from 'css-selector-generator'
+import * as Engine from 'translation.js'
+import { getUserLang, LANG_STORAGE_KEY } from '../../js/helper/lang'
 
 var options = window.options;
 
@@ -44,40 +48,66 @@ function getBlock(node, deep) {
     }
 }
 
+function getPosition(selection) {
+    const gen = new CssSelectorGenerator();
+    const path = gen.getSelector(selection.baseNode.parentElement);
+    const offset = [selection.baseOffset, selection.extentOffset];
+    const pos = {
+        url: window.location.href,
+        path,
+        offset
+    };
+
+    return pos;
+}
+
+function removeHighlight(elem) {
+    selectText(elem);
+
+    const text = elem.firstChild;
+
+    elem.after(text);
+    elem.remove();
+}
+
 let menuEvent;
 var App = {
     context: window,
     iframeLoaded: false,
-    handleTextSelected: function(e) {
-        var selection = this.context.getSelection();
-        var word = (selection.toString() || '').trim();
-        if (!e) {
-            console.error('no selection...');
-            debugger
+    checkValid(word, node) {
+        if (!node || ['INPUT', 'TEXTAREA'].indexOf(node.tagName) !== -1
+        || !word || numReg.test(word)) {
+            return false;
+        } else {
+            return true;
         }
-        var node = e.target;
+    },
+    handleTextSelected: function(e, actionType) {
+        const selection = this.context.getSelection();
+        let word = (selection.toString() || '').trim();
+        let node;
 
-        if (!word) {
+        if (e === 'fromExternal' && selection && selection.baseNode) {
+            node = selection.baseNode.parentElement;
+        } else if (e) {
+            node = e.target;
+        }
+
+        if (actionType === 'click') {
+            word = e.target.innerText;
+            node = e.target.parentElement;
+        }
+
+        if (this.checkValid(word, node)) {
+            const pos = getPosition(selection);
+
+            if (actionType !== 'click') {
+                this.highlight = new Highlight(node, word, this.context);
+            }
+            this.lookUp(e, word, node, pos);
+        } else {
             return;
         }
-
-        // 数字或三个字母下的不翻译
-        // 纯英文才翻译
-        if (word.length < 3 || numReg.test(word)) {
-            return;
-        }
-
-        if (!enReg.test(word)) {
-            return;
-        }
-
-        // input内部不翻译
-        if (['INPUT', 'TEXTAREA'].indexOf(node.tagName) !== -1) {
-            return;
-        }
-
-        this.highlight = new Highlight(node, word, this.context);
-        this.lookUp(e, word, node);
     },
 
     autocutSentenceIfNeeded(word, sentence) {
@@ -138,12 +168,8 @@ var App = {
         this.iframe = $('#wordcard-frame');
     },
 
-    lookUp: function(e, word, node) {
-        var x_pos = e.pageX;
-        var y_pos = e.pageY;
-        var x_posView = e.clientX;
+    prepareBox(e) {
         var y_posView = e.clientY;
-        var winWidth = this.context.innerWidth;
         var winHeight = this.context.innerHeight;
         var upDir = (y_posView > (winHeight / 2));
 
@@ -155,14 +181,6 @@ var App = {
                 .addClass('bottom');
         }
 
-        var data = {
-            word: word,
-            surroundings: this.getSurroundings(word, node),
-            source: window.location.href,
-            host: window.location.hostname,
-            engine: this.config.engine
-        };
-
         if (!this.iframe) {
             this.initIframe();
         }
@@ -172,8 +190,41 @@ var App = {
             width: '690px',
             marginLeft: '-345px'
         }).show();
-        this.noticeIframe(data);
-        this.isOpen = true;
+    },
+
+    lookUp: function(e, word, node, pos) {
+        this.prepareBox(e);
+
+        var data = {
+            word: word,
+            surroundings: this.getSurroundings(word, node),
+            source: window.location.href,
+            host: window.location.hostname,
+            engine: this.config.engine,
+            from: this.config.from,
+            to: this.config.to,
+            pos
+        };
+
+        const notice = () => {
+            this.noticeIframe(data);
+            this.isOpen = true;
+        }
+
+        if (this.config.precisionFirst) {
+            Engine.google.detect({
+                text: data.word,
+                com: chrome.i18n.getUILanguage() !== 'zh-CN'
+            }).then(lang => {
+                data.from = lang;
+                notice();
+            }).catch(error => {
+                console.error(error);
+                notice();
+            });
+        } else {
+            notice();
+        }
     },
 
     noticeIframe(data) {
@@ -189,7 +240,7 @@ var App = {
                 this.iframeLoaded = true;
             });
         } else {
-            setTimeout(notice, 25);
+            setTimeout(notice, 100);
         }
     },
 
@@ -238,7 +289,6 @@ var App = {
     bindEvents: function() {
         var self = this;
 
-        // 选中翻译
         $(document).on('dblclick', function(event) {
             if (self.config.dblclick2trigger) {
                 const withCtrlOrCmd = self.config.withCtrlOrCmd;
@@ -267,6 +317,8 @@ var App = {
                 self.handleTextSelected(menuEvent);
             } else if (action === 'config') {
                 this.config = request.data;
+            } else if (action === 'lookup') {
+                this.handleTextSelected('fromExternal');
             }
         });
 
@@ -274,9 +326,23 @@ var App = {
             self.closePopup();
         });
 
-        $(document).on('click', function(e) {
-            if (self.isOpen && e.target.id !== 'wordcard-main') {
+        function isPressHelperKey(metaKey, ctrlKey) {
+            if (isMac) {
+                return metaKey;
+            } else {
+                return ctrlKey;
+            }
+        }
+
+        $(document).on('click', function(event) {
+            if (self.isOpen && event.target.id !== 'wordcard-main') {
                 self.closePopup();
+            } else if ($(event.target).hasClass('wc-highlight')) {
+                if (!isPressHelperKey(event.metaKey, event.ctrlKey)) {
+                    self.handleTextSelected(event, 'click');
+                } else {
+                    removeHighlight(event.target);
+                }
             }
         });
 
@@ -285,6 +351,21 @@ var App = {
                 self.closePopup();
             }
         }, false);
+
+        document.addEventListener('closeWordcardPopup', function() {
+            self.closePopup();
+        });
+
+        chrome.storage.onChanged.addListener((changes, namespace) => {
+            const change = changes[LANG_STORAGE_KEY];
+
+            if (change && change.newValue[window.location.host]) {
+                const pair = change.newValue[window.location.host];
+
+                this.config.from = pair.from;
+                this.config.to = pair.to;
+            }
+        });
     },
 
     searchAndHighlight(words) {
@@ -306,22 +387,62 @@ var App = {
         });
     },
 
-    initHighlights() {
-        let self = this;
+    initHighlight(pos, goto) {
+        const node = $(pos.path)[0];
+        const range = document.createRange();
+        
+        range.setStart(node.firstChild, pos.offset[0]);
+        range.setEnd(node.firstChild, pos.offset[1]);
 
-        browser.runtime.sendMessage({
-            'action': 'get',
-            'data': {}
-        },
-        function(resp) {
-            if (resp.data && resp.data.length) {
-                self.searchAndHighlight(resp.data);
+        const selectionContents = range.extractContents();
+        const elem = document.createElement('em');
+
+        elem.appendChild(selectionContents);
+        elem.setAttribute('class', 'wc-highlight');
+        range.insertNode(elem);
+
+        if (goto) {
+            node.scrollIntoView();
+        }
+    },
+
+    initHighlights() {
+        const tag = getParameterByName('wc_tag');
+
+        if (tag) {
+            try {
+                const pos = JSON.parse(Base64.decode(tag));
+
+                this.initHighlight(pos, true);
+            } catch (error) {
+                console.log(error);
             }
+        }
+    },
+
+    detectLang() {
+        const lang = document.documentElement.lang || 'en';
+
+        return getLangCode(lang);
+    },
+
+    mergeConfig(config) {
+        if (config.autoSetFrom) {
+            config.from = this.detectLang();
+        }
+
+        getUserLang(window.location.host).then(pair => {
+            if (pair) {
+                config.from = pair.from;
+                config.to = pair.to;
+            }
+
+            this.config = config;
         });
     },
 
     init: function(config) {
-        this.config = config;
+        this.mergeConfig(config);
 
         var popup = [
             '<div id="wordcard-main" class="wordcard-main" style="display:none;">',
@@ -330,6 +451,7 @@ var App = {
         $('html').append(popup);
         this.el = $('#wordcard-main');
         this.bindEvents();
+        this.initHighlights();
     }
 };
 

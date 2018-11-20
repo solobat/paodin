@@ -1,0 +1,175 @@
+{
+    "extName": { "message": "Word card: word translation / collection / back word" },
+    "extShortName": { "message": "Word Card" },
+    "extDesc": { "message": "Word card: word translation, make wordcard, memory word, words data export" },
+    "extCmdDesc": { "message": "Translate selected word" },
+
+    "background_msg_maxwords_tips": {
+        "message": "Word cards can only hold up to {{max}} words"
+    },
+    "popup_item_words": {
+        "message": "Word list"
+    },
+    "popup_item_wordsrecite": {
+        "message": "Memory word"
+    },
+    "popup_item_help": {
+        "message": "Help"
+    },
+    "translate_save_confirm_tips": {
+        "message": "Will overwrite the word in the word library, are you sure you want to continue?"
+    },
+    "translate_item_tips": {
+        "message": "Prompt"
+    },
+    "translate_item_confirm": {
+        "message": "Confirm"
+    },
+    "translate_item_cancel": {
+        "message": "Cancel"
+    },
+    "options_base_choose": {
+        "message": "Please select"
+    },
+    "options_base_delete": { "message": "Delete" },
+    "options_base_cancel": { "message": "Cancel" },
+    "options_base_save": {
+        "message": "Save"
+    },
+    "options_tab_general": {
+        "message": "General"
+    },
+    "options_tab_words": {
+        "message": "Word list"
+    },
+    "options_tab_wordsrecite": {
+        "message": "Memory words"
+    },
+    "options_tab_wordroots": {
+        "message": "Root table"
+    },
+    "options_tab_advanced": {
+        "message": "Advanced"
+    },
+    "options_tab_help": {
+        "message": "Help"
+    },
+    "options_tab_update": {
+        "message": "Update"
+    },
+    "options_general_engine": {
+        "message": "Translation Engine"
+    },
+    "options_general_source": {
+        "message": "Source Language"
+    },
+    "options_general_target": {
+        "message": "Target Language"
+    },
+    "options_general_lang_tips": {
+        "message": "Click to view language code"
+    },
+    "options_general_auto_source": {
+        "message": "Automatically set the source language"
+    },
+    "options_general_dblclick_trigger": {
+        "message": "Double click on the word"
+    },
+    "options_general_hold_ctrl": {
+        "message": "Hold Ctrl / ⌘"
+    },
+    "options_general_hold_ctrl_tips": {
+        "message": "Just hold down Ctrl / ⌘ and double click to translate"
+    },
+    "options_general_autocut_sentence": {
+        "message": "Automatic cropping sentences"
+    },
+    "options_general_autocut_sentence_tips": {
+        "message": "Automatically cut sentences to 3 sentences"
+    },
+    "options_general_card_fontsize": {
+        "message": "Card font size"
+    },
+    "options_general_omnibox_enter_show_sentence": {
+        "message": "Omnibox Enter to show sentences"
+    },
+    "options_general_precision_first": { "message": "More precise" },
+    "options_general_precision_first_tips": { "message": "Will automatically detect the language, so it is slower" },
+    
+    "options_words_search": {
+        "message": "Search"
+    },
+    "options_words_vocabulary": {
+        "message": "Vocabulary"
+    },
+    "options_words_reset": {
+        "message": "Reset"
+    },
+    "options_words_level": {
+        "message": "Memory level"
+    },
+    "options_words_tag": {
+        "message": "Tag"
+    },
+    "options_words_count": {
+        "message": "{{choosed}} / total {{all}} words"
+    },
+    "options_words_batchdelete": {
+        "message": "Bulk delete"
+    },
+    "options_wordsrecite_title": {
+        "message": "Test plan"
+    },
+    "options_wordsrecite_submit": {
+        "message": "Begin Quiz"
+    },
+    "options_wordsrecite_newquiz": { "message": "New Quiz" },
+    "options_wordsrecite_result": { "message": "Quiz Result" },
+    "options_advanced_export": {
+        "message": "Export"
+    },
+    "options_advanced_onlywords": {
+        "message": "Word only"
+    },
+    "options_item_word": {
+        "message": "Word"
+    },
+    "options_item_translate": {
+        "message": "Translation"
+    },
+    "options_item_tag": { "message": "Tag" },
+    "options_item_sentence": { "message": "Sentences" },
+    "options_item_right": {
+        "message": "Correct"
+    },
+    "options_item_wrong": {
+        "message": "Error"
+    },
+    "options_item_tips": {
+        "message": "Prompt"
+    },
+    "options_msg_saveok": {
+        "message": "Save successfully"
+    },
+    "options_msg_deletewords_confirm": {
+        "message": "This operation will permanently delete these words, do you want to continue?"
+    },
+    "options_msg_nowords_todelete": {
+        "message": "There are no words to delete!"
+    },
+    "options_msg_batchdelete_ok": {
+        "message": "Bulk delete successfully!"
+    },
+    "options_msg_delete_ok": {
+        "message": "Delete successful!"
+    },
+    "options_msg_form_error": {
+        "message": "There is a problem with the information"
+    },
+    "options_msg_wordschoosed_nothing": {
+        "message": "No words selected"
+    },
+    "options_msg_nowords_toexport": {
+        "message": "No words to export!"
+    }
+}

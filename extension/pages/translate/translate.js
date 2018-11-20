@@ -9,6 +9,9 @@ import './translate.scss'
 import AV from 'leancloud-storage'
 import browser from 'webextension-polyfill'
 import * as PageConfig from './translate.config.js'
+import * as i18n from '../../js/i18n/translate'
+import { codeList } from '../../js/constant/code'
+import { updateUserLang } from '../../js/helper/lang'
 
 Vue.use(ElementUI)
 
@@ -62,17 +65,21 @@ const AVHelper = {
 let vm;
 let parentWin;
 
-function initApp({ word, surroundings, source, host, engine }) {
+function initApp({ word, surroundings, source, host, engine, pos, from, to }) {
     vm = new Vue({
         el: '#main',
         data: function() {
             return {
+                codeList,
                 meta: {
                     word,
                     surroundings,
                     source,
                     host,
-                    engine
+                    engine,
+                    from,
+                    to,
+                    pos
                 },
                 assit: PageConfig.getDefaultAssit()
             }
@@ -82,9 +89,27 @@ function initApp({ word, surroundings, source, host, engine }) {
             this.lookup();
         },
 
+        watch: {
+            'meta.from': function() {
+                this.updateLang();
+            },
+            'meta.to': function() {
+                this.updateLang();
+            }
+        },
+
         methods: {
+            updateLang() {
+                const { host, from, to } = this.meta;
+
+                updateUserLang(host, from, to);
+                this.rerender();
+            },
+
             rerender(meta) {
-                this.meta = meta;
+                if (meta) {
+                    this.meta = meta;
+                }
                 this.assit = PageConfig.getDefaultAssit();
                 this.$nextTick(() => {
                     this.lookup();
@@ -135,15 +160,15 @@ function initApp({ word, surroundings, source, host, engine }) {
                         this.assit.orgWord = data;
                     }
                     this.getTranslate().then(() => {
-                        // 收藏过的单词就不需要再查 cocoa 了
-                        if (!this.assit.orgWord) {
+                        if (!this.assit.orgWord && this.meta.from === 'en') {
                             this.queryWordIndex();
                         }
                     });
                 });
             },
             getTranslate() {
-                return Translate.translate(this.meta.word, this.meta.engine).then(results => {
+                return Translate.translate(this.meta.word, this.meta.engine,
+                    this.meta.from, this.meta.to).then(results => {
                     // FIXME: orgWord may only have id attr
                     if (this.assit.orgWord) {
                         let { trans = [], tags = [] } = this.assit.orgWord;
@@ -157,7 +182,7 @@ function initApp({ word, surroundings, source, host, engine }) {
             },
 
             playAudio(url) {
-                Translate.playAudio(url);
+                Translate.playAudio(url, this.meta.from);
             },
 
             enbaleWordInput() {
@@ -224,7 +249,7 @@ function initApp({ word, surroundings, source, host, engine }) {
             },
 
             toggleEdit() {
-                this.assit.sentenceEditable = !this.sentenceEditable;
+                this.assit.sentenceEditable = !this.assit.sentenceEditable;
             },
 
             saveSentence() {
@@ -268,7 +293,10 @@ function initApp({ word, surroundings, source, host, engine }) {
                     trans: this.assit.translate.trans || [],
                     tags: this.assit.wordTags,
                     host: this.meta.host,
-                    source: this.meta.source
+                    source: this.meta.source,
+                    from: this.meta.from,
+                    to: this.meta.to,
+                    pos: this.meta.pos
                 };
 
                 browser.runtime.sendMessage({
@@ -282,9 +310,9 @@ function initApp({ word, surroundings, source, host, engine }) {
 
             handleSaveClick() {
                 if (this.assit.orgWord) {
-                    this.$confirm('会覆盖单词库里的单词，确定要继续吗?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
+                    this.$confirm(i18n.msg.forceSaveTips, i18n.item.tips, {
+                        confirmButtonText: i18n.item.confirm,
+                        cancelButtonText: i18n.item.cancel,
                         type: 'warning'
                     }).then(() => {
                         this.save();

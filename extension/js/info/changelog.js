@@ -4,6 +4,51 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.3.5.1',
+        detail: `
+            放开单词同步的语言区限制 
+        `
+    },
+    {
+        version: 'v2.3.5',
+        detail: `
+            根据域名自动保存 lang pair 记录;<br>
+            点击高亮弹出翻译框，使用 cmd/ctrl + 点击移除高亮;<br>
+            一些优化及 bug 修复。
+        `
+    },
+    {
+        version: 'v2.3.4',
+        detail: `
+            支持自动探测网站语言;<br>
+            国际化。
+        `
+    },
+    {
+        version: 'v2.3.3',
+        detail: `
+            支持多语言查词，自动归类单词本，以及单词本筛选;<br>
+            修复某个网站样式污染问题。
+        `
+    },
+    {
+        version: 'v2.3.2',
+        detail: `
+            新增保存到扇贝单词本;<br>
+            新增保存到有道单词本;<br>
+            单词列表添加词根链接。
+        `
+    },
+    {
+        version: 'v2.3.1',
+        detail: `
+            记录单词的网页以及页面位置；<br>
+            支持批量删除选中的单词；<br>
+            点击 icon 可更改同步状态；<br>
+            支持快捷键查询选中的单词。
+        `
+    },
+    {
         version: 'v2.3',
         detail: `
             引入多翻译引擎，目前支持 Google / Baidu，默认 Google，可以选项页更改；<br>
@@ -124,9 +169,35 @@ let langZh = [
     }
 ];
 
-// TODO: translate
 let langEn = [
-
+    {
+        version: 'v2.3.5.1',
+        detail: `
+            Add word sync for zh-CN users.
+        `
+    },
+    {
+        version: 'v2.3.5',
+        detail: `
+            Automatically save lang pair records based on host;<br>
+            Click on the highlight will show popup box and use cmd/ctrl + click to remove the highlight;<br>
+            Some optimizations and bug fixes.
+        `
+    },
+    {
+        version: 'v2.3.4',
+        detail: `
+            Support automatic detection of website language;<br>
+            i18n.
+        `
+    },
+    {
+         version: 'v2.3.3',
+         detail: `
+            Support multi-language search, automatic categorization of vocabularies, and can filter by vocabulary;<br>
+            Fix a site style pollution issue.
+         `
+     }
 ];
 
 let results;

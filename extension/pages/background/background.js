@@ -14,6 +14,7 @@ import Translate from '../../js/translate'
 import browser from 'webextension-polyfill'
 import { WORD_LEVEL } from '../../js/constant/options'
 import { getSyncConfig } from '../../js/common/config'
+import * as i18n from '../../js/i18n/background'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
@@ -190,6 +191,13 @@ function msgHandler(req, sender, resp) {
         resp({ msg: 'remove ok...' });
     }
 
+    if (action === 'batchDelete') {
+        data.ids.forEach(id => {
+            wordsHelper.remove(id);
+        });
+        resp({ msg: 'batch remove ok...' });
+    }
+
     if (action === 'update') {
         var word = wordsHelper.update(data);
         resp({
@@ -258,14 +266,30 @@ function msgHandler(req, sender, resp) {
         let storageVaild = wordsHelper.getWords().length < MAX_WORDS_NUM; 
         console.log(`storageVaild is: ${storageVaild}`);
         resp({
-            msg: `单词小卡片最多只能容纳${MAX_WORDS_NUM}个单词`,
+            msg: i18n.msg.maxWords,
             data: storageVaild
         });
+    }
+
+    if (action === 'lookup') {
+        console.log('lookup');
+        browser.tabs.query({active: true, currentWindow: true}, function(tabs){
+            browser.tabs.sendMessage(tabs[0].id, {action: "lookup"}, function(response) {});  
+        });
+        resp({ msg: 'pass ok' });
     }
 }
 
 ['onMessage', 'onMessageExternal'].forEach((msgType) => {
     browser.runtime[msgType].addListener(msgHandler);
+});
+
+chrome.commands.onCommand.addListener(function(command) {
+    if (command === 'lookup_in_selection') {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "lookup" }, function() {});
+        });    
+    }
 });
 
 function filterWords(words, filter) {
@@ -411,7 +435,7 @@ function setupOmnibox() {
 
 function setup() {
     let parentMenu = browser.contextMenus.create({
-        title : "单词小卡片",
+        title : chrome.i18n.getMessage('extShortName'),
         contexts: ['selection'],
         onclick : function(info, tab) {
             browser.tabs.query({active: true, currentWindow: true}, function(tabs){

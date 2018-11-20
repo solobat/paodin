@@ -1,12 +1,14 @@
 
 // highlight
 .wc-highlight {
+    font-style: normal;
     margin: 0 5px;
     background-color: yellow;
     color: black;
+    cursor: pointer;
 }
 
-.lightbox {
+.wc-lightbox-content {
     position:fixed;
     z-index:999999999999;
     left:50%;

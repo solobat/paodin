@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "单词小卡片: 查词/收集/背单词",
-    "short_name": "单词小卡片",
-    "version": "2.3",
-    "description": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出",
+    "name": "__MSG_extName__",
+    "short_name": "__MSG_extShortName__",
+    "version": "2.3.5.1",
+    "description": "__MSG_extDesc__",
     "applications": {
         "gecko": {
           "id": "tomas.yangjianchuan@gmail.com",
@@ -13,6 +13,7 @@
     "background": {
         "page": "background.html"
     },
+    "default_locale": "zh_CN",
     "browser_action": {
         "default_icon": "img/icon.png",
         "default_title": "Word Card",
@@ -22,10 +23,12 @@
         "matches": ["<all_urls>"],
         "css": ["content.css"],
         "all_frames": true,
-        "js": ["content.js"]
+        "js": ["manifest.js", "vendor.js", "content.js"]
     }],
     "icons": {
-        "16": "img/icon16.png"
+        "16": "img/icon.png",
+        "48": "img/icon.png",
+        "128": "img/icon.png"
     },
     "web_accessible_resources": [
         "img/*",
@@ -39,11 +42,24 @@
     "content_security_policy": "script-src 'self' 'unsafe-eval' https://localhost/* https://ssl.google-analytics.com; object-src 'self'",
     "permissions": [
         "tabs",
+        "cookies",
         "clipboardRead",
         "clipboardWrite",
         "contextMenus",
         "storage",
         "notifications",
         "<all_urls>"
-    ]
+    ],
+    "commands": {
+        "lookup_in_selection": {
+            "suggested_key": {
+                "windows": "Ctrl+Shift+L",
+                "mac": "Command+Shift+L",
+                "chromeos": "Ctrl+Shift+L",
+                "linux": "Ctrl+Shift+L"
+            },
+            "description": "__extCmdDesc__",
+            "global": true
+        }
+    }
 }

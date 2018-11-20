@@ -9,7 +9,7 @@ export function getDefaultAssit() {
         deleteTimes: 0,
         translate: {
             phonetic: [{
-                name: '美'
+                name: 'en-US'
             }],
             trans: [],
             explains: []

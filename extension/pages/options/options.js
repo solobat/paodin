@@ -8,7 +8,6 @@ import ElementUI from 'element-ui'
 import _ from 'underscore'
 import 'element-ui/lib/theme-default/index.css'
 import './options.scss'
-import ga from '../../js/common/ga'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
 import { getSyncConfig } from '../../js/common/config'
@@ -22,6 +21,10 @@ import wordRoots from '../../js/constant/wordroots'
 import keyboardJS from 'keyboardjs'
 import SocialSharing  from 'vue-social-sharing'
 import API from '../../js/api'
+import { Base64 } from 'js-base64'
+import URI from 'urijs'
+import { codeList } from '../../js/constant/code'
+import * as i18n from '../../js/i18n/options'
 
 Vue.use(SocialSharing);
 
@@ -37,8 +40,7 @@ function init() {
     getSyncConfig().then(config => {
         console.log(config);
         let i18nTexts = getI18nTexts();
-        
-        ga();
+
         render(config, i18nTexts);
     });
 }
@@ -91,6 +93,7 @@ function render(config, i18nTexts) {
         el: '#app',
         data: function() {
             return {
+                i18n,
                 // tab
                 activeName,
                 // base info
@@ -98,15 +101,18 @@ function render(config, i18nTexts) {
                 appName,
                 storeId,
                 config,
+                codeList,
                 i18nTexts,
                 CARD_FONTSIZE_OPTIONS,
                 TRANSLATE_ENGINS,
                 // list
                 words: [],
+                langPairs: [],
                 filter: {
                     wordSearchText: '',
                     levels: [],
-                    tags: []
+                    tags: [],
+                    langPair: ''
                 },
                 tags: [],
                 allTags: [],
@@ -122,14 +128,15 @@ function render(config, i18nTexts) {
                     level: 0
                 },
                 wordRules: {
-                    name: Validator.text('单词'),
-                    trans: Validator.text('翻译')
+                    name: Validator.text(i18n.item.word),
+                    trans: Validator.text(i18n.item.translate)
                 },
                 // recite
                 wordrecitevisible: false,
                 reciteFilter: {
                     levels: [],
-                    tags: []
+                    tags: [],
+                    langPair: ''
                 },
                 reciteStage: 0,
                 recitedWordIndex: 0,
@@ -158,6 +165,8 @@ function render(config, i18nTexts) {
                     userKey: Validator.text('userKey')
                 },
                 hasMinappChecked: false,
+
+                // sync
                 syncPorcess: 0,
                 syncing: false,
                 version
@@ -199,7 +208,7 @@ function render(config, i18nTexts) {
                 let { right, wrong } = this.reciteResult;
 
                 return {
-                    labels: ['正确', '错误'],
+                    labels: [i18n.item.right, i18n.item.wrong],
                     datasets: [
                         {
                             backgroundColor: ['#1ebe8d', '#e80d39'],
@@ -221,12 +230,15 @@ function render(config, i18nTexts) {
 
             words() {
                 let allTags = [];
+                let langPairs = [];
 
-                this.words.forEach(({ tags = [] }) => {
+                this.words.forEach(({ tags = [], from = 'en', to = 'zh-CN' }) => {
                     allTags = allTags.concat(tags);
+                    langPairs.push(`${from},${to}`);
                 });
 
                 this.tags = _.uniq(allTags);
+                this.langPairs = _.uniq(langPairs);
                 this.allTags = this.tags.map(tag => {
                     return {
                         label: tag,
@@ -248,7 +260,20 @@ function render(config, i18nTexts) {
         },
         methods: {
             handleClick: function(tab) {
-                _gaq.push(['_trackEvent', 'options_tab', 'click', tab.name]);
+            },
+
+            handleWords(list) {
+                list.forEach(item => {
+                    if (item.pos) {
+                        const { url, offset, path } = item.pos;
+                        const tag = Base64.encodeURI(JSON.stringify({ offset, path }));
+                        const link = URI(url).removeSearch('wc_tag').addSearch('wc_tag', tag);
+
+                        item.link = link.href();
+                    }
+                });
+
+                return list;
             },
 
             loadWords() {
@@ -257,7 +282,7 @@ function render(config, i18nTexts) {
                         action: 'get'
                     }, ({ data }) => {
                         if (data) {
-                            this.words = data;
+                            this.words = this.handleWords(data);
 
                             resolve(data);
                         } else {
@@ -268,7 +293,7 @@ function render(config, i18nTexts) {
             },
 
             filterWords(filter, type = 'list') {
-                let { wordSearchText, levels, tags } = filter;
+                let { wordSearchText, levels, tags, langPair } = filter;
 
                 if (!this.words.length) {
                     return [];
@@ -307,6 +332,14 @@ function render(config, i18nTexts) {
                     });
                 }
 
+                if (langPair && langPair.indexOf(',') !== -1) {
+                    results = results.filter(({ from = 'en', to = 'zh-CN' }) => {
+                        const arr = langPair.split(',');
+
+                        return from === arr[0] && to === arr[1];
+                    });
+                }
+
                 return results;
             },
 
@@ -319,8 +352,6 @@ function render(config, i18nTexts) {
                 } else {
                     filter.levels.push(level);
                 }
-
-                _gaq.push(['_trackEvent', 'wordlist', 'click', 'filter', 'level']);
             },
 
             handleTagFilterClick(tag, type = 'list') {
@@ -332,14 +363,10 @@ function render(config, i18nTexts) {
                 } else {
                     filter.tags.push(tag);
                 }
-
-                _gaq.push(['_trackEvent', 'wordlist', 'click', 'filter', 'tag']);
             },
 
             handleConfigSubmit() {
                 this.saveConfig();
-
-                _gaq.push(['_trackEvent', 'options_general', 'save']);
             },
 
             saveConfig: function(silent) {
@@ -350,11 +377,44 @@ function render(config, i18nTexts) {
                     config: newConfig
                 }).then(resp => {
                     if (!silent) {
-                        this.$message('保存成功');
+                        this.$message(i18n.msg.saveok);
                     }
                 });
+            },
 
-                _gaq.push(['_trackEvent', 'general', 'click', 'save']);
+            resetFilter() {
+                this.filter = {
+                    wordSearchText: '',
+                    levels: [],
+                    tags: []
+                };
+            },
+
+            handleBatchDeleteClick() {
+                const words = this.filteredWords;
+
+                if (words.length) {
+                    this.$confirm(i18n.msg.deletewordsConfirm, i18n.item.tips).then(() => {
+                        this.batchDelete();
+                    }).catch(() => {
+                        console.log('cancel');
+                    });
+                } else {
+                    this.$message.warning(i18n.msg.nowordsToDelete);
+                }
+            },
+
+            batchDelete() {
+                const ids = this.filteredWords.map(word => word.id);
+
+                chrome.runtime.sendMessage({
+                    action: 'batchDelete',
+                    data: { ids }
+                }, () => {
+                    this.$message(i18n.msg.batchDeleteOk);
+                    this.resetFilter();
+                    this.loadWords();
+                });
             },
 
             handleWordClick(word) {
@@ -367,13 +427,10 @@ function render(config, i18nTexts) {
                     tags: word.tags,
                     level: word.level
                 };
-
-                _gaq.push(['_trackEvent', 'wordlist', 'click', 'word']);
             },
 
             handleTagClose(tag) {
                 this.wordForm.tags.splice(this.wordForm.tags.indexOf(tag), 1);
-                _gaq.push(['_trackEvent', 'wordeditor', 'input', 'tagClose']);
             },
 
             createFilter(queryString) {
@@ -400,8 +457,6 @@ function render(config, i18nTexts) {
                 }
                 this.tagInputVisible = false;
                 this.tagInputValue = '';
-
-                _gaq.push(['_trackEvent', 'wordeditor', 'input', 'addtag']);
             },
 
             showTagInput() {
@@ -409,13 +464,10 @@ function render(config, i18nTexts) {
                 this.$nextTick(_ => {
                     this.$refs.saveTagInput.$refs.input.$refs.input.focus();
                 });
-
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'taginput']);
             },
 
             handleEditorCancelClick() {
                 this.wordEditorVisible = false;
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'cancel']);
             },
 
             handleEditorDeleteClick() {
@@ -423,10 +475,26 @@ function render(config, i18nTexts) {
                     action: 'remove',
                     data: { id: this.wordForm.id }
                 }, () => {
-                    this.$message('删除成功!');
+                    this.$message(i18n.msg.deleteOk);
                     this.resetWordEditor();
                 });
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'delete']);
+            },
+
+            handleSyncedClick(word) {
+                word.synced = false;
+                this.saveWord(word);
+            },
+
+            handleWordLinkClick(link) {
+                chrome.tabs.create({
+                    url: link
+                });
+            },
+
+            handleRootClick(word) {
+                chrome.tabs.create({
+                    url: `http://www.cgdict.com/index.php?app=cigen&ac=word&w=${word.name}`
+                });
             },
 
             onWordFormSubmit() {
@@ -461,7 +529,7 @@ function render(config, i18nTexts) {
             handleEditorSubmit() {
                 this.$refs.wordForm.validate((valid) => {
                     if (!valid) {
-                        this.$message.error('信息填写有问题');
+                        this.$message.error(i18n.msg.formError);
                         return;
                     }
                     
@@ -480,7 +548,6 @@ function render(config, i18nTexts) {
                         this.resetWordEditor();
                     });
                 });
-                _gaq.push(['_trackEvent', 'wordeditor', 'click', 'save']);
             },
 
             resetWordEditor() {
@@ -497,12 +564,10 @@ function render(config, i18nTexts) {
                     this.reciteWord();
                 } else {
                     this.$message({
-                        message: '没有选中任何单词!',
+                        message: i18n.msg.wordsChoosedNothing,
                         type: 'warning'
                     });
                 }
-                
-                _gaq.push(['_trackEvent', 'recite', 'click', 'begin']);
             },
 
             reciteWord() {
@@ -566,7 +631,6 @@ function render(config, i18nTexts) {
 
             playVoice() {
                 Translate.playAudio(this.curRecitedWord.name);
-                _gaq.push(['_trackEvent', 'recite', 'click', 'voice']);
             },
 
             wordRecited(gotit) {
@@ -596,8 +660,6 @@ function render(config, i18nTexts) {
                 }, () => {
                     this.goNextStep();
                 });
-
-                _gaq.push(['_trackEvent', 'recite', 'click', gotit ? 'right' : 'wrong']);
             },
 
             beginNewReciteFilter() {
@@ -618,8 +680,6 @@ function render(config, i18nTexts) {
                     right: 0,
                     wrong: 0
                 };
-
-                _gaq.push(['_trackEvent', 'recite', 'click', 'newrecite']);
             },
 
             handleExportClick(format) {
@@ -666,7 +726,7 @@ function render(config, i18nTexts) {
 
             exportWords(words, format) {
                 if (!words.length) {
-                    this.$message.warn('没有可导出的词语！');
+                    this.$message.warn(i18n.msg.noWordsToExport);
                     
                     return;
                 }
@@ -680,8 +740,6 @@ function render(config, i18nTexts) {
                 } else if (format === 'words') {
                     this.downloadAsText(obj);
                 }
-
-                _gaq.push(['_trackEvent', 'options_advanced', 'click', 'export']);
             },
 
             async handleUserCheck(type) {
@@ -723,9 +781,9 @@ function render(config, i18nTexts) {
                 return parts;
             },
 
-            async getShouldSyncWords() {
+            async getShouldSyncWords(filterFn) {
                 const words = await this.loadWords();
-                const newWords = words.filter(word => !word.synced);
+                const newWords = filterFn ? words.filter(filterFn) : words;
 
                 if (newWords.length) {
                     return JSON.parse(JSON.stringify(newWords))
@@ -734,12 +792,12 @@ function render(config, i18nTexts) {
                 }
             },
 
-            async batchSync(userId, parts) {
+            async batchSync(syncMethod, parts) {
                 return parts.reduce((tasks, part) => {
                     return tasks.then(results => {
                         return new Promise((resolve) => {
                             setTimeout(() => {
-                                resolve(API.minapp.sync(userId, part).then((result) => {
+                                resolve(syncMethod(part).then((result) => {
                                     final.push(result);
                                     const percent = (final.length / parts.length * 100).toFixed(2);
 
@@ -751,22 +809,21 @@ function render(config, i18nTexts) {
                 }, Promise.resolve());
             },
 
-            async syncToMinapp() {
-                const list = await this.getShouldSyncWords();
+            async syncToCloud(syncMethod, filterFn, chunk) {
+                const list = await this.getShouldSyncWords(filterFn);
 
                 if (list) {
-                    const parts = this.partial(list);
+                    const parts = this.partial(list, chunk);
 
                     this.syncing = true;
 
                     try {
-                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
-                        const result = await this.batchSync(userData.userId, parts);
-                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
+                        const result = await this.batchSync(syncMethod, parts);
                         
                         return list;
                     } catch (error) {
                         console.log(error);
+                        this.$message.error('同步失败，请稍后再试，或去论坛反馈');
                     } finally {
                         this.syncing = false;
                     }
@@ -775,13 +832,78 @@ function render(config, i18nTexts) {
                 }
             },
 
-            async handleSyncClick(type) {
+            async shouldSyncToMinapp() {
                 this.$refs.minappForm.validate(async valid => {
                     if (valid) {
-                        const syncedList = await this.syncToMinapp();
+                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
+                        const syncMethod = (part) => {
+                            return API.minapp.sync(userData.userId, part);
+                        };
+                        const filterFn = word => !word.synced;
+                        const syncedList = await this.syncToCloud(syncMethod, filterFn, 5);
                         const resp = await this.makeWordsSynced(syncedList);
+
+                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
                     }
                 });
+            },
+
+            async syncToShanbay() {
+                const syncMethod = async (part) => {
+                    const word = part[0].name;
+                    const { data } = await API.shanbay.translate(word);
+
+                    return API.shanbay.addToVocabulary(data.id);
+                };
+
+                await this.syncToCloud(syncMethod, null, 1);
+                this.$message.success('单词已经全部同步到扇贝!');
+            },
+
+            shouldSyncToShanbay() {
+                chrome.cookies.get({ url: 'http://www.shanbay.com', name: 'auth_token' }, cookie => {
+                    if (cookie) {
+                        this.syncToShanbay();
+                    } else {
+                        chrome.tabs.create({ url: 'https://www.shanbay.com/web/account/login' })
+                    }
+                })
+            },
+
+            async syncToYoudao() {
+                const syncMethod = async (part) => {
+                    const word = part[0].name;
+
+                    return API.youdao.addToVocabulary(word);
+                };
+
+                await this.syncToCloud(syncMethod, null, 1);
+                this.$message.success('单词已经全部同步到有道!');
+            },
+
+            shouldSyncToYoudao() {
+                const url = 'http://dict.youdao.com';
+                const loginURL = 'http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist%3Fkeyfrom%3Dnull';
+
+                chrome.cookies.get({ url, name: 'DICT_SESS' }, async cookie => {
+                    if (cookie) {
+                        this.syncToYoudao();
+                    } else {
+                        chrome.tabs.create({
+                            url: loginURL
+                        })
+                    }
+                })
+            },
+
+            handleSyncClick(type) {
+                if (type === 'minapp') {
+                    this.shouldSyncToMinapp();
+                } else if (type === 'shanbay') {
+                    this.shouldSyncToShanbay();
+                } else if (type === 'youdao') {
+                    this.shouldSyncToYoudao();
+                }
             }
         }
     });
