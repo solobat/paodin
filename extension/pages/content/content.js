@@ -50,13 +50,19 @@ function getBlock(node, deep) {
 
 function getPosition(selection) {
     const gen = new CssSelectorGenerator();
-    const path = gen.getSelector(selection.baseNode.parentElement);
-    const offset = [selection.baseOffset, selection.extentOffset];
+    const offset = [selection.baseOffset || selection.anchorOffset, selection.extentOffset || selection.focusOffset];
     const pos = {
         url: window.location.href,
-        path,
         offset
     };
+
+    try {
+        const path = gen.getSelector((selection.baseNode || selection.anchorNode).parentElement);
+
+        pos.path = path; 
+    } catch (error) {
+        console.error(error);
+    }
 
     return pos;
 }
