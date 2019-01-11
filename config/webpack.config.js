@@ -14,6 +14,7 @@ const config = {
     content: './extension/pages/content/content.js',
     translate: './extension/pages/translate/translate.js',
     popup: './extension/pages/popup/popup.js',
+    newtab: './extension/pages/newtab/newtab.js',
     options: './extension/pages/options/options.js',
     background: './extension/pages/background/background.js'
   },
@@ -80,6 +81,12 @@ const config = {
       template: './extension/pages/background/background.html',
       filename: 'background.html',
       chunks: ['manifest', 'vendor', 'background']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'WordCard - NewTab',
+      template: './extension/pages/newtab/newtab.html',
+      filename: 'newtab.html',
+      chunks: ['manifest', 'vendor', 'newtab']
     }),
     new HtmlWebpackPlugin({
       title: 'WordCard - Popup',

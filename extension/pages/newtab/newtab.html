@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Word Card</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+    <div id="app" class="wordcard" v-cloak>
+        <section class="wordrecite-ground card-size-normal">
+            <div class="word-card-wrap">
+                <el-card class="word-card">
+                    <div class="word-fields">
+                        <div class="word-card-name word-field">{{curWordState.name}}</div>
+                        <div class="word-card-trans word-field">
+                            <span v-if="curWordState.trans && curWordState.trans.length">{{(curWordState.trans || []).join(',')}}</span>
+                            <span v-else class="msg-box">释义</span>
+                        </div>
+                        <div class="word-card-sentence word-field" v-html="highlightWord(curWordState.sentence, curWordState.name)"></div>
+                    </div>
+                    <div class="word-otherinfo">
+                        <div class="word-level">
+                            <img :src="`/img/level${curWordState.level || 0}.png`" alt="">
+                        </div>
+                        <div class="play-voice">
+                            <img class="voice-btn" src="/img/wordvoice.png" alt="" @click="playVoice">
+                        </div>
+                    </div>
+                </el-card>
+                <div class="word-card-actions">
+                    <img src="/img/nextstep.png" alt="" v-if="!isFinalStep" @click="goNextStep">
+                    <template v-else>
+                        <img src="/img/gotit.png" alt="" @click="wordRecited(true)">
+                        <img src="/img/wrong.png" alt="" @click="wordRecited(false)">
+                    </template>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
