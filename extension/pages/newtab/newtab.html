@@ -16,7 +16,7 @@
                         <div class="word-card-name word-field">{{curWordState.name}}</div>
                         <div class="word-card-trans word-field">
                             <span v-if="curWordState.trans && curWordState.trans.length">{{(curWordState.trans || []).join(',')}}</span>
-                            <span v-else class="msg-box">释义</span>
+                            <span v-else class="msg-box clickable" @click="goNextStep">......</span>
                         </div>
                         <div class="word-card-sentence word-field" v-html="highlightWord(curWordState.sentence, curWordState.name)"></div>
                     </div>
