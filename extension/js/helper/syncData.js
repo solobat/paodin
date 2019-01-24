@@ -168,7 +168,7 @@ export const syncMixin = {
     }
 };
 
-export function getSyncHelper4Bg(wordsHelper, config, userInfo) {
+export function getSyncHelper4Bg(wordsHelper, userInfo) {
     return {
         isBg: true,
         autoSyncInterval: 60 * 60 * 1000,
@@ -191,15 +191,26 @@ export function getSyncHelper4Bg(wordsHelper, config, userInfo) {
 
             return Promise.resolve(true);
         },
-        autoSyncIfNeeded() {
+        autoSyncIfNeeded(config) {
             if (this.userInfo && config.autoSync) {
-                clearInterval(this.syncTimer);
-
-                this.syncTimer = setInterval(() => {
-                    this.syncToMinapp();
-                }, this.autoSyncInterval);
-                console.log('syncing to miniapp every hour...');
+                this.startAutoSync();
+            } else {
+                this.stopAutoSync();
             }
+        },
+
+        startAutoSync() {
+            clearInterval(this.syncTimer);
+
+            this.syncTimer = setInterval(() => {
+                this.syncToMinapp();
+            }, this.autoSyncInterval);
+            console.log('syncing to miniapp every hour...');
+        },
+
+        stopAutoSync() {
+            clearInterval(this.syncTimer);
+            console.log('stop auto sync to minapp');
         },
         ...syncHelper
     };

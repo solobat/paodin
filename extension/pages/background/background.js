@@ -445,7 +445,8 @@ function setup() {
     });
 
     setupOmnibox();
-    syncHelper.autoSyncIfNeeded();
+    syncHelper.autoSyncIfNeeded(config);
+    window.syncHelper = syncHelper;
 }
 
 function loadConfig() {
@@ -474,8 +475,7 @@ let syncHelper;
 
 function init(data) {
     wordsHelper.init();
-    syncHelper = getSyncHelper4Bg(wordsHelper, data.config, data.userInfo);
-    window.syncHelper = syncHelper;
+    syncHelper = getSyncHelper4Bg(wordsHelper, data.userInfo);
 
     Words.on('add remove', function() {
         wordsHelper.getWords();
@@ -486,6 +486,7 @@ function init(data) {
     browser.storage.onChanged.addListener((changes) => {
         if (changes.config) {
             config = changes.config.newValue;
+            syncHelper.autoSyncIfNeeded(config);
             notifyTabs({
                 action: 'config',
                 data: config
