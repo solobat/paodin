@@ -491,6 +491,9 @@ function init(data) {
                 action: 'config',
                 data: config
             });
+        } else if (changes.mp_userinfo) {
+            syncHelper.userInfo = changes.mp_userinfo.newValue;
+            syncHelper.autoSyncIfNeeded(config);
         }
     });
 }
