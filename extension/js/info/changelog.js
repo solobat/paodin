@@ -2,6 +2,13 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.4.1',
+        detail: `
+            缓存微信小程序的关联状态；<br>
+            支持自动同步到小程序，默认开启。
+        `
+    },
+    {
         version: 'v2.4',
         detail: `
             添加新页面背单词的方式；<br>
@@ -175,6 +182,12 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.4.1',
+        detail: `
+            Update. 
+        `
+    },
     {
         version: 'v2.4',
         detail: `
