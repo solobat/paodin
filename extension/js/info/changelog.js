@@ -2,6 +2,12 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.4.2',
+        detail: `
+            Bug 修复。
+        `
+    },
+    {
         version: 'v2.4.1',
         detail: `
             缓存微信小程序的关联状态；<br>
@@ -182,6 +188,12 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.4.2',
+        detail: `
+            Bugfix. 
+        `
+    },
     {
         version: 'v2.4.1',
         detail: `
