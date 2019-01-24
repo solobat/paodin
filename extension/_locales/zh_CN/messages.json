@@ -46,6 +46,7 @@
     "options_general_omnibox_enter_show_sentence": { "message": "Omnibox Enter时显示例句" },
     "options_general_precision_first": { "message": "精准优先" },
     "options_general_precision_first_tips": { "message": "将自动探测语种，因而速度较慢" },
+    "options_general_autosync": { "message": "自动同步" },
 
     "options_words_search": { "message": "搜索" },
     "options_words_vocabulary": { "message": "单词本" },

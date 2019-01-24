@@ -12,8 +12,9 @@ import guid from '../../js/common/guid'
 import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
 import { WORD_LEVEL } from '../../js/constant/options'
-import { getSyncConfig } from '../../js/common/config'
+import { getSyncConfig, getUserInfo } from '../../js/common/config'
 import * as i18n from '../../js/i18n/background'
+import { getSyncHelper4Bg } from '../../js/helper/syncData'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
@@ -63,7 +64,6 @@ var wordsHelper = {
     },
 
     update: function(attrs) {
-        debugger
         var word = Words.set(attrs, {
             add: false,
             remove: false
@@ -445,11 +445,20 @@ function setup() {
     });
 
     setupOmnibox();
+    syncHelper.autoSyncIfNeeded();
 }
 
 function loadConfig() {
-    return getSyncConfig().then(conf => {
+    return Promise.all([
+        getSyncConfig(),
+        getUserInfo()
+    ]).then(([conf, userInfo]) => {
         config = conf;
+
+        return {
+            config: conf,
+            userInfo
+        }
     });
 }
 
@@ -461,8 +470,13 @@ function notifyTabs(resp) {
     });
 }
 
-function init() {
+let syncHelper;
+
+function init(data) {
     wordsHelper.init();
+    syncHelper = getSyncHelper4Bg(wordsHelper, data.config, data.userInfo);
+    window.syncHelper = syncHelper;
+
     Words.on('add remove', function() {
         wordsHelper.getWords();
     });

@@ -9,6 +9,7 @@ export const defaultConfig = {
     disableUrls: [],
     urlMode: 'enableUrls',
     dblclick2trigger: false,
+    autoSync: true,
     withCtrlOrCmd: false,
     autocut: true,
     sentenceNum: 3,

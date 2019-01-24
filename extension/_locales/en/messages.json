@@ -95,6 +95,7 @@
     },
     "options_general_precision_first": { "message": "More precise" },
     "options_general_precision_first_tips": { "message": "Will automatically detect the language, so it is slower" },
+    "options_general_autosync": { "message": "Auto sync" },
     
     "options_words_search": {
         "message": "Search"
