@@ -10,7 +10,7 @@ import 'element-ui/lib/theme-default/index.css'
 import './options.scss'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
-import { getSyncConfig } from '../../js/common/config'
+import { getSyncConfig, getUserInfo, saveUserInfo } from '../../js/common/config'
 import { WORD_LEVEL, CARD_FONTSIZE_OPTIONS } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
@@ -39,11 +39,13 @@ let final = [];
 Vue.use(ElementUI)
 
 function init() {
-    getSyncConfig().then(config => {
-        console.log(config);
+    Promise.all([
+        getSyncConfig(),
+        getUserInfo()
+    ]).then(([config, userInfo]) => {
         let i18nTexts = getI18nTexts();
 
-        render(config, i18nTexts);
+        render(config, userInfo, i18nTexts);
     });
 }
 
@@ -83,7 +85,7 @@ const reciteStages = [
 
 const tabs = ['general', 'words', 'wordsrecite', 'wordroots', 'advanced', 'help', 'update', 'about'];
 
-function render(config, i18nTexts) {
+function render(config, userInfo, i18nTexts) {
     let activeName = getParameterByName('tab') || 'general';
     
     if (config.version < version) {
@@ -107,6 +109,7 @@ function render(config, i18nTexts) {
                 i18nTexts,
                 CARD_FONTSIZE_OPTIONS,
                 TRANSLATE_ENGINS,
+                userInfo,
                 // list
                 words: [],
                 langPairs: [],
@@ -750,8 +753,9 @@ function render(config, i18nTexts) {
                         const resp = await API.minapp.checkUser(this.minappForm.userKey);
 
                         if (resp && resp.code === 0 && resp.data) {
+                            this.userInfo = resp.data;
                             this.$message.success(`身份验证成功，Hi, ${resp.data.nickname}`);
-                            this.hasMinappChecked = true;
+                            saveUserInfo(resp.data);
                         } else {
                             this.$message.error('查找不到匹配的用户!');
                         }
@@ -834,10 +838,19 @@ function render(config, i18nTexts) {
                 }
             },
 
+            getUserData() {
+                const { id, openid } = this.userInfo;
+
+                return {
+                    userId: id,
+                    openId: openid
+                };
+            },
+
             async shouldSyncToMinapp() {
                 this.$refs.minappForm.validate(async valid => {
                     if (valid) {
-                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
+                        const userData = this.getUserData();
                         const syncMethod = (part) => {
                             return API.minapp.sync(userData.userId, part);
                         };
