@@ -122,12 +122,24 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item :label="i18n.general.ominboxEnterShowSentence">
-                        <el-switch
-                            v-model="config.alertOnOmniboxInputEntered"
-                            on-color="#20a0ff">
-                        </el-switch>
-                    </el-form-item>
+                    <el-row>
+                      <el-col :span="6">
+                        <el-form-item :label="i18n.general.ominboxEnterShowSentence">
+                            <el-switch
+                                v-model="config.alertOnOmniboxInputEntered"
+                                on-color="#20a0ff">
+                            </el-switch>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="6">
+                        <el-form-item :label="i18n.general.autoSync">
+                            <el-switch
+                                v-model="config.autoSync"
+                                on-color="#20a0ff">
+                            </el-switch>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
                     <el-form-item>
                         <el-button type="primary" @click.native.prevent="handleConfigSubmit">{{ i18n.base.save }}</el-button>
                     </el-form-item>
@@ -431,18 +443,23 @@
                         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
                             <el-row>
                               <el-col :span="16">
-                                <el-form-item label="用户身份" prop="userKey">
+                                <el-form-item v-if="!userInfo" label="用户身份" prop="userKey">
                                     <el-input v-model="minappForm.userKey" 
                                         placeholder="请输入" :disabled="hasMinappChecked"
                                         style="width: 400px;">
                                     </el-input>
                                 </el-form-item>
+                                <el-form-item v-else label="账号">
+                                    <el-input :value="userInfo.nickname" :disabled="true" 
+                                    style="width: 400px;">
+                                    </el-input>
+                                </el-form-item>
                               </el-col>
                               <el-col :span="8">
-                                  <el-button v-if="!hasMinappChecked" type="primary" @click.native="handleUserCheck('minapp')">检查</el-button>
+                                  <el-button v-if="!userInfo" type="primary" @click.native="handleUserCheck('minapp')">检查</el-button>
                                   <template v-if="!syncing">
-                                    <el-button v-if="hasMinappChecked" type="primary" @click.native="handleSyncClick('minapp')">开始同步</el-button>
-                                    <el-button v-if="hasMinappChecked" type="primary" @click.native="hasMinappChecked = false">取消</el-button>
+                                    <el-button v-if="userInfo" type="primary" @click.native="handleSyncClick('minapp')">开始同步</el-button>
+                                    <el-button v-if="userInfo" type="primary" @click.native="userInfo = null">取消</el-button>
                                   </template>
                                   <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="syncPorcess"></el-progress>
                               </el-col>
@@ -472,21 +489,15 @@
                         <span>QQ群: 314501729</span>
                         <hr>
                         此扩展可以帮助你在访问英文网站过程中，遇到不认识的单词，使用<em>右键菜单</em>查询： <br>
-                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/command.png" alt="">
                         <br>
                         如果你想更方便地查词，可以在设置页设置<em>双击取词</em> ：<br>
-                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/options.png" alt="">
                         同时，通过点击左下角的
                         <i class="el-icon-star-on"></i>
                         按钮将单词、释义、例句保存成单词小卡片，
                         你还可以为单词打上各种 <em>标签</em> ，以方便筛选复习. <br>
-                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/iframe.png" alt="">
                         收集的单词可以在设置/单词列表中查看并编辑<br>
-                        <img class="eg-img" src="http://owsjc7iz3.bkt.clouddn.com/wordlist.png" alt="">
                         你还可以筛选中不同类型/状态的单词<br>
-                        <img src="http://owsjc7iz3.bkt.clouddn.com/filterwords.png" alt="" class="eg-img">
                         并记忆或测验它们<br>
-                        <img src="http://owsjc7iz3.bkt.clouddn.com/recitewords.png" alt="" class="eg-img">
                         如果你还在使用其它背单词app，那你还可以将这里收集到的单词导出成 <em>csv</em> 文件，然后导入app中。
                     </div>
                 </div>

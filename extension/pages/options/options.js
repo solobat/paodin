@@ -10,7 +10,7 @@ import 'element-ui/lib/theme-default/index.css'
 import './options.scss'
 import changelog from '../../js/info/changelog'
 import browser from 'webextension-polyfill'
-import { getSyncConfig } from '../../js/common/config'
+import { getSyncConfig, getUserInfo, saveUserInfo } from '../../js/common/config'
 import { WORD_LEVEL, CARD_FONTSIZE_OPTIONS } from '../../js/constant/options'
 import * as Validator from '../../js/common/validatorHelper'
 import Pie from '../../js/components/pieChart'
@@ -25,6 +25,7 @@ import { Base64 } from 'js-base64'
 import URI from 'urijs'
 import { codeList } from '../../js/constant/code'
 import * as i18n from '../../js/i18n/options'
+import { syncMixin } from '../../js/helper/syncData'
 
 Vue.use(SocialSharing);
 
@@ -37,11 +38,13 @@ let final = [];
 Vue.use(ElementUI)
 
 function init() {
-    getSyncConfig().then(config => {
-        console.log(config);
+    Promise.all([
+        getSyncConfig(),
+        getUserInfo()
+    ]).then(([config, userInfo]) => {
         let i18nTexts = getI18nTexts();
 
-        render(config, i18nTexts);
+        render(config, userInfo, i18nTexts);
     });
 }
 
@@ -81,7 +84,7 @@ const reciteStages = [
 
 const tabs = ['general', 'words', 'wordsrecite', 'wordroots', 'advanced', 'help', 'update', 'about'];
 
-function render(config, i18nTexts) {
+function render(config, userInfo, i18nTexts) {
     let activeName = getParameterByName('tab') || 'general';
     
     if (config.version < version) {
@@ -105,6 +108,7 @@ function render(config, i18nTexts) {
                 i18nTexts,
                 CARD_FONTSIZE_OPTIONS,
                 TRANSLATE_ENGINS,
+                userInfo,
                 // list
                 words: [],
                 langPairs: [],
@@ -167,8 +171,6 @@ function render(config, i18nTexts) {
                 hasMinappChecked: false,
 
                 // sync
-                syncPorcess: 0,
-                syncing: false,
                 version
             }
         },
@@ -176,6 +178,8 @@ function render(config, i18nTexts) {
         components: {
             Pie
         },
+
+        mixins: [syncMixin],
 
         computed: {
             filteredWords() {
@@ -748,152 +752,22 @@ function render(config, i18nTexts) {
                         const resp = await API.minapp.checkUser(this.minappForm.userKey);
 
                         if (resp && resp.code === 0 && resp.data) {
+                            this.userInfo = resp.data;
                             this.$message.success(`身份验证成功，Hi, ${resp.data.nickname}`);
-                            this.hasMinappChecked = true;
+                            saveUserInfo(resp.data);
                         } else {
                             this.$message.error('查找不到匹配的用户!');
                         }
                     }
                 });
             },
-
-            async makeWordsSynced(newWords = []) {
-                const words = newWords.map(word => {
-                    return { id: word.id, name: word.name, synced: true };
-                });
-                return new Promise((resolve, reject) => {
-                    chrome.runtime.sendMessage({
-                        action: 'batchUpdate',
-                        data: words
-                    }, ({ data }) => {
-                        resolve(data);
-                    });
-                });
-            },
-
-            partial(list, chunk = 5) {
-                let i, j, parts = [];
-
-                for (i = 0,j = list.length; i < j; i += chunk) {
-                    parts.push(list.slice(i, i + chunk));
-                }
-
-                return parts;
-            },
-
-            async getShouldSyncWords(filterFn) {
-                const words = await this.loadWords();
-                const newWords = filterFn ? words.filter(filterFn) : words;
-
-                if (newWords.length) {
-                    return JSON.parse(JSON.stringify(newWords))
-                } else {
-                    return;
-                }
-            },
-
-            async batchSync(syncMethod, parts) {
-                return parts.reduce((tasks, part) => {
-                    return tasks.then(results => {
-                        return new Promise((resolve) => {
-                            setTimeout(() => {
-                                resolve(syncMethod(part).then((result) => {
-                                    final.push(result);
-                                    const percent = (final.length / parts.length * 100).toFixed(2);
-
-                                    this.syncPorcess = Number(percent);
-                                }));
-                            }, 200);
-                        });
-                    }).catch(console.error);
-                }, Promise.resolve());
-            },
-
-            async syncToCloud(syncMethod, filterFn, chunk) {
-                const list = await this.getShouldSyncWords(filterFn);
-
-                if (list) {
-                    const parts = this.partial(list, chunk);
-
-                    this.syncing = true;
-
-                    try {
-                        const result = await this.batchSync(syncMethod, parts);
-                        
-                        return list;
-                    } catch (error) {
-                        console.log(error);
-                        this.$message.error('同步失败，请稍后再试，或去论坛反馈');
-                    } finally {
-                        this.syncing = false;
-                    }
-                } else {
-                    this.$message.warning('没有需要同步的单词了.');
-                }
-            },
-
+            
             async shouldSyncToMinapp() {
                 this.$refs.minappForm.validate(async valid => {
                     if (valid) {
-                        const userData = API.minapp.pasreUserKey(this.minappForm.userKey);
-                        const syncMethod = (part) => {
-                            return API.minapp.sync(userData.userId, part);
-                        };
-                        const filterFn = word => !word.synced;
-                        const syncedList = await this.syncToCloud(syncMethod, filterFn, 5);
-                        const resp = await this.makeWordsSynced(syncedList);
-
-                        this.$message.success('最新单词已经成功同步到单词小卡片小程序!');
+                        this.syncToMinapp();
                     }
                 });
-            },
-
-            async syncToShanbay() {
-                const syncMethod = async (part) => {
-                    const word = part[0].name;
-                    const { data } = await API.shanbay.translate(word);
-
-                    return API.shanbay.addToVocabulary(data.id);
-                };
-
-                await this.syncToCloud(syncMethod, null, 1);
-                this.$message.success('单词已经全部同步到扇贝!');
-            },
-
-            shouldSyncToShanbay() {
-                chrome.cookies.get({ url: 'http://www.shanbay.com', name: 'auth_token' }, cookie => {
-                    if (cookie) {
-                        this.syncToShanbay();
-                    } else {
-                        chrome.tabs.create({ url: 'https://www.shanbay.com/web/account/login' })
-                    }
-                })
-            },
-
-            async syncToYoudao() {
-                const syncMethod = async (part) => {
-                    const word = part[0].name;
-
-                    return API.youdao.addToVocabulary(word);
-                };
-
-                await this.syncToCloud(syncMethod, null, 1);
-                this.$message.success('单词已经全部同步到有道!');
-            },
-
-            shouldSyncToYoudao() {
-                const url = 'http://dict.youdao.com';
-                const loginURL = 'http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist%3Fkeyfrom%3Dnull';
-
-                chrome.cookies.get({ url, name: 'DICT_SESS' }, async cookie => {
-                    if (cookie) {
-                        this.syncToYoudao();
-                    } else {
-                        chrome.tabs.create({
-                            url: loginURL
-                        })
-                    }
-                })
             },
 
             handleSyncClick(type) {

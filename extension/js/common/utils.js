@@ -134,3 +134,11 @@ export function getLangCode(lang) {
         return lang;
     }
 }
+
+export function getRandomOne(list) {
+    if (list && list.length) {
+        const index = Math.round(Math.random() * (list.length - 1));
+
+        return list[index];
+    }
+}

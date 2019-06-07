@@ -33,7 +33,8 @@ export const general = {
     precisionFirst: chrome.i18n.getMessage('options_general_precision_first'),
     precisionFirstTips: chrome.i18n.getMessage('options_general_precision_first_tips'),
     cardFontSize: chrome.i18n.getMessage('options_general_card_fontsize'),
-    ominboxEnterShowSentence: chrome.i18n.getMessage('options_general_omnibox_enter_show_sentence')
+    ominboxEnterShowSentence: chrome.i18n.getMessage('options_general_omnibox_enter_show_sentence'),
+    autoSync: chrome.i18n.getMessage('options_general_autosync')
 }
 
 export const words = {

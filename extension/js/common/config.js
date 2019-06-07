@@ -9,6 +9,7 @@ export const defaultConfig = {
     disableUrls: [],
     urlMode: 'enableUrls',
     dblclick2trigger: false,
+    autoSync: true,
     withCtrlOrCmd: false,
     autocut: true,
     sentenceNum: 3,
@@ -36,5 +37,18 @@ export function getSyncConfig() {
         });
 
         return config;
+    });
+}
+
+const USERINFO_STORAGE_KEY = 'mp_userinfo';
+
+export function getUserInfo() {
+    return browser.storage.sync.get(USERINFO_STORAGE_KEY)
+        .then(resp => resp[USERINFO_STORAGE_KEY]);
+}
+
+export function saveUserInfo(userInfo = null) {
+    return browser.storage.sync.set({
+        [USERINFO_STORAGE_KEY]: userInfo
     });
 }

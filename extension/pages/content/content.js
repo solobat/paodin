@@ -15,6 +15,7 @@ import { Base64 } from 'js-base64'
 import CssSelectorGenerator from 'css-selector-generator'
 import * as Engine from 'translation.js'
 import { getUserLang, LANG_STORAGE_KEY } from '../../js/helper/lang'
+import keyboardJS from 'keyboardjs'
 
 var options = window.options;
 
@@ -329,6 +330,10 @@ var App = {
         });
 
         $(document).on('click', '.wordcard-close', function() {
+            self.closePopup();
+        });
+
+        keyboardJS.bind('esc', function() {
             self.closePopup();
         });
 

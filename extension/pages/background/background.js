@@ -13,8 +13,9 @@ import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
 import browser from 'webextension-polyfill'
 import { WORD_LEVEL } from '../../js/constant/options'
-import { getSyncConfig } from '../../js/common/config'
+import { getSyncConfig, getUserInfo } from '../../js/common/config'
 import * as i18n from '../../js/i18n/background'
+import { getSyncHelper4Bg } from '../../js/helper/syncData'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
@@ -63,7 +64,6 @@ var wordsHelper = {
     },
 
     update: function(attrs) {
-        debugger
         var word = Words.set(attrs, {
             add: false,
             remove: false
@@ -445,11 +445,21 @@ function setup() {
     });
 
     setupOmnibox();
+    syncHelper.autoSyncIfNeeded(config);
+    window.syncHelper = syncHelper;
 }
 
 function loadConfig() {
-    return getSyncConfig().then(conf => {
+    return Promise.all([
+        getSyncConfig(),
+        getUserInfo()
+    ]).then(([conf, userInfo]) => {
         config = conf;
+
+        return {
+            config: conf,
+            userInfo
+        }
     });
 }
 
@@ -461,8 +471,12 @@ function notifyTabs(resp) {
     });
 }
 
-function init() {
+let syncHelper;
+
+function init(data) {
     wordsHelper.init();
+    syncHelper = getSyncHelper4Bg(wordsHelper, data.userInfo);
+
     Words.on('add remove', function() {
         wordsHelper.getWords();
     });
@@ -472,10 +486,14 @@ function init() {
     browser.storage.onChanged.addListener((changes) => {
         if (changes.config) {
             config = changes.config.newValue;
+            syncHelper.autoSyncIfNeeded(config);
             notifyTabs({
                 action: 'config',
                 data: config
             });
+        } else if (changes.mp_userinfo) {
+            syncHelper.userInfo = changes.mp_userinfo.newValue;
+            syncHelper.autoSyncIfNeeded(config);
         }
     });
 }

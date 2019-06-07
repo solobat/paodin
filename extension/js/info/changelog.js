@@ -4,6 +4,26 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.4.2',
+        detail: `
+            Bug 修复。
+        `
+    },
+    {
+        version: 'v2.4.1',
+        detail: `
+            缓存微信小程序的关联状态；<br>
+            支持自动同步到小程序，默认开启。
+        `
+    },
+    {
+        version: 'v2.4',
+        detail: `
+            添加新页面背单词的方式；<br>
+            ESC 关闭查词弹窗。
+        `
+    },
+    {
         version: 'v2.3.5.1',
         detail: `
             放开单词同步的语言区限制 
@@ -170,6 +190,25 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.4.2',
+        detail: `
+            Bugfix. 
+        `
+    },
+    {
+        version: 'v2.4.1',
+        detail: `
+            Update. 
+        `
+    },
+    {
+        version: 'v2.4',
+        detail: `
+            Add a new page to back the word; <br>
+            Press ESC to close the search window. 
+        `
+    },
     {
         version: 'v2.3.5.1',
         detail: `
