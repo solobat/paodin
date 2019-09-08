@@ -6,8 +6,9 @@ const ax = axios.create({
 });
 
 export function pasreUserKey(userKey) {
-    const userId = userKey.substr(0, 8);
-    const openId = userKey.substr(8);
+    const match = userKey.match((/^(\d+)(.*)$/))
+    const userId = match[1]
+    const openId = match[2]
 
     return {
         userId,

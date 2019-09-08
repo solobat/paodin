@@ -2,6 +2,12 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v2.4.3',
+        detail: `
+            修复同步小程序找不到用户的问题。
+        `
+    },
+    {
         version: 'v2.4.2',
         detail: `
             Bug 修复。
@@ -188,6 +194,12 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v2.4.3',
+        detail: `
+            Bugfix. 
+        `
+    },
     {
         version: 'v2.4.2',
         detail: `
