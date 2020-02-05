@@ -17,7 +17,7 @@
         "matches": ["<all_urls>"],
         "css": ["content.css"],
         "all_frames": true,
-        "js": ["manifest.js", "vendor.js", "content.js"]
+        "js": ["manifest.js", "common.js", "vendor.js", "content.js"]
     }],
     "icons": {
         "16": "img/icon.png",

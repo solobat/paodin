@@ -1,11 +1,11 @@
 {
-    "extName": { "message": "单词小卡片: 查词/收集/背单词" },
-    "extShortName": { "message": "单词小卡片" },
-    "extDesc": { "message": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出" },
+    "extName": { "message": "庖丁解语: 查词/收集/背单词/造句" },
+    "extShortName": { "message": "庖丁解语" },
+    "extDesc": { "message": "庖丁解语: 网页查词，制作wordcard，背单词，单词导出" },
     "extCmdDesc": { "message": "查询选中的单词" },
 
     
-    "background_msg_maxwords_tips": { "message": "单词小卡片最多只能容纳{{max}}个单词" },
+    "background_msg_maxwords_tips": { "message": "庖丁解语最多只能容纳{{max}}个单词" },
 
 
     "popup_item_words": { "message": "单词列表" },

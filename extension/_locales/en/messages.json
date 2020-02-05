@@ -1,7 +1,7 @@
 {
-    "extName": { "message": "Word card: word translation / collection / back word" },
-    "extShortName": { "message": "Word Card" },
-    "extDesc": { "message": "Word card: word translation, make wordcard, memory word, words data export" },
+    "extName": { "message": "Paodin: word translation / collection / back word" },
+    "extShortName": { "message": "Paodin" },
+    "extDesc": { "message": "Paodin: word translation, make wordcard, memory word, words data export" },
     "extCmdDesc": { "message": "Translate selected word" },
 
     "background_msg_maxwords_tips": {
