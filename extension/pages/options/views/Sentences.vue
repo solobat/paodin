@@ -1,46 +1,51 @@
 <template>
   <div class="content-wrapper">
-    <div class="toolbar">
-      <el-radio-group v-model="mode">
-        <el-radio-button
-          v-for="(item, index) in SENTENCE_MODE"
-          :key="index"
-          :label="item.value"
-        >{{item.label}}</el-radio-button>
-      </el-radio-group>
+    <template v-if="list && list.length">
+      <div class="toolbar">
+        <el-radio-group v-model="mode">
+          <el-radio-button
+            v-for="(item, index) in SENTENCE_MODE"
+            :key="index"
+            :label="item.value"
+          >{{item.label}}</el-radio-button>
+        </el-radio-group>
 
-      <el-radio-group v-model="showMode">
-        <el-radio-button label="grid">
-          <i class="el-icon-s-grid"></i>
-        </el-radio-button>
-        <el-radio-button label="carousel">
-          <i class="el-icon-files"></i>
-        </el-radio-button>
-      </el-radio-group>
-    </div>
-    <div class="items-container items-container-grid" v-if="showMode === 'grid'">
-      <component
-        :is="`sentence-${mode}-card`"
-        v-for="(item, index) in list"
-        :item="item"
-        :key="index"
-        :mode="mode"
-        @delete="onDelete"
-      />
-    </div>
-    <div class="items-container items-container-slide" v-if="showMode === 'carousel'">
-      <el-carousel :autoplay="false" arrow="always" type="card" indicator-position="none">
-        <el-carousel-item v-for="(item, index) in list" :key="index">
-          <div class="item-wrap">
-            <component
-              :is="`sentence-${mode}-card`"
-              :item="item"
-              :mode="mode"
-              @delete="onDelete"
-            />
-          </div>
-        </el-carousel-item>
-      </el-carousel>
+        <el-radio-group v-model="showMode">
+          <el-radio-button label="grid">
+            <i class="el-icon-s-grid"></i>
+          </el-radio-button>
+          <el-radio-button label="carousel">
+            <i class="el-icon-files"></i>
+          </el-radio-button>
+        </el-radio-group>
+      </div>
+      <div class="items-container items-container-grid" v-if="showMode === 'grid'">
+        <component
+          :is="`sentence-${mode}-card`"
+          v-for="(item, index) in list"
+          :item="item"
+          :key="index"
+          :mode="mode"
+          @delete="onDelete"
+        />
+      </div>
+      <div class="items-container items-container-slide" v-if="showMode === 'carousel'">
+        <el-carousel :autoplay="false" arrow="always" type="card" indicator-position="none">
+          <el-carousel-item v-for="(item, index) in list" :key="index">
+            <div class="item-wrap">
+              <component
+                :is="`sentence-${mode}-card`"
+                :item="item"
+                :mode="mode"
+                @delete="onDelete"
+              />
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+    </template>
+    <div v-else class="err-msg">
+      No Data
     </div>
   </div>
 </template>
@@ -56,7 +61,7 @@ export default {
   data() {
     return {
       list: [],
-      showMode: 'carousel',
+      showMode: "carousel",
       mode: this.$route.query.mode || "preview",
       SENTENCE_MODE
     };
