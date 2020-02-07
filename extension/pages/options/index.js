@@ -6,7 +6,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import _ from 'underscore'
-import 'element-ui/lib/theme-default/index.css'
+import 'element-ui/lib/theme-chalk/index.css'
 import { getSyncConfig, getUserInfo } from '@/js/common/config'
 import SocialSharing  from 'vue-social-sharing'
 import App from './App.vue'

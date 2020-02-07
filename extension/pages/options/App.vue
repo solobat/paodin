@@ -5,9 +5,13 @@
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
+      background-color="#303030"
+      text-color="#fff"
+      active-text-color="#ffd04b"
       :router="true"
     >
       <el-menu-item index="/">{{i18n.tabs.general}}</el-menu-item>
+      <el-menu-item index="/sentences">{{i18n.tabs.sentences}}</el-menu-item>
       <el-menu-item index="/words">{{i18n.tabs.words}}</el-menu-item>
       <el-menu-item index="/wordsrecite">{{i18n.tabs.wordsrecite}}</el-menu-item>
       <el-menu-item index="/wordroots">{{i18n.tabs.wordroots}}</el-menu-item>
@@ -45,11 +49,10 @@ export default {
   data: function() {
     return {
       activeIndex: this.$route.path,
-      i18n,
+      i18n
     };
   },
-  mounted: function() {
-  }
+  mounted: function() {}
 };
 </script>
 
@@ -71,8 +74,28 @@ a {
   text-decoration: none;
 }
 
+html {
+  box-sizing: border-box;
+  background: #f7f7f7;
+
+  * {
+    box-sizing: inherit;
+  }
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f7f7f7;
+}
+
 .page-container {
-    padding-left: 15px;
+  height: calc(100vh - 61px);
+
+  .view-container {
+    height: 100%;
+  }
 }
 
 .bg-black {
@@ -123,12 +146,12 @@ a {
 }
 
 .filter-panel {
+  width: 350px;
   display: flex;
   flex-direction: column;
   position: relative;
   box-sizing: border-box;
   padding: 20px;
-  height: 600px;
   background: #303030;
   color: #fff;
 
@@ -174,7 +197,8 @@ a {
 }
 
 .word-list-container {
-  height: 600px;
+  flex: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -430,11 +454,6 @@ a {
       font-size: 18px;
     }
   }
-}
-
-.roots-container {
-  height: 600px;
-  overflow: hidden;
 }
 
 .share-icons {

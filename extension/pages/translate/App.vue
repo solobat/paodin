@@ -1,160 +1,180 @@
 <template>
   <div class="wc-lightbox-content" id="main" v-cloak>
-    <div class="top-row">
-      <el-row @dblclick.self="handleSaveClick">
-        <el-col :span="4">
-          <el-select v-model="meta.from" filterable>
-            <el-option v-for="(item, index) in codeList" :key="index" :label="item" :value="item"></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="1">&nbsp;</el-col>
-        <el-col :span="4">
-          <el-select v-model="meta.to" filterable>
-            <el-option v-for="(item, index) in codeList" :key="index" :label="item" :value="item"></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="2" :offset="1">
-          <div style="margin-top: 7px;" class="saveCard" @click="handleSaveClick">
-            <i v-if="assit.orgWord" class="el-icon-star-on"></i>
-            <i v-else class="el-icon-star-off"></i>
-          </div>
-        </el-col>
-      </el-row>
-      <a class="close" @click="handleCloseClick">X</a>
-    </div>
-    <div id="popup-lookup">
-      <div id="content">
-        <div class="tab-content">
-          <div class="scroll-area" id="lookup-area">
-            <div id="lookup-area-inner">
-              <div class="head">
-                <input
-                  type="text"
-                  v-model="meta.word"
-                  id="lookup-root"
-                  @blur="updateWord"
-                  @dblclick="enbaleWordInput"
-                  class="title"
-                  :readonly="!assit.wordEditable"
-                />
-                <span
-                  class="voice-item"
-                  v-if="assit.translate.phonetic && assit.translate.phonetic.length"
-                  v-for="(item, index) in assit.translate.phonetic"
+    <div class="lookup-word" v-if="isWord">
+      <div class="top-row">
+        <el-row @dblclick.self="handleSaveClick">
+          <el-col :span="4">
+            <el-select v-model="meta.from" filterable>
+              <el-option v-for="(item, index) in codeList" :key="index" :label="item" :value="item"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="1">&nbsp;</el-col>
+          <el-col :span="4">
+            <el-select v-model="meta.to" filterable>
+              <el-option v-for="(item, index) in codeList" :key="index" :label="item" :value="item"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="2" :offset="1">
+            <div style="margin-top: 7px;" class="saveCard" @click="handleSaveClick">
+              <i v-if="assit.orgWord" class="el-icon-star-on"></i>
+              <i v-else class="el-icon-star-off"></i>
+            </div>
+          </el-col>
+        </el-row>
+        <a class="close" @click="handleCloseClick">X</a>
+      </div>
+      <div id="popup-lookup">
+        <div id="content">
+          <div class="tab-content">
+            <div class="scroll-area" id="lookup-area">
+              <div id="lookup-area-inner">
+                <div class="head">
+                  <input
+                    type="text"
+                    v-model="meta.word"
+                    id="lookup-root"
+                    @blur="updateWord"
+                    @dblclick="enbaleWordInput"
+                    class="title"
+                    :readonly="!assit.wordEditable"
+                  />
+                  <span
+                    class="voice-item"
+                    v-if="assit.translate.phonetic && assit.translate.phonetic.length"
+                    v-for="(item, index) in assit.translate.phonetic"
+                    :key="index"
+                  >
+                    <span>[{{item.name}}]</span>
+                    <span class="ico-audio" @mouseover="playAudio(item.ttsURI || meta.word)"></span>
+                  </span>
+                  <span class="add-txt"></span>
+                </div>
+                <a
+                  class="btn defitem active"
+                  v-for="(item, index) in assit.translate.trans"
                   :key="index"
-                >
-                  <span>[{{item.name}}]</span>
-                  <span class="ico-audio" @mouseover="playAudio(item.ttsURI || meta.word)"></span>
-                </span>
-                <span class="add-txt"></span>
+                  @click="handleDefDelete(index)"
+                  :defindex="index"
+                >{{ item }}</a>
+                <div class="add-btn">
+                  <input
+                    id="add-definition"
+                    v-model="assit.newWordDef"
+                    type="text"
+                    @keyup.delete="handleDefDelete"
+                    @keyup.enter="handleDefAdd"
+                    placeholder="Add your own"
+                  />
+                  <a class="btn-plus" @click="handleDefAdd">+</a>
+                </div>
+                <div class="tags">
+                  <el-tag
+                    style="margin-right: 5px;"
+                    :key="tag"
+                    v-for="tag in assit.wordTags"
+                    :closable="true"
+                    :close-transition="false"
+                    @close="handleTagClose(tag)"
+                  >{{tag}}</el-tag>
+                  <el-autocomplete
+                    class="inline-input"
+                    v-if="assit.tagInputVisible"
+                    v-model="assit.tagInputValue"
+                    :fetch-suggestions="tagsQuerySearch"
+                    placeholder="Please input"
+                    ref="saveTagInput"
+                    @select="handleTagSelect"
+                    @keyup.enter.native="handleTagInputConfirm"
+                    @blur="handleTagInputConfirm"
+                  ></el-autocomplete>
+                  <el-button
+                    v-else
+                    class="button-new-tag"
+                    size="small"
+                    @click="showTagInput"
+                  >+ New Tag</el-button>
+                </div>
+                <ul>
+                  <li
+                    v-for="(explain, index) in assit.translate.explains"
+                    :key="index"
+                  >{{ explain }}</li>
+                </ul>
               </div>
-              <a
-                class="btn defitem active"
-                v-for="(item, index) in assit.translate.trans"
-                :key="index"
-                @click="handleDefDelete(index)"
-                :defindex="index"
-              >{{ item }}</a>
-              <div class="add-btn">
-                <input
-                  id="add-definition"
-                  v-model="assit.newWordDef"
-                  type="text"
-                  @keyup.delete="handleDefDelete"
-                  @keyup.enter="handleDefAdd"
-                  placeholder="Add your own"
-                />
-                <a class="btn-plus" @click="handleDefAdd">+</a>
-              </div>
-              <div class="tags">
-                <el-tag
-                  style="margin-right: 5px;"
-                  :key="tag"
-                  v-for="tag in assit.wordTags"
-                  :closable="true"
-                  :close-transition="false"
-                  @close="handleTagClose(tag)"
-                >{{tag}}</el-tag>
-                <el-autocomplete
-                  class="inline-input"
-                  v-if="assit.tagInputVisible"
-                  v-model="assit.tagInputValue"
-                  :fetch-suggestions="tagsQuerySearch"
-                  placeholder="Please input"
-                  ref="saveTagInput"
-                  @select="handleTagSelect"
-                  @keyup.enter.native="handleTagInputConfirm"
-                  @blur="handleTagInputConfirm"
-                ></el-autocomplete>
-                <el-button
-                  v-else
-                  class="button-new-tag"
-                  size="small"
-                  @click="showTagInput"
-                >+ New Tag</el-button>
-              </div>
-              <ul>
-                <li v-for="(explain, index) in assit.translate.explains" :key="index">{{ explain }}</li>
-              </ul>
             </div>
           </div>
         </div>
-      </div>
-      <div class="two-cols">
-        <div class="col context right-col" language="zhs">
-          <div class="text-hold">
-            <div class="text scroll-area" id="surroundings">
-              <p
-                v-show="!assit.sentenceEditable"
-                class="translated-container"
-                @dblclick="toggleEdit"
-                language="zhs"
-              >{{ meta.surroundings }}</p>
-              <textarea
-                v-show="assit.sentenceEditable"
-                v-model="meta.surroundings"
-                class="sent-translated"
-                cols="30"
-                rows="3"
-              ></textarea>
+        <div class="two-cols">
+          <div class="col context right-col" language="zhs">
+            <div class="text-hold">
+              <div class="text scroll-area" id="surroundings">
+                <p
+                  v-show="!assit.sentenceEditable"
+                  class="translated-container"
+                  @dblclick="toggleEdit"
+                  language="zhs"
+                >{{ meta.surroundings }}</p>
+                <textarea
+                  v-show="assit.sentenceEditable"
+                  v-model="meta.surroundings"
+                  class="sent-translated"
+                  cols="30"
+                  rows="3"
+                ></textarea>
+              </div>
+              <div class="actions">
+                <a v-show="!assit.sentenceEditable" class="edit-btn" @click="toggleEdit">edit</a>
+                <a v-show="assit.sentenceEditable" class="confirm-btn" @click="saveSentence">
+                  <i class="el-icon-check" style="color: #49baea;"></i>
+                </a>
+                <a v-show="assit.sentenceEditable" class="reject-btn" @click="toggleEdit">
+                  <i class="el-icon-close" style="color: #ccc;"></i>
+                </a>
+              </div>
             </div>
-            <div class="actions">
-              <a v-show="!assit.sentenceEditable" class="edit-btn" @click="toggleEdit">edit</a>
-              <a v-show="assit.sentenceEditable" class="confirm-btn" @click="saveSentence">
-                <i class="el-icon-check" style="color: #49baea;"></i>
-              </a>
-              <a v-show="assit.sentenceEditable" class="reject-btn" @click="toggleEdit">
-                <i class="el-icon-close" style="color: #ccc;"></i>
-              </a>
+            <div class="col-footer">
+              <span class="by">Translation by {{ meta.engine }}</span>
             </div>
-          </div>
-          <div class="col-footer">
-            <span class="by">Translation by {{ meta.engine }}</span>
           </div>
         </div>
       </div>
     </div>
+    <Sentence ref="sentence" v-else :meta="meta"></Sentence>
   </div>
 </template>
 
 <script>
-import * as PageConfig from './translate.config.js'
-import * as i18n from '@/js/i18n/translate'
-import { codeList } from '@/js/constant/code'
-import { updateUserLang } from '@/js/helper/lang'
-import $ from 'jquery'
-import _ from 'underscore'
-import Translate from '@/js/translate'
-import { AVHelper } from '@/js/helper/leancloud'
+import * as PageConfig from "./translate.config.js";
+import * as i18n from "@/js/i18n/translate";
+import { codeList } from "@/js/constant/code";
+import { updateUserLang } from "@/js/helper/lang";
+import $ from "jquery";
+import _ from "underscore";
+import Translate from "@/js/translate";
+import { AVHelper } from "@/js/helper/leancloud";
+import { TEXT_TYPE } from "@/js/constant/options";
+import { getTextType } from "@/js/helper/text";
+import Sentence from "@/js/components/sentence/index.vue";
 
 export default {
-  props: ['meta'],
+  props: ["meta"],
+
+  components: {
+    Sentence
+  },
 
   data: function() {
     return {
       codeList,
+      textType: TEXT_TYPE.WORD,
       assit: PageConfig.getDefaultAssit()
     };
+  },
+
+  computed: {
+    isWord() {
+      return this.textType === TEXT_TYPE.WORD;
+    }
   },
 
   mounted() {
@@ -162,6 +182,9 @@ export default {
   },
 
   watch: {
+    meta() {
+      this.rerender();
+    },
     "meta.from": function() {
       this.updateLang();
     },
@@ -188,9 +211,21 @@ export default {
       });
     },
 
-    lookup() {
+    lookupWord() {
       this.loadWord();
       this.fetchAllTags();
+    },
+
+    lookup() {
+      const type = getTextType(this.meta.word, this.meta.from);
+
+      if (type === TEXT_TYPE.WORD) {
+        this.textType = type;
+        this.lookupWord();
+      } else {
+        // NOTE: article type is no supported
+        this.textType = TEXT_TYPE.SENTENCE;
+      }
     },
 
     queryWordIndex() {
@@ -606,7 +641,7 @@ p {
 
   vertical-align: top;
 
-  background: url(../../img/sprite.png) no-repeat;
+  background: url("/img/sprite.png") no-repeat;
 }
 
 .ico-gear:hover {
@@ -1322,7 +1357,7 @@ p {
   width: 16px;
   height: 21px;
 
-  background: url(../../img/voice.png) no-repeat center center;
+  background: url(/img/voice.png) no-repeat center center;
   -webkit-background-size: 16px;
   background-size: 16px;
 }
@@ -1759,7 +1794,7 @@ p {
 
   content: "";
 
-  background: url(../../img/sprite.png) no-repeat -58px 0;
+  background: url(/img/sprite.png) no-repeat -58px 0;
 }
 
 .confirm-btn:hover,
@@ -2043,7 +2078,7 @@ p {
 
   cursor: pointer;
 
-  background: url(../../img/del.png);
+  background: url("/img/del.png");
   -webkit-background-size: 20px;
   background-size: 20px;
 }

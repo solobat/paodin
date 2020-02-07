@@ -21,7 +21,7 @@ const chrome = window.chrome;
 var options = window.options;
 
 const enReg = /^[^\u4e00-\u9fa5]+$/i;
-const numReg = /\d/;
+const numReg = /^\d+$/g;
 const sentenceReg = '([^.?:]*?{{word}}.*?\[.?])';
 const colors = [
     { bgcolor: '#9c5e99', color: '#fff' },
@@ -78,7 +78,7 @@ var App = {
     iframeLoaded: false,
     checkValid(word, node) {
         if (!node || ['INPUT', 'TEXTAREA'].indexOf(node.tagName) !== -1
-        || !word || numReg.test(word)) {
+        || !word || word.match(numReg)) {
             return false;
         } else {
             return true;

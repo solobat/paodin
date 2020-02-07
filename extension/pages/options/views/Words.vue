@@ -1,212 +1,195 @@
 <template>
-  <el-row>
-    <el-col :span="6">
-      <div class="word-filter filter-panel">
-        <div class="filter-item">
-          <div class="field-label">{{ i18n.words.search }}</div>
-          <el-input placeholder="Search" icon="search" v-model="filter.wordSearchText"></el-input>
+  <div class="view-container words-container">
+    <div class="word-filter filter-panel">
+      <div class="filter-item">
+        <div class="field-label">{{ i18n.words.search }}</div>
+        <el-input placeholder="Search" icon="search" v-model="filter.wordSearchText"></el-input>
+      </div>
+      <div class="filter-item">
+        <div class="field-label">
+          <span class="label-text">{{ i18n.words.vocabulary }}</span>
+          <el-button type="primary" size="mini" @click="filter.langPair = ''">{{ i18n.words.reset }}</el-button>
         </div>
-        <div class="filter-item">
-          <div class="field-label">
-            <span class="label-text">{{ i18n.words.vocabulary }}</span>
-            <el-button
-              type="primary"
-              size="mini"
-              @click="filter.langPair = ''"
-            >{{ i18n.words.reset }}</el-button>
-          </div>
-          <div class="filter-tags">
-            <el-select v-model="filter.langPair" :placeholder="i18n.base.choose">
-              <el-option
-                v-for="(item, index) in langPairs"
-                :key="index"
-                :label="item"
-                :value="item"
-              ></el-option>
-            </el-select>
-          </div>
+        <div class="filter-tags">
+          <el-select v-model="filter.langPair" :placeholder="i18n.base.choose">
+            <el-option v-for="(item, index) in langPairs" :key="index" :label="item" :value="item"></el-option>
+          </el-select>
         </div>
-        <div class="filter-item">
-          <div class="field-label">
-            <span class="label-text">{{ i18n.words.level }}</span>
-            <el-button type="primary" size="mini" @click="filter.levels = []">{{ i18n.words.reset }}</el-button>
-          </div>
-          <div class="filter-tags">
+      </div>
+      <div class="filter-item">
+        <div class="field-label">
+          <span class="label-text">{{ i18n.words.level }}</span>
+          <el-button type="primary" size="mini" @click="filter.levels = []">{{ i18n.words.reset }}</el-button>
+        </div>
+        <div class="filter-tags">
+          <el-tag
+            style="margin-right: 10px;"
+            v-for="level in [0, 1, 2, 3, 4, 5]"
+            :type="filter.levels.indexOf(level) !== -1 ? 'danger' : 'grey'"
+            :key="level"
+            @click.native="handleLevelFilterClick(level)"
+          >{{level}}</el-tag>
+        </div>
+      </div>
+      <div class="filter-item filter-item-tags">
+        <div class="field-label">
+          <span class="label-text">{{ i18n.words.tag }}</span>
+          <el-button type="primary" size="mini" @click="filter.tags = []">{{ i18n.words.reset }}</el-button>
+        </div>
+        <div class="filter-tags">
+          <el-tag
+            style="margin-right: 10px;margin-bottom: 5px;"
+            v-for="(tag, index) in tags"
+            :key="index"
+            :type="filter.tags.indexOf(tag) !== -1 ? 'danger' : 'grey'"
+            @click.native="handleTagFilterClick(tag)"
+          >{{tag}}</el-tag>
+        </div>
+      </div>
+      <div class="other-info">
+        <div class="word-nums">{{ i18n.words.count(filteredWords.length, words.length) }}</div>
+        <div class="batch-delete-btn" @click="handleBatchDeleteClick">{{ i18n.words.batchdelete }}</div>
+      </div>
+    </div>
+    <div class="word-list-container">
+      <div class="word-list">
+        <div
+          class="word-item"
+          v-for="(word, index) in filteredWords"
+          :key="index"
+          @click="handleWordClick(word)"
+        >
+          <div class="word-name">{{word.name}}</div>
+          <div class="word-trans">{{ (word.trans || []).join(',') }}</div>
+          <div class="word-tags">
             <el-tag
-              style="margin-right: 10px;"
-              v-for="level in [0, 1, 2, 3, 4, 5]"
-              :type="filter.levels.indexOf(level) !== -1 ? 'danger' : 'grey'"
-              :key="level"
-              @click.native="handleLevelFilterClick(level)"
-            >{{level}}</el-tag>
-          </div>
-        </div>
-        <div class="filter-item filter-item-tags">
-          <div class="field-label">
-            <span class="label-text">{{ i18n.words.tag }}</span>
-            <el-button type="primary" size="mini" @click="filter.tags = []">{{ i18n.words.reset }}</el-button>
-          </div>
-          <div class="filter-tags">
-            <el-tag
-              style="margin-right: 10px;margin-bottom: 5px;"
-              v-for="(tag, index) in tags"
+              style="margin-right: 5px;"
+              type="success"
+              v-for="(tag, index) in word.tags"
               :key="index"
-              :type="filter.tags.indexOf(tag) !== -1 ? 'danger' : 'grey'"
-              @click.native="handleTagFilterClick(tag)"
             >{{tag}}</el-tag>
           </div>
-        </div>
-        <div class="other-info">
-          <div class="word-nums">{{ i18n.words.count(filteredWords.length, words.length) }}</div>
-          <div class="batch-delete-btn" @click="handleBatchDeleteClick">{{ i18n.words.batchdelete }}</div>
-        </div>
-      </div>
-    </el-col>
-    <el-col :span="18">
-      <div class="word-list-container">
-        <div class="word-list">
-          <div
-            class="word-item"
-            v-for="(word, index) in filteredWords"
-            :key="index"
-            @click="handleWordClick(word)"
-          >
-            <div class="word-name">{{word.name}}</div>
-            <div class="word-trans">{{ (word.trans || []).join(',') }}</div>
-            <div class="word-tags">
-              <el-tag
-                style="margin-right: 5px;"
-                type="success"
-                v-for="(tag, index) in word.tags"
-                :key="index"
-              >{{tag}}</el-tag>
-            </div>
-            <div class="word-icons">
-              <el-tooltip
-                v-if="i18n.lang === 'zh-CN'"
-                effect="dark"
-                content="查看单词的词根词缀"
-                placement="top-start"
-              >
-                <i class="word-icon icon-root" @click.stop="handleRootClick(word)"></i>
-              </el-tooltip>
-              <el-tooltip
-                effect="dark"
-                content="View the source location of the word"
-                placement="top-start"
-              >
-                <i
-                  class="word-icon icon-link"
-                  @click.stop="handleWordLinkClick(word.link)"
-                  v-if="word.link"
-                ></i>
-              </el-tooltip>
-              <el-tooltip
-                v-if="i18n.lang === 'zh-CN'"
-                effect="dark"
-                content="已同步到单词小卡片，点击重置"
-                placement="top-start"
-              >
-                <i
-                  class="word-icon icon-synced"
-                  @click.stop="handleSyncedClick(word)"
-                  v-if="word.synced"
-                ></i>
-              </el-tooltip>
-            </div>
+          <div class="word-icons">
+            <el-tooltip
+              v-if="i18n.lang === 'zh-CN'"
+              effect="dark"
+              content="查看单词的词根词缀"
+              placement="top-start"
+            >
+              <i class="word-icon icon-root" @click.stop="handleRootClick(word)"></i>
+            </el-tooltip>
+            <el-tooltip
+              effect="dark"
+              content="View the source location of the word"
+              placement="top-start"
+            >
+              <i
+                class="word-icon icon-link"
+                @click.stop="handleWordLinkClick(word.link)"
+                v-if="word.link"
+              ></i>
+            </el-tooltip>
+            <el-tooltip
+              v-if="i18n.lang === 'zh-CN'"
+              effect="dark"
+              content="已同步到单词小卡片，点击重置"
+              placement="top-start"
+            >
+              <i
+                class="word-icon icon-synced"
+                @click.stop="handleSyncedClick(word)"
+                v-if="word.synced"
+              ></i>
+            </el-tooltip>
           </div>
         </div>
-        <el-collapse-transition>
-          <div class="word-editor" v-show="wordEditorVisible" @keyup.esc="handleEditorCancelClick">
-            <el-row>
-              <el-col :span="20">
-                <el-form
-                  ref="wordForm"
-                  :rules="wordRules"
-                  :model="wordForm"
-                  label-width="80px"
-                  @submit.prevent="onWordFormSubmit"
-                >
-                  <el-form-item :label="i18n.item.word + ':'" prop="name">
-                    <el-input type="text" v-model="wordForm.name"></el-input>
-                  </el-form-item>
-                  <el-form-item :label="i18n.item.translate + ':'" prop="trans">
-                    <el-input type="text" v-model="wordForm.trans"></el-input>
-                  </el-form-item>
-                  <el-form-item :label="i18n.item.tag + ':'">
-                    <el-tag
-                      style="margin-right: 5px;"
-                      :key="tag"
-                      v-for="tag in wordForm.tags"
-                      :closable="true"
-                      :close-transition="false"
-                      @close="handleTagClose(tag)"
-                    >{{tag}}</el-tag>
-                    <el-autocomplete
-                      class="inline-input"
-                      v-if="tagInputVisible"
-                      v-model="tagInputValue"
-                      :fetch-suggestions="tagsQuerySearch"
-                      ref="saveTagInput"
-                      :trigger-on-focus="false"
-                      @select="handleTagSelect"
-                      @keyup.enter.native="handleTagInputConfirm"
-                      @blur="handleTagInputConfirm"
-                    ></el-autocomplete>
-                    <el-button
-                      v-else
-                      class="button-new-tag"
-                      size="small"
-                      @click="showTagInput"
-                    >+ New Tag</el-button>
-                  </el-form-item>
-                  <el-form-item :label="i18n.item.sentence + ':'">
-                    <el-input type="textarea" :rows="3" v-model="wordForm.sentence"></el-input>
-                  </el-form-item>
-                  <div class="form-btns">
-                    <el-button size="small" @click="handleEditorCancelClick">{{ i18n.base.cancel }}</el-button>
-                    <el-button size="small" @click="handleEditorDeleteClick">{{ i18n.base.delete }}</el-button>
-                  </div>
-                </el-form>
-              </el-col>
-              <el-col :span="4">
-                <div class="form-aside">
-                  <div class="form-aside-fields">
-                    <div class="el-form-item__label">{{ i18n.words.level }} :</div>
-                    <el-select
-                      v-model="wordForm.level"
-                      :placeholder="i18n.base.choose"
-                      size="small"
-                    >
-                      <el-option
-                        v-for="item in levels"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                  </div>
-                  <div class="form-aside-btns">
-                    <el-button
-                      type="primary"
-                      size="small"
-                      @click.native.prevent="handleEditorSubmit"
-                    >{{ i18n.base.save }}</el-button>
-                  </div>
+      </div>
+      <el-collapse-transition>
+        <div class="word-editor" v-show="wordEditorVisible" @keyup.esc="handleEditorCancelClick">
+          <el-row>
+            <el-col :span="20">
+              <el-form
+                ref="wordForm"
+                :rules="wordRules"
+                :model="wordForm"
+                label-width="80px"
+                @submit.prevent="onWordFormSubmit"
+              >
+                <el-form-item :label="i18n.item.word + ':'" prop="name">
+                  <el-input type="text" v-model="wordForm.name"></el-input>
+                </el-form-item>
+                <el-form-item :label="i18n.item.translate + ':'" prop="trans">
+                  <el-input type="text" v-model="wordForm.trans"></el-input>
+                </el-form-item>
+                <el-form-item :label="i18n.item.tag + ':'">
+                  <el-tag
+                    style="margin-right: 5px;"
+                    :key="tag"
+                    v-for="tag in wordForm.tags"
+                    :closable="true"
+                    :close-transition="false"
+                    @close="handleTagClose(tag)"
+                  >{{tag}}</el-tag>
+                  <el-autocomplete
+                    class="inline-input"
+                    v-if="tagInputVisible"
+                    v-model="tagInputValue"
+                    :fetch-suggestions="tagsQuerySearch"
+                    ref="saveTagInput"
+                    :trigger-on-focus="false"
+                    @select="handleTagSelect"
+                    @keyup.enter.native="handleTagInputConfirm"
+                    @blur="handleTagInputConfirm"
+                  ></el-autocomplete>
+                  <el-button
+                    v-else
+                    class="button-new-tag"
+                    size="small"
+                    @click="showTagInput"
+                  >+ New Tag</el-button>
+                </el-form-item>
+                <el-form-item :label="i18n.item.sentence + ':'">
+                  <el-input type="textarea" :rows="3" v-model="wordForm.sentence"></el-input>
+                </el-form-item>
+                <div class="form-btns">
+                  <el-button size="small" @click="handleEditorCancelClick">{{ i18n.base.cancel }}</el-button>
+                  <el-button size="small" @click="handleEditorDeleteClick">{{ i18n.base.delete }}</el-button>
                 </div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-collapse-transition>
-      </div>
-    </el-col>
-  </el-row>
+              </el-form>
+            </el-col>
+            <el-col :span="4">
+              <div class="form-aside">
+                <div class="form-aside-fields">
+                  <div class="el-form-item__label">{{ i18n.words.level }} :</div>
+                  <el-select v-model="wordForm.level" :placeholder="i18n.base.choose" size="small">
+                    <el-option
+                      v-for="item in levels"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </div>
+                <div class="form-aside-btns">
+                  <el-button
+                    type="primary"
+                    size="small"
+                    @click.native.prevent="handleEditorSubmit"
+                  >{{ i18n.base.save }}</el-button>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-collapse-transition>
+    </div>
+  </div>
 </template>
 
 <script>
 import * as Validator from "@/js/common/validatorHelper";
 import { syncMixin } from "@/js/helper/syncData";
-import WordsMixin from '@/js/mixins/words.mixin'
+import WordsMixin from "@/js/mixins/words.mixin";
 
 const levels = [0, 1, 2, 3, 4, 5].map(level => {
   return {
@@ -464,5 +447,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.words-container {
+  display: flex;
+}
 </style>

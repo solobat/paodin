@@ -1,13 +1,14 @@
 {
-    "extName": { "message": "庖丁解语: 查词/收集/背单词/造句" },
+    "extName": { "message": "庖丁解语: 查词句/收集/背单词/造句" },
     "extShortName": { "message": "庖丁解语" },
-    "extDesc": { "message": "庖丁解语: 网页查词，制作wordcard，背单词，单词导出" },
+    "extDesc": { "message": "庖丁解语: 网页查词句，制作wordcard，背单词，单词导出" },
     "extCmdDesc": { "message": "查询选中的单词" },
 
     
     "background_msg_maxwords_tips": { "message": "庖丁解语最多只能容纳{{max}}个单词" },
 
 
+    "popup_item_sentences": { "message": "句子列表" },
     "popup_item_words": { "message": "单词列表" },
     "popup_item_wordsrecite": { "message": "背单词" },
     "popup_item_help": { "message": "帮助" },
@@ -25,6 +26,7 @@
     "options_base_save": { "message": "保存" },
 
     "options_tab_general": { "message": "通用" },
+    "options_tab_sentences": { "message": "句子列表" },
     "options_tab_words": { "message": "单词列表" },
     "options_tab_wordsrecite": { "message": "背单词" },
     "options_tab_wordroots": { "message": "词根表" },

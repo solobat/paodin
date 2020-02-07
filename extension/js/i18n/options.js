@@ -11,6 +11,7 @@ export const base = {
 
 export const tabs = {
     general: chrome.i18n.getMessage('options_tab_general'),
+    sentences: chrome.i18n.getMessage('options_tab_sentences'),
     words: chrome.i18n.getMessage('options_tab_words'),
     wordsrecite: chrome.i18n.getMessage('options_tab_wordsrecite'),
     wordroots: chrome.i18n.getMessage('options_tab_wordroots'),

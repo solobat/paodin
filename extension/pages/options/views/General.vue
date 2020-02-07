@@ -1,5 +1,5 @@
 <template>
-  <el-form style="margin: 20px 0; min-height: 150px;" ref="config" :model="config">
+  <el-form style="margin: 20px 15px; min-height: 150px;" ref="config" :model="config">
     <el-row>
       <el-col :span="6">
         <el-form-item :label="i18n.general.engine">

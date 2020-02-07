@@ -34,8 +34,6 @@
     "permissions": [
         "tabs",
         "cookies",
-        "clipboardRead",
-        "clipboardWrite",
         "contextMenus",
         "storage",
         "notifications",

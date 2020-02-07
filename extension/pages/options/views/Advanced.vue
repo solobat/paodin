@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin: 15px;">
     <div class="panel-content" style="padding: 10px 0;">
       <el-button type="primary" @click="handleExportClick('csv')">CSV {{ i18n.advanced.export }}</el-button>
       <el-button type="primary" @click="handleExportClick('json')">JSON {{ i18n.advanced.export }}</el-button>
@@ -8,7 +8,7 @@
         @click="handleExportClick('words')"
       >{{ i18n.advanced.onlywords }} {{ i18n.advanced.export }}</el-button>
     </div>
-    <el-collapse v-model="activeSyncNames" accordion>
+    <el-collapse class="collapse" v-model="activeSyncNames" accordion>
       <el-collapse-item title="同步到小程序" name="1">
         <div>单词小卡片小程序用户可以使用此功能，用户身份码从小程序个人头像点击获取</div>
         <el-form ref="minappForm" :model="minappForm" :inline="true" :rules="minappRules">
@@ -60,13 +60,13 @@
 </template>
 
 <script>
-import API from '@/js/api'
+import API from "@/js/api";
 import WordsMixin from "@/js/mixins/words.mixin";
 import * as Validator from "@/js/common/validatorHelper";
 import { syncMixin } from "@/js/helper/syncData";
 
 export default {
-  props: ["i18n", "config", 'userInfo'],
+  props: ["i18n", "config", "userInfo"],
 
   mixins: [syncMixin, WordsMixin],
 
@@ -185,5 +185,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.collapse {
+  margin-top: 10px;
+  
+  .el-collapse-item__header,
+  .el-collapse-item__wrap {
+    background: inherit;
+  }
+}
 </style>

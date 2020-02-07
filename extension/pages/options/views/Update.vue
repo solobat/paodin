@@ -26,7 +26,8 @@ export default {
 
   data() {
     return {
-      changelog
+      changelog,
+      appName: 'paodin'
     };
   },
 

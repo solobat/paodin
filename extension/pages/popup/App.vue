@@ -2,6 +2,12 @@
   <div id="main" class="main">
     <ul class="menus">
       <li class="menu-item">
+        <a href="options.html#/sentences" target="_blank">
+          <img src="/img/list.png" alt />
+          <span>{{ i18n.item.sentences }}</span>
+        </a>
+      </li>
+      <li class="menu-item">
         <a href="options.html#/words" target="_blank">
           <img src="/img/list.png" alt />
           <span>{{ i18n.item.words }}</span>

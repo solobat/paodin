@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import General from '@/pages/options/views/General.vue'
+import Sentences from '@/pages/options/views/Sentences.vue'
 import Words from '@/pages/options/views/Words.vue'
 import WordsRecite from '@/pages/options/views/WordsRecite.vue'
 import WordRoots from '@/pages/options/views/WordRoots.vue'
@@ -15,6 +16,13 @@ const routes = [
     path: '/',
     name: 'General',
     component: General,
+    meta: {
+    }
+  },
+  {
+    path: '/sentences',
+    name: 'Sentences',
+    component: Sentences,
     meta: {
     }
   },

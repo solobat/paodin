@@ -39,6 +39,7 @@
     "options_tab_general": {
         "message": "General"
     },
+    "options_tab_sentences": { "message": "Sentences" },
     "options_tab_words": {
         "message": "Word list"
     },
