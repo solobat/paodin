@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "__MSG_extName__",
     "short_name": "__MSG_extShortName__",
-    "version": "2.4.2",
+    "version": "3.0.0",
     "description": "__MSG_extDesc__",
     "background": {
         "page": "background.html"
@@ -10,7 +10,7 @@
     "default_locale": "zh_CN",
     "browser_action": {
         "default_icon": "img/icon.png",
-        "default_title": "Word Card",
+        "default_title": "Paodin",
         "default_popup": "popup.html"
     },
     "content_scripts": [{
