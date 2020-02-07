@@ -26,6 +26,7 @@
           :item="item"
           :key="index"
           :mode="mode"
+          :i18n="i18n"
           @delete="onDelete"
         />
       </div>
@@ -37,6 +38,7 @@
                 :is="`sentence-${mode}-card`"
                 :item="item"
                 :mode="mode"
+                :i18n="i18n"
                 @delete="onDelete"
               />
             </div>
@@ -44,9 +46,7 @@
         </el-carousel>
       </div>
     </template>
-    <div v-else class="err-msg">
-      No Data
-    </div>
+    <div v-else class="err-msg">No Data</div>
   </div>
 </template>
 
@@ -57,6 +57,8 @@ import { SENTENCE_MODE } from "@/js/constant/options";
 
 export default {
   name: "Sentences",
+
+  props: ["i18n"],
 
   data() {
     return {

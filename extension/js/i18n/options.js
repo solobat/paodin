@@ -4,6 +4,7 @@ export const lang = chrome.i18n.getUILanguage();
 
 export const base = {
     choose: chrome.i18n.getMessage('options_base_choose'),
+    edit: chrome.i18n.getMessage('options_base_edit'),
     'delete': chrome.i18n.getMessage('options_base_delete'),
     cancel: chrome.i18n.getMessage('options_base_cancel'),
     save: chrome.i18n.getMessage('options_base_save')
@@ -36,6 +37,11 @@ export const general = {
     cardFontSize: chrome.i18n.getMessage('options_general_card_fontsize'),
     ominboxEnterShowSentence: chrome.i18n.getMessage('options_general_omnibox_enter_show_sentence'),
     autoSync: chrome.i18n.getMessage('options_general_autosync')
+}
+
+export const sentences = {
+    answer: chrome.i18n.getMessage('options_sentences_answer'),
+    translate: chrome.i18n.getMessage('options_item_translate'),
 }
 
 export const words = {

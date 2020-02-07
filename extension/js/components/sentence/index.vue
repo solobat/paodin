@@ -72,7 +72,7 @@ import * as sentenceController from "@/server/controller/sentenceController";
 export default {
   name: "sentence",
 
-  props: ["meta"],
+  props: ["meta", "i18n"],
 
   data() {
     const { word: text, from, to, engine, source } = this.meta;

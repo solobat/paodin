@@ -11,7 +11,7 @@ export default {
       return sentenceController.del(this.item.id);
     },
     handleDeleteClick() {
-      this.$confirm("确认删除?", "提示", {
+      this.$confirm("Confirm to delete?", "Note", {
         type: "warning"
       })
         .then(() => {
@@ -19,7 +19,7 @@ export default {
             this.$emit("delete");
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "Delete successfully!"
             });
           });
         })

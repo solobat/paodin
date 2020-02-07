@@ -21,6 +21,7 @@
     
 
     "options_base_choose": { "message": "请选择" },
+    "options_base_edit": { "message": "编辑" },
     "options_base_delete": { "message": "删除" },
     "options_base_cancel": { "message": "取消" },
     "options_base_save": { "message": "保存" },
@@ -49,6 +50,8 @@
     "options_general_precision_first": { "message": "精准优先" },
     "options_general_precision_first_tips": { "message": "将自动探测语种，因而速度较慢" },
     "options_general_autosync": { "message": "自动同步" },
+    
+    "options_sentences_answer": { "message": "答案" },
 
     "options_words_search": { "message": "搜索" },
     "options_words_vocabulary": { "message": "单词本" },

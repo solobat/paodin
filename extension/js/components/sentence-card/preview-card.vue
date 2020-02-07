@@ -15,13 +15,8 @@
           :icon="editable ? 'check' : 'edit'"
           @click="toggleEdit"
         >{{editBtnText}}</el-button>
-        <el-button
-          v-if="editable"
-          size="small"
-          icon="close"
-          @click="editable = false"
-        >取消</el-button>
-        <el-button v-if="!editable" size="small" icon="delete" @click="handleDeleteClick">删除</el-button>
+        <el-button v-if="editable" size="small" icon="close" @click="editable = false">{{i18n.base.cancel}}</el-button>
+        <el-button v-if="!editable" size="small" icon="delete" @click="handleDeleteClick">{{i18n.base.delete}}</el-button>
       </div>
       <el-switch v-model="transVisible" on-text off-text></el-switch>
     </div>
@@ -29,9 +24,11 @@
 </template>
 
 <script>
-import SentenceMixin from '@/js/mixins/sentence.mixin'
+import SentenceMixin from "@/js/mixins/sentence.mixin";
 
 export default {
+  props: ["i18n"],
+
   mixins: [SentenceMixin],
 
   data() {
@@ -43,7 +40,7 @@ export default {
 
   computed: {
     editBtnText() {
-      return this.editable ? "保存" : "编辑";
+      return this.editable ? this.i18n.base.save : this.i18n.base.edit;
     }
   },
 
@@ -53,12 +50,12 @@ export default {
         this.save().then(() => {
           this.$message({
             type: "success",
-            message: "保存成功!"
+            message: "Save successfully!"
           });
         });
       }
       this.editable = !this.editable;
-    },
+    }
   }
 };
 </script>
