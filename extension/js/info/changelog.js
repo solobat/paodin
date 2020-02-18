@@ -2,6 +2,12 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v3.0.1',
+        detail: `
+            Bug 修复。
+        `
+    },
+    {
         version: 'v3.0.0',
         detail: `
             项目重构优化；<br>
@@ -195,6 +201,12 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v3.0.1',
+        detail: `
+            Bugfix. 
+        `
+    },
     {
         version: 'v3.0.0',
         detail: `
