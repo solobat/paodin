@@ -1,13 +1,14 @@
 {
-    "extName": { "message": "单词小卡片: 查词/收集/背单词" },
-    "extShortName": { "message": "单词小卡片" },
-    "extDesc": { "message": "单词小卡片: 网页查词，制作wordcard，背单词，单词导出" },
+    "extName": { "message": "庖丁解语: 查词句/收集/背单词/造句" },
+    "extShortName": { "message": "庖丁解语" },
+    "extDesc": { "message": "庖丁解语: 网页查词句，制作wordcard，背单词，单词导出" },
     "extCmdDesc": { "message": "查询选中的单词" },
 
     
-    "background_msg_maxwords_tips": { "message": "单词小卡片最多只能容纳{{max}}个单词" },
+    "background_msg_maxwords_tips": { "message": "庖丁解语最多只能容纳{{max}}个单词" },
 
 
+    "popup_item_sentences": { "message": "句子列表" },
     "popup_item_words": { "message": "单词列表" },
     "popup_item_wordsrecite": { "message": "背单词" },
     "popup_item_help": { "message": "帮助" },
@@ -20,11 +21,13 @@
     
 
     "options_base_choose": { "message": "请选择" },
+    "options_base_edit": { "message": "编辑" },
     "options_base_delete": { "message": "删除" },
     "options_base_cancel": { "message": "取消" },
     "options_base_save": { "message": "保存" },
 
     "options_tab_general": { "message": "通用" },
+    "options_tab_sentences": { "message": "句子列表" },
     "options_tab_words": { "message": "单词列表" },
     "options_tab_wordsrecite": { "message": "背单词" },
     "options_tab_wordroots": { "message": "词根表" },
@@ -47,6 +50,8 @@
     "options_general_precision_first": { "message": "精准优先" },
     "options_general_precision_first_tips": { "message": "将自动探测语种，因而速度较慢" },
     "options_general_autosync": { "message": "自动同步" },
+    
+    "options_sentences_answer": { "message": "答案" },
 
     "options_words_search": { "message": "搜索" },
     "options_words_vocabulary": { "message": "单词本" },

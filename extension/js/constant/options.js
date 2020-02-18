@@ -9,6 +9,12 @@ export const WORD_LEVEL = {
     DONE: 5
 }
 
+export const TEXT_TYPE = {
+    WORD: 0,
+    SENTENCE: 1,
+    ARTICLE: 2
+}
+
 export const CARD_FONTSIZE_OPTIONS = [{
     label: 'Normal',
     value: 'normal'
@@ -27,3 +33,14 @@ export const TRANSLATE_ENGINS = [{
     label: 'Google',
     value: 'google'
 }];
+
+export const SENTENCE_MODE = [{
+    label: 'Preview',
+    value: 'preview'
+}, {
+    label: 'Translation',
+    value: 'translation'
+}, {
+    label: 'Creative',
+    value: 'creative'
+}]

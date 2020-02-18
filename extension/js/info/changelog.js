@@ -2,9 +2,16 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
-        version: 'v2.4.3',
+        version: 'v3.0.1',
         detail: `
-            修复同步小程序找不到用户的问题。
+            Bug 修复。
+        `
+    },
+    {
+        version: 'v3.0.0',
+        detail: `
+            项目重构优化；<br>
+            添加句子功能。 
         `
     },
     {
@@ -195,9 +202,16 @@ let langZh = [
 
 let langEn = [
     {
-        version: 'v2.4.3',
+        version: 'v3.0.1',
         detail: `
             Bugfix. 
+        `
+    },
+    {
+        version: 'v3.0.0',
+        detail: `
+            Refactoring and optimization,<br>
+            Add sentences features. 
         `
     },
     {
