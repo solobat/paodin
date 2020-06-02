@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "__MSG_extName__",
     "short_name": "__MSG_extShortName__",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "description": "__MSG_extDesc__",
     "background": {
         "page": "background.html"
@@ -36,7 +36,6 @@
         "cookies",
         "contextMenus",
         "storage",
-        "notifications",
         "tts",
         "<all_urls>"
     ],
