@@ -29,7 +29,7 @@
         "translate.html"
     ],
     "options_page": "options.html",
-    "content_security_policy": "script-src 'self' 'unsafe-eval' http://localhost:8098; object-src 'self'",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
         "tabs",
         "contextMenus",
