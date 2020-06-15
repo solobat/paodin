@@ -6,6 +6,8 @@ export function getSentenceDefaultAssit() {
     tagInputValue: '',
     deleteTimes: 0,
     allTags: [],
+    saved: false,
+    saving: false,
     translating: false,
     translate: {
       phonetic: [{

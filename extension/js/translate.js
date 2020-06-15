@@ -7,6 +7,19 @@ export default {
         return this.getTranslation(word, type, from, to);
     },
 
+    getPhoetic(resp) {
+        try {
+            return [
+                {
+                    name: 'en-US',
+                    value: resp.raw[0][1].pop()
+                }
+            ]; 
+        } catch (error) {
+            return []
+        }
+    },
+
     getTranslation: function(word, type = 'baidu', from, to) {
         return Engine[type].translate({
             text: word,
@@ -18,9 +31,7 @@ export default {
             return {
                 explains: resp.dict,
                 trans: resp.result,
-                phonetic: resp.phonetic || [{
-                    name: ''
-                }]
+                phonetic: resp.phonetic || this.getPhoetic(resp)
             };
         });
     },

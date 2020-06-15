@@ -14,6 +14,7 @@ const conf = require('./utils')
 const config = {
   mode: process.env.NODE_ENV,
   entry: conf.entries,
+  devtool: "source-map",
   output: {
     path: path.resolve(__dirname, '../output/'),
     filename: '[name].js'

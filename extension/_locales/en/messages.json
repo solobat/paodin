@@ -4,6 +4,26 @@
     "extDesc": { "message": "Paodin: word translation, make wordcard, memory word, words data export" },
     "extCmdDesc": { "message": "Translate selected word" },
 
+    "signup": { "message": "Sign up" },
+    "login": { "message": "Login" },
+    "username": { "message": "Username" },
+    "password": { "message": "Password" },
+    "enter_username": { "message": "Please enter username" },
+    "enter_password": { "message": "Please enter password" },
+    "login_error": { "message": "Login failed" },
+    "login_ok": { "message": "Login successfully" },
+    "logout": { "message": "Logout" },
+    "logout_ok": { "message": "Logout successfully" },
+
+    "add_ok": { "message": "Add successfully" },
+    "add_failed": { "message": "Add failed" },
+    "save_ok": { "message": "Save successfully" },
+    "save_failed": { "message": "Save failed" },
+    "word_saved": { "message": "This word has been added" },
+    "sentence_saved": { "message": "This sentence has been added" },
+    "confirmto_overwrite": { "message": "Confirm to overwrite?" },
+    "login_first": { "message": "Please log in first" },
+
     "background_msg_maxwords_tips": {
         "message": "Word cards can only hold up to {{max}} words"
     },

@@ -1,118 +1,106 @@
 <template>
-  <el-form style="margin: 20px 15px; min-height: 150px;" ref="config" :model="config">
-    <el-row>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.engine">
-          <el-select v-model="config.engine" :placeholder="i18n.base.choose">
-            <el-option
-              v-for="(item, index) in TRANSLATE_ENGINS"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.source">
-          <el-select
-            :disabled="config.autoSetFrom"
-            v-model="config.from"
-            filterable
-            :placeholder="i18n.base.choose"
-          >
-            <el-option v-for="(item, index) in codeList" :key="index" :label="item" :value="item"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.target">
-          <el-select v-model="config.to" filterable :placeholder="i18n.base.choose">
-            <el-option v-for="(item, index) in codeList" :key="index" :label="item" :value="item"></el-option>
-          </el-select>
-          <el-tooltip effect="dark" :content="i18n.general.langTips" placement="top-start">
-            <a
-              class="code-help"
-              href="https://cloud.google.com/translate/docs/languages"
-              target="_blank"
-            >?</a>
-          </el-tooltip>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.autoSource">
-          <el-switch v-model="config.autoSetFrom" on-color="#20a0ff"></el-switch>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.dblclickTrigger">
-          <el-switch v-model="config.dblclick2trigger" on-color="#20a0ff"></el-switch>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.holdCtrl">
-          <el-tooltip effect="dark" :content="i18n.general.holdCtrlTips" placement="top-start">
-            <el-switch v-model="config.withCtrlOrCmd" on-color="#20a0ff"></el-switch>
-          </el-tooltip>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.autocutSentence">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="i18n.general.autocutSentenceTips"
-            placement="top-start"
-          >
-            <el-switch v-model="config.autocut" on-color="#20a0ff"></el-switch>
-          </el-tooltip>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.cardFontSize">
-          <el-select v-model="config.cardFontSize" :placeholder="i18n.base.choose">
-            <el-option
-              v-for="item in CARD_FONTSIZE_OPTIONS"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.precisionFirst">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="i18n.general.precisionFirstTips"
-            placement="top-start"
-          >
-            <el-switch v-model="config.precisionFirst" on-color="#20a0ff"></el-switch>
-          </el-tooltip>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.ominboxEnterShowSentence">
-          <el-switch v-model="config.alertOnOmniboxInputEntered" on-color="#20a0ff"></el-switch>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item :label="i18n.general.autoSync">
-          <el-switch v-model="config.autoSync" on-color="#20a0ff"></el-switch>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-form-item>
-      <el-button type="primary" @click.native.prevent="handleConfigSubmit">{{ i18n.base.save }}</el-button>
-    </el-form-item>
-  </el-form>
+  <div class="page-general">
+    <a-form-model ref="config" :model="config"
+      layout="horizontal" :labelCol="{span: 12}" :wrapperCol="{span: 12}">
+      <a-row>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.engine">
+            <a-select v-model="config.engine" :placeholder="i18n.base.choose">
+              <a-select-option
+                v-for="(item, index) in TRANSLATE_ENGINS"
+                :key="index"
+                :value="item.value">{{ item.label }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.source">
+            <a-select
+              :disabled="config.autoSetFrom"
+              v-model="config.from"
+              filterable
+              :placeholder="i18n.base.choose"
+            >
+              <a-select-option v-for="(item, index) in codeList" :key="index" :value="item">{{ item }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.target">
+            <a-select v-model="config.to" filterable :placeholder="i18n.base.choose">
+              <a-select-option v-for="(item, index) in codeList" :key="index" :value="item">{{ item }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.autoSource">
+            <a-switch v-model="config.autoSetFrom" on-color="#20a0ff"></a-switch>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.dblclickTrigger">
+            <a-switch v-model="config.dblclick2trigger" on-color="#20a0ff"></a-switch>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.holdCtrl">
+            <a-tooltip effect="dark" :content="i18n.general.holdCtrlTips" placement="topLeft">
+              <a-switch v-model="config.withCtrlOrCmd" on-color="#20a0ff"></a-switch>
+            </a-tooltip>
+          </a-form-model-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.autocutSentence">
+            <a-tooltip
+              class="item"
+              effect="dark"
+              :content="i18n.general.autocutSentenceTips"
+              placement="topLeft"
+            >
+              <a-switch v-model="config.autocut" on-color="#20a0ff"></a-switch>
+            </a-tooltip>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.cardFontSize">
+            <a-select v-model="config.cardFontSize" :placeholder="i18n.base.choose">
+              <a-select-option
+                v-for="item in CARD_FONTSIZE_OPTIONS"
+                :key="item.value"
+                :value="item.value"
+              >{{ item.label }}</a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.precisionFirst">
+            <a-tooltip
+              class="item"
+              effect="dark"
+              :content="i18n.general.precisionFirstTips"
+              placement="topLeft"
+            >
+              <a-switch v-model="config.precisionFirst" on-color="#20a0ff"></a-switch>
+            </a-tooltip>
+          </a-form-model-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="8">
+          <a-form-model-item :label="i18n.general.ominboxEnterShowSentence">
+            <a-switch v-model="config.alertOnOmniboxInputEntered" on-color="#20a0ff"></a-switch>
+          </a-form-model-item>
+        </a-col>
+      </a-row>
+    </a-form-model>
+    <div class="btns-wrap">
+      <a-button type="primary" @click="handleConfigSubmit">{{ i18n.base.save }}</a-button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -147,7 +135,7 @@ export default {
         })
         .then(resp => {
           if (!silent) {
-            this.$message(this.i18n.msg.saveok);
+            this.$message.success(this.i18n.msg.saveok);
           }
         });
     },
@@ -155,5 +143,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.page-general {
+  margin-top: 20px;
+  background: #fff;
+  padding: 20px;
+}
+
+.btns-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>

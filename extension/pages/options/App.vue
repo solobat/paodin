@@ -1,24 +1,6 @@
 <template>
   <div id="app" class="wordcard">
-    <el-menu
-      theme="dark"
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      background-color="#303030"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-      :router="true"
-    >
-      <el-menu-item index="/">{{i18n.tabs.general}}</el-menu-item>
-      <el-menu-item index="/sentences">{{i18n.tabs.sentences}}</el-menu-item>
-      <el-menu-item index="/words">{{i18n.tabs.words}}</el-menu-item>
-      <el-menu-item index="/wordsrecite">{{i18n.tabs.wordsrecite}}</el-menu-item>
-      <el-menu-item index="/wordroots">{{i18n.tabs.wordroots}}</el-menu-item>
-      <el-menu-item index="/advanced">{{i18n.tabs.advanced}}</el-menu-item>
-      <el-menu-item index="/help">{{i18n.tabs.help}}</el-menu-item>
-      <el-menu-item index="/update">{{i18n.tabs.update}}</el-menu-item>
-    </el-menu>
+    <topbar />
     <div class="page-container">
       <router-view :config="config" :i18n="i18n" />
     </div>
@@ -27,6 +9,7 @@
 
 <script>
 import * as i18n from "@/js/i18n/options";
+import Topbar from './components/Topbar.vue'
 
 const bg = chrome.extension.getBackgroundPage();
 let final = [];
@@ -45,6 +28,10 @@ const reciteStages = ["name", "sentence", "trans"];
 
 export default {
   props: ["i18nTexts", "config", "userInfo"],
+
+  components: {
+    Topbar
+  },
 
   data: function() {
     return {
@@ -92,6 +79,8 @@ html {
 
 .page-container {
   height: calc(100vh - 61px);
+  margin: 0 auto;
+  width: 960px;
 
   .view-container {
     height: 100%;
@@ -110,8 +99,9 @@ html {
 }
 
 .text-panel {
-  width: 740px;
+  width: 960px;
   margin: 20px auto 0;
+  background: #fff;
   color: rgba(51, 51, 51, 0.87);
   font-size: 16px;
   line-height: 1.6;

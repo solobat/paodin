@@ -4,20 +4,25 @@
  */
 
 import Vue from 'vue'
-import ElementUI from 'element-ui'
 import _ from 'underscore'
-import 'element-ui/lib/theme-chalk/index.css'
+import Antd, { FormModel } from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+import store, { initStore } from '../../store'
 import { getSyncConfig, getUserInfo } from '@/js/common/config'
-import SocialSharing  from 'vue-social-sharing'
 import App from './App.vue'
 import router from '@/pages/options/router'
+import { getI18nTexts } from '@/js/helper/i18n.helper';
+import '@/services/base'
+import i18n from 'vue-plugin-webextension-i18n'
 
-Vue.use(SocialSharing);
-Vue.use(ElementUI)
-
-const chrome = window.chrome;
+Vue.use(i18n)
+Vue.use(Antd);
+Vue.use(FormModel);
+Vue.config.productionTip = false
 
 function init() {
+    initStore()
+
     Promise.all([
         getSyncConfig(),
         getUserInfo()
@@ -28,27 +33,10 @@ function init() {
     });
 }
 
-function getI18nTexts(obj) {
-    let texts = {};
-
-    try {
-        for (let cate in obj) {
-            let subobj = texts[cate] = {};
-
-            for (var key in obj[cate]) {
-                subobj[key] = chrome.i18n.getMessage(`${cate}_${key}`);
-            }
-        }
-    } catch (e) {
-        console.log(e);
-    }
-
-    return texts;
-}
-
 function render(config, userInfo, i18nTexts) {
     const app = new Vue({
         el: '#app',
+        store,
         data: {
           config,
           userInfo,

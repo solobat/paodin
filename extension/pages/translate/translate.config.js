@@ -8,14 +8,13 @@ export function getDefaultAssit() {
         tagInputValue: '',
         deleteTimes: 0,
         translate: {
-            phonetic: [{
-                name: 'en-US'
-            }],
+            phonetic: [],
             trans: [],
             explains: []
         },
         wordTags: [],
         allTags: [],
         orgWord: null,
+        saved: false
     };
 }

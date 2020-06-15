@@ -3,13 +3,13 @@
     <div>
       <a
         v-if="i18n.lang === 'zh-CN'"
-        href="http://list.youku.com/albumlist/show/id_51352320.html"
+        href="https://paodin.app"
         target="_blank"
-      >单词小卡片视频专辑</a>
+      >官网</a>
       <a href="https://t.me/okwordcard" style="margin-left: 12px;" target="_blank">Telegram</a>
       <a
         v-if="i18n.lang === 'zh-CN'"
-        href="http://bbs.oksteward.com"
+        href="http://bbs.oksteward.com/?tab=wordcard"
         style="margin-left: 12px;"
         target="_blank"
       >论坛</a>
@@ -25,12 +25,10 @@
       <i class="el-icon-star-on"></i>
       按钮将单词、释义、例句保存成单词小卡片，
       你还可以为单词打上各种
-      <em>标签</em> ，以方便筛选复习.
-      <br />收集的单词可以在设置/单词列表中查看并编辑
-      <br />你还可以筛选中不同类型/状态的单词
-      <br />并记忆或测验它们
-      <br />如果你还在使用其它背单词app，那你还可以将这里收集到的单词导出成
-      <em>csv</em> 文件，然后导入app中。
+      <div>
+        <div>关注微信公众号(<em>比奇堡沙滩</em>)，获取最新消息</div>
+        <img src="http://static.oksteward.com/qrcode_wx_gzh.jpg" alt="微信公众号" class="qrcode">
+      </div>
     </div>
   </div>
 </template>

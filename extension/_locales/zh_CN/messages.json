@@ -4,9 +4,27 @@
     "extDesc": { "message": "庖丁解语: 网页查词句，制作wordcard，背单词，单词导出" },
     "extCmdDesc": { "message": "查询选中的单词" },
 
+    "signup": { "message": "注册" },
+    "login": { "message": "登录" },
+    "username": { "message": "用户名" },
+    "password": { "message": "密码" },
+    "enter_username": { "message": "请输入用户名" },
+    "enter_password": { "message": "请输入密码" },
+    "login_error": { "message": "登录失败" },
+    "login_ok": { "message": "登录成功" },
+    "logout": { "message": "登出" },
+    "logout_ok": { "message": "登出成功" },
+
+    "add_ok": { "message": "收藏成功" },
+    "add_failed": { "message": "收藏失败" },
+    "save_ok": { "message": "保存成功" },
+    "save_failed": { "message": "保存失败" },
+    "word_saved": { "message": "单词已经收藏过" },
+    "sentence_saved": { "message": "句子已经收藏过" },
+    "confirmto_overwrite": { "message": "是否覆盖？" },
+    "login_first": { "message": "请先登录" },
     
     "background_msg_maxwords_tips": { "message": "庖丁解语最多只能容纳{{max}}个单词" },
-
 
     "popup_item_sentences": { "message": "句子列表" },
     "popup_item_words": { "message": "单词列表" },
@@ -46,7 +64,7 @@
     "options_general_autocut_sentence": { "message": "自动裁剪例句" },
     "options_general_autocut_sentence_tips": { "message": "自动将例句剪切至3句" },
     "options_general_card_fontsize": { "message": "卡片字体大小" },
-    "options_general_omnibox_enter_show_sentence": { "message": "Omnibox Enter时显示例句" },
+    "options_general_omnibox_enter_show_sentence": { "message": "Omnibox 显示例句" },
     "options_general_precision_first": { "message": "精准优先" },
     "options_general_precision_first_tips": { "message": "将自动探测语种，因而速度较慢" },
     "options_general_autosync": { "message": "自动同步" },
