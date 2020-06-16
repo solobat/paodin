@@ -233,7 +233,7 @@ export default {
           action: "find",
           word: this.meta.word
         },
-        ({ data }) => {
+        () => {
           this.getTranslate().then(() => {
             if (!this.assit.orgWord && this.meta.from === "en") {
               this.queryWordIndex();
