@@ -22,7 +22,7 @@ import changelog from "@/js/info/changelog";
 import browser from "webextension-polyfill";
 
 export default {
-  props: ["i18n", "config"],
+  props: ["config"],
 
   data() {
     return {
@@ -42,7 +42,7 @@ export default {
         })
         .then(resp => {
           if (!silent) {
-            this.$message(this.i18n.msg.saveok);
+            this.$message(this.$i18n('options_msg_saveok'));
           }
         });
     }

@@ -52,7 +52,7 @@ export default {
 
     onLogoutClick() {
       this.logout().then(() => {
-        this.$message.success(this.$i18n('logout.ok'));
+        this.$message.success(this.$i18n('logout_ok'));
       })
     },
   }

@@ -7,6 +7,7 @@
     "dev": "npm run watch",
     "watch": "cross-env NODE_ENV=development webpack --watch --config config/webpack.config.js",
     "prod": "bash build/build.sh",
+    "i18n": "node ./build/build-i18n.js",
     "build:minified": "cross-env NODE_ENV=production webpack --config config/webpack.config.js",
     "cleaninstall": "rm -rf node_modules && npm i"
   },

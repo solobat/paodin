@@ -27,7 +27,7 @@ const filterKeyMap = {
 const reciteStages = ["name", "sentence", "trans"];
 
 export default {
-  props: ["i18nTexts", "config", "userInfo"],
+  props: ["config", "userInfo"],
 
   components: {
     Topbar

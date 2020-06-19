@@ -9,7 +9,6 @@ import { WordList } from '../../js/word'
 import Translate from '../../js/translate'
 import { WORD_LEVEL } from '../../js/constant/options'
 import { getSyncConfig, getUserInfo } from '../../js/common/config'
-import * as i18n from '../../js/i18n/background'
 
 const browser = window.chrome;
 

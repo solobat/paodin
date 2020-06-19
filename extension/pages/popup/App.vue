@@ -4,25 +4,25 @@
       <li class="menu-item">
         <a href="options.html#/sentences" target="_blank">
           <img src="/img/list.png" alt />
-          <span>{{ i18n.item.sentences }}</span>
+          <span>{{$i18n("popup_item_sentences")}}</span>
         </a>
       </li>
       <li class="menu-item">
         <a href="options.html#/words" target="_blank">
           <img src="/img/list.png" alt />
-          <span>{{ i18n.item.words }}</span>
+          <span>{{$i18n("popup_item_words")}}</span>
         </a>
       </li>
       <li>
         <a href="wordcard.html" target="_blank">
           <img src="/img/recite.png" alt />
-          <span>{{ i18n.item.wordsrecite }}</span>
+          <span>{{$i18n("popup_item_wordsrecite")}}</span>
         </a>
       </li>
       <li>
         <a href="options.html#/help" target="_blank">
           <img src="/img/help.png" alt />
-          <span>{{ i18n.item.help }}</span>
+          <span>{{$i18n("popup_item_help")}}</span>
         </a>
       </li>
     </ul>
@@ -30,12 +30,10 @@
 </template>
 
 <script>
-import * as i18n from "@/js/i18n/popup";
 
 export default {
   data() {
     return {
-      i18n
     };
   }
 };

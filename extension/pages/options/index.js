@@ -27,24 +27,21 @@ function init() {
         getSyncConfig(),
         getUserInfo()
     ]).then(([config, userInfo]) => {
-        let i18nTexts = getI18nTexts();
-
-        render(config, userInfo, i18nTexts);
+        render(config, userInfo);
     });
 }
 
-function render(config, userInfo, i18nTexts) {
+function render(config, userInfo) {
     const app = new Vue({
         el: '#app',
         store,
         data: {
           config,
           userInfo,
-          i18nTexts
         },
         router,
         components: { App },
-        template: '<App :config="config" :userInfo="userInfo" :i18nTexts="i18nTexts" />'
+        template: '<App :config="config" :userInfo="userInfo" />'
       });
 }
 
