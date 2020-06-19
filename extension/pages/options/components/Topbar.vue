@@ -2,7 +2,7 @@
   <div class="topbar">
     <header class="main-header">
       <div class="container">
-        <a href="/" class="logo"></a>
+        <a href="https://paodin.app" target="_blank" class="logo"></a>
         <nav class="main-nav">
           <ul class="nav-list">
             <li class="nav-item">
@@ -17,6 +17,9 @@
           <ul class="right-nav-list">
             <li v-if="!loggedIn">
               <router-link to="/login" class="link-btn">{{$i18n('login')}}</router-link>
+            </li>
+            <li v-if="!loggedIn">
+              <router-link to="/register" class="link-btn">{{$i18n('register')}}</router-link>
             </li>
             <li v-else>
               <a-dropdown :trigger="['click']" overlayClassName="user-layer">
@@ -115,7 +118,7 @@ export default {
     margin-left: 20px;
 
     .nav-item {
-      padding: 0 18px;
+      padding: 0 10px;
     }
   }
 
@@ -125,11 +128,11 @@ export default {
     height: 40px;
 
     li {
-      margin-left: 20px;
+      margin-left: 10px;
     }
 
     .link-btn {
-      margin-left: 20px;
+      margin-left: 10px;
     }
   }
 

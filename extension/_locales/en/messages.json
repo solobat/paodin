@@ -118,5 +118,47 @@
   },
   "popup_item_sentences": {
     "message": "popup_item_sentences"
+  },
+  "register": {
+    "message": "Register"
+  },
+  "not_email": {
+    "message": "Not a valid email"
+  },
+  "reenter_password": {
+    "message": "Please enter your password again"
+  },
+  "diff_password": {
+    "message": "Different from password"
+  },
+  "wechat_mp": {
+    "message": "WeChat Mini Program"
+  },
+  "register_mp_tips": {
+    "message": "If you are a WeChat user, please use the WeChat Mini Program to register"
+  },
+  "register_byuname": {
+    "message": "Register directly"
+  },
+  "register_byuname_tips": {
+    "message": "Directly registered accounts will not be able to bind to WeChat Mini Program"
+  },
+  "email": {
+    "message": "Email"
+  },
+  "enter_email": {
+    "message": "Please enter your email"
+  },
+  "repassword": {
+    "message": "Repassword"
+  },
+  "signup": {
+    "message": "Sign up"
+  },
+  "register_ok": {
+    "message": "Successfully register"
+  },
+  "register_error": {
+    "message": "Register failed"
   }
 }

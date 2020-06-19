@@ -118,5 +118,47 @@
   },
   "logout_ok": {
     "message": "登出成功"
+  },
+  "register": {
+    "message": "注册"
+  },
+  "not_email": {
+    "message": "邮箱格式错误"
+  },
+  "reenter_password": {
+    "message": "请再次输入密码"
+  },
+  "diff_password": {
+    "message": "两次输入的密码不一致"
+  },
+  "wechat_mp": {
+    "message": "微信小程序"
+  },
+  "register_mp_tips": {
+    "message": "如果你使用微信，请扫描下方二维码使用小程序注册"
+  },
+  "register_byuname": {
+    "message": "账号注册"
+  },
+  "register_byuname_tips": {
+    "message": "直接注册的账号将无法绑定到微信小程序"
+  },
+  "email": {
+    "message": "邮箱"
+  },
+  "enter_email": {
+    "message": "请输入邮箱"
+  },
+  "repassword": {
+    "message": "重复密码"
+  },
+  "signup": {
+    "message": "注册"
+  },
+  "register_ok": {
+    "message": "注册成功"
+  },
+  "register_error": {
+    "message": "注册失败"
   }
 }
