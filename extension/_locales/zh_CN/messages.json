@@ -160,5 +160,26 @@
   },
   "register_error": {
     "message": "注册失败"
+  },
+  "data_migration": {
+    "message": "数据迁移"
+  },
+  "data_to_migrate": {
+    "message": "待迁移数据"
+  },
+  "word_count": {
+    "message": "单词数"
+  },
+  "sentence_count": {
+    "message": "句子数"
+  },
+  "begin_migrate": {
+    "message": "开始迁移"
+  },
+  "migrate_ok": {
+    "message": "迁移完成"
+  },
+  "migrate_error": {
+    "message": "迁移失败"
   }
 }

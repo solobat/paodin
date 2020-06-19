@@ -7,7 +7,8 @@ export const sentenceService = {
   isExisted,
   addOne,
   create,
-  upateExisted
+  upateExisted,
+  bulkAdd
 }
 
 export function upateExisted(sentence, attrs) {
@@ -38,9 +39,10 @@ export function isExisted(text) {
   })
 }
 
-export function create(attrs) {
+function createByAttrs(attrs) {
   const { text, trans, tags, source, from_lang, to_lang, platform } = attrs 
   const sentence = new Sentence();
+
   sentence.set('text', text)
   sentence.set('trans', trans)
   sentence.set('tags', tags)
@@ -51,6 +53,12 @@ export function create(attrs) {
   sentence.set('author', AV.User.current())
 
   setACL(sentence)
+
+  return Sentence
+}
+
+export function create(attrs) {
+  const sentence = createByAttrs(attrs)
 
   return sentence.save()
 }
@@ -65,4 +73,10 @@ export function addOne(attrs) {
       return Promise.reject('Sentence has existed')
     }
   })
+}
+
+export function bulkAdd(attrsList) {
+  const sentences = attrsList.map(attrs => createByAttrs(attrs))
+
+  return AV.Object.saveAll(sentences)
 }

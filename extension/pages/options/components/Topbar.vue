@@ -27,6 +27,9 @@
                   <a-icon type="caret-down" />
                 </span>
                 <a-menu slot="overlay">
+                  <a-menu-item v-if="shouldMigrate">
+                    <router-link to="/migration">{{$i18n("data_migration")}}</router-link>
+                  </a-menu-item>
                   <a-menu-item>
                     <div @click="onLogoutClick">{{$i18n("logout")}}</div>
                   </a-menu-item>
@@ -42,9 +45,16 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { migrationHelper } from '@/js/helper/migration.helper'
 
 export default {
   name: "TopBar",
+
+  data() {
+    return {
+      shouldMigrate: false
+    }
+  },
 
   computed: {
     ...mapGetters('account', ['loggedIn', 'user', 'uid'])
@@ -58,6 +68,16 @@ export default {
         this.$message.success(this.$i18n('logout_ok'));
       })
     },
+
+    loadData() {
+      migrationHelper.shouldMigrate().then(shouldMigrate => {
+        this.shouldMigrate = shouldMigrate
+      })
+    }
+  },
+
+  mounted() {
+    this.loadData();
   }
 };
 </script>

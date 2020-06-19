@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import General from '@/pages/options/views/General.vue'
 import Login from '@/pages/options/views/Login.vue'
 import Register from '@/pages/options/views/Register.vue'
+import Migration from '@/pages/options/views/Migration.vue'
 import Help from '@/pages/options/views/Help.vue'
 
 Vue.use(VueRouter)
@@ -33,6 +34,13 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+    meta: {
+    }
+  },
+  {
+    path: '/migration',
+    name: 'Migration',
+    component: Migration,
     meta: {
     }
   },

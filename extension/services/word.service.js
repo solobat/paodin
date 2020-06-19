@@ -6,7 +6,8 @@ const Word = AV.Object.extend('Word');
 export const wordService = {
   isExisted,
   addOne,
-  create
+  create,
+  bulkAdd
 }
 
 export function isExisted(text) {
@@ -21,7 +22,7 @@ export function isExisted(text) {
   })
 }
 
-export function create(attrs) {
+function createByAttrs(attrs) {
   const { text, trans, sentence, tags, source, from_lang, to_lang, platform } = attrs 
   const word = new Word();
   word.set('text', text)
@@ -36,6 +37,12 @@ export function create(attrs) {
 
   setACL(word)
 
+  return word
+}
+
+export function create(attrs) {
+  const word = createByAttrs(attrs)
+
   return word.save()
 }
 
@@ -49,4 +56,10 @@ export function addOne(attrs) {
       return Promise.reject('Word has existed')
     }
   })
+}
+
+export function bulkAdd(attrsList) {
+  const words = attrsList.map(attrs => createByAttrs(attrs))
+
+  return AV.Object.saveAll(words)
 }

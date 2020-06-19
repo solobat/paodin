@@ -160,5 +160,26 @@
   },
   "register_error": {
     "message": "Register failed"
+  },
+  "data_migration": {
+    "message": "Data Migration"
+  },
+  "data_to_migrate": {
+    "message": "Data to be migrated"
+  },
+  "word_count": {
+    "message": "Word count"
+  },
+  "sentence_count": {
+    "message": "Sentence count"
+  },
+  "begin_migrate": {
+    "message": "Begin migrate"
+  },
+  "migrate_ok": {
+    "message": "Successfully migrate"
+  },
+  "migrate_error": {
+    "message": "Migrate failed"
   }
 }
