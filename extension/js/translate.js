@@ -41,29 +41,4 @@ export default {
             };
         });
     },
-
-    playAudio: function(voiceUrl = '', tl = 'en-US', event) {
-        if (voiceUrl.startsWith('http')) {
-            this.playAudioUrl(voiceUrl, event);
-        } else {
-            const word = voiceUrl;
-
-            return chrome.tts.speak(word, {'lang': tl});
-        }
-    },
-
-    playAudioUrl: function(voiceUrl, event) {
-        var $audio = $('#wc-audio');
-
-        if (!$audio.length) {
-            $audio = $('<audio id="wc-audio" style="display: none"></audio>');
-            $audio.appendTo('body');
-        }
-
-        var audioElem = $audio.get(0);
-
-        $audio.attr('src', voiceUrl);
-
-        audioElem.play();
-    }
 }
