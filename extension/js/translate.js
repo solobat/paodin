@@ -1,9 +1,14 @@
 import $ from 'jquery'
-import * as Engine from 'translation.js'
+import * as baseEngin from 'translation.js'
+import youdao from '@/js/api/youdao'
+
+const Engine = {
+    ...baseEngin,
+    youdao
+}
 
 export default {
     translate: function(word, type, from, to) {
-        console.log(`engine is: ${type}`);
         return this.getTranslation(word, type, from, to);
     },
 
@@ -11,8 +16,10 @@ export default {
         try {
             return [
                 {
-                    name: 'en-US',
-                    value: resp.raw[0][1].pop()
+                    name: 'en-US'
+                },
+                {
+                    name: 'en-GB'
                 }
             ]; 
         } catch (error) {
@@ -27,7 +34,6 @@ export default {
             com: chrome.i18n.getUILanguage() !== 'zh-CN',
             to
         }).then(resp => {
-            console.log(resp);
             return {
                 explains: resp.dict,
                 trans: resp.result,
@@ -36,9 +42,9 @@ export default {
         });
     },
 
-    playAudio: function(voiceUrl = '', tl = 'en-US') {
+    playAudio: function(voiceUrl = '', tl = 'en-US', event) {
         if (voiceUrl.startsWith('http')) {
-            this.playAudioUrl(voiceUrl);
+            this.playAudioUrl(voiceUrl, event);
         } else {
             const word = voiceUrl;
 
@@ -46,7 +52,7 @@ export default {
         }
     },
 
-    playAudioUrl: function(voiceUrl) {
+    playAudioUrl: function(voiceUrl, event) {
         var $audio = $('#wc-audio');
 
         if (!$audio.length) {

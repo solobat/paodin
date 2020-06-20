@@ -37,9 +37,10 @@
                   class="voice-item"
                   v-if="assit.translate.phonetic && assit.translate.phonetic.length"
                   :key="index"
+                  @mouseenter="playAudio(meta.word, item.name)"
                 >
                   <span>[{{item.name}}]</span>
-                  <a-icon @mouseenter="playAudio(meta.word)" type="sound" />
+                  <a-icon type="sound" />
                 </span>
               </template>
               <span class="add-txt"></span>
@@ -228,19 +229,11 @@ export default {
     },
 
     loadWord() {
-      chrome.runtime.sendMessage(
-        {
-          action: "find",
-          word: this.meta.word
-        },
-        () => {
-          this.getTranslate().then(() => {
-            if (!this.assit.orgWord && this.meta.from === "en") {
-              this.queryWordIndex();
-            }
-          });
+      this.getTranslate().then(() => {
+        if (!this.assit.orgWord && this.meta.from === "en") {
+          this.queryWordIndex();
         }
-      );
+      });
     },
     getTranslate() {
       return Translate.translate(
@@ -261,8 +254,14 @@ export default {
       });
     },
 
-    playAudio(url) {
-      Translate.playAudio(url, this.meta.from);
+    playAudio(word, tl) {
+      const tlMap = {
+        'en-US': 'en-US',
+        'en-UK': 'en-GB',
+        '美': 'en-US',
+        '英': 'en-GB'
+      }
+      return chrome.tts.speak(word, {'lang': tlMap[tl] || tl});
     },
 
     enbaleWordInput() {

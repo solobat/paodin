@@ -181,5 +181,11 @@
   },
   "migrate_error": {
     "message": "迁移失败"
+  },
+  "options_youdao_key": {
+    "message": "AppKey"
+  },
+  "options_youdao_secret": {
+    "message": "AppSecret"
   }
 }

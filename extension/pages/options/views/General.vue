@@ -13,6 +13,18 @@
             </a-select>
           </a-form-model-item>
         </a-col>
+        <a-col :span="8" v-if="config.engine === 'youdao'">
+          <a-form-model-item :label="$i18n('options_youdao_key')">
+            <a-input v-model="config.ydAppKey"/>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="8" v-if="config.engine === 'youdao'">
+          <a-form-model-item :label="$i18n('options_youdao_secret')">
+            <a-input v-model="config.ydAppSecret"/>
+          </a-form-model-item>
+        </a-col>
+      </a-row>
+      <a-row>
         <a-col :span="8">
           <a-form-model-item :label="$i18n('options_general_source')">
             <a-select
