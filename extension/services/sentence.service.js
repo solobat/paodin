@@ -54,7 +54,7 @@ function createByAttrs(attrs) {
 
   setACL(sentence)
 
-  return Sentence
+  return sentence
 }
 
 export function create(attrs) {
