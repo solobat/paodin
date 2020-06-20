@@ -76,7 +76,7 @@ function translate(attrs) {
     if (config && config.appKey && config.key) {
       const { appKey, key } = config
       const { text, from, to } = attrs
-      const query = text.split(' ').join('\n')
+      const query = text
       const salt = (new Date).getTime();
       const curTime = Math.round(new Date().getTime() / 1000);
       const sign = getSign(appKey, query, salt, curTime, key)
