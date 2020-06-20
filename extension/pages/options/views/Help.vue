@@ -23,8 +23,8 @@
       <em>双击取词</em> ：
       <br />同时，通过点击左下角的
       <i class="el-icon-star-on"></i>
-      按钮将单词、释义、例句保存成单词小卡片，
-      你还可以为单词打上各种
+      按钮将单词、释义、例句保存到云端，
+      你还可以为单词打上各种标签
       <div>
         <div>关注微信公众号(<em>比奇堡沙滩</em>)，获取最新消息</div>
         <img src="http://static.oksteward.com/qrcode_wx_gzh.jpg" alt="微信公众号" class="qrcode">

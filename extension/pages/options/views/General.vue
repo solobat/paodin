@@ -78,17 +78,6 @@
           </a-form-model-item>
         </a-col>
         <a-col :span="8">
-          <a-form-model-item :label="$i18n('options_general_card_fontsize')">
-            <a-select v-model="config.cardFontSize" :placeholder="$i18n('options_base_choose')">
-              <a-select-option
-                v-for="item in CARD_FONTSIZE_OPTIONS"
-                :key="item.value"
-                :value="item.value"
-              >{{ item.label }}</a-select-option>
-            </a-select>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="8">
           <a-form-model-item :label="$i18n('options_general_precision_first')">
             <a-tooltip
               class="item"
@@ -98,13 +87,6 @@
             >
               <a-switch v-model="config.precisionFirst" on-color="#20a0ff"></a-switch>
             </a-tooltip>
-          </a-form-model-item>
-        </a-col>
-      </a-row>
-      <a-row>
-        <a-col :span="8">
-          <a-form-model-item :label="$i18n('options_general_omnibox_enter_show_sentence')">
-            <a-switch v-model="config.alertOnOmniboxInputEntered" on-color="#20a0ff"></a-switch>
           </a-form-model-item>
         </a-col>
       </a-row>

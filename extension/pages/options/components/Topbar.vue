@@ -36,6 +36,21 @@
                 </a-menu>
               </a-dropdown>
             </li>
+            <li>
+              <a-dropdown overlayClassName="mpqrcode-layer">
+                <span class="btn-trigger">
+                  <img class="icon-mp" src="/img/mp.svg" alt="">
+                </span>
+                <div class="mpqrcode-wrap " slot="overlay">
+                  <img class="mp-qrcode" src="/img/mp_qrcode.jpg" alt="">
+                </div>
+              </a-dropdown>
+            </li>
+            <li>
+              <a href="https://paodin.app" target="_blank">
+                <img src="/img/pc.svg" class="icon-pc" title="https://paodin.app" alt="https://paodin.app">
+              </a>
+            </li>
           </ul>
         </nav>
       </div>
@@ -180,9 +195,32 @@ export default {
     font-size: 12px;
   }
 }
+
+.mpqrcode-wrap {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 4px;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.mp-qrcode {
+  width: 150px;
+}
+
+.icon-mp,
+.icon-pc {
+  width: 20px;
+  height: 20px;
+}
 </style>
 <style lang="scss">
 .user-layer {
   width: 120px;
+}
+
+.mpqrcode-layer {
+  width: 180px;
+  text-align: center;
 }
 </style>
