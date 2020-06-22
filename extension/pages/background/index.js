@@ -64,26 +64,8 @@ function loadConfig() {
     });
 }
 
-function notifyTabs(resp) {
-    chrome.tabs.query({}, function(tabs) {
-        tabs.forEach(({ id }) => {
-            chrome.tabs.sendMessage(id, resp, function() {});
-        });
-    });
-}
-
 function init(data) {
     setup();
-
-    browser.storage.onChanged.addListener((changes) => {
-        if (changes.config) {
-            config = changes.config.newValue;
-            notifyTabs({
-                action: 'config',
-                data: config
-            });
-        }
-    });
 }
 
 loadConfig().then(init);

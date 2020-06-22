@@ -31,11 +31,15 @@
     "options_page": "options.html",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
-        "tabs",
+        "activeTab",
         "contextMenus",
         "storage",
         "tts",
-        "<all_urls>"
+        "https://fanyi.baidu.com/",
+        "https://api-paodin.nohabitlife.com/",
+        "https://translate.google.com/",
+        "https://translate.google.cn/",
+        "https://openapi.youdao.com/"
     ],
     "commands": {
         "lookup_in_selection": {
