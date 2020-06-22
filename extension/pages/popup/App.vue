@@ -1,22 +1,16 @@
 <template>
   <div id="main" class="main">
     <ul class="menus">
-      <li class="menu-item">
-        <a href="options.html#/sentences" target="_blank">
-          <img src="/img/list.png" alt />
-          <span>{{$i18n("popup_item_sentences")}}</span>
-        </a>
-      </li>
-      <li class="menu-item">
-        <a href="options.html#/words" target="_blank">
-          <img src="/img/list.png" alt />
-          <span>{{$i18n("popup_item_words")}}</span>
-        </a>
-      </li>
       <li>
-        <a href="wordcard.html" target="_blank">
+        <a href="https://paodin.app/#/recite" target="_blank">
           <img src="/img/recite.png" alt />
           <span>{{$i18n("popup_item_wordsrecite")}}</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://paodin.app/#/sentences" target="_blank">
+          <img src="/img/list.png" alt />
+          <span>{{$i18n("popup_item_sentences")}}</span>
         </a>
       </li>
       <li>
