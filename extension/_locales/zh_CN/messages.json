@@ -50,15 +50,6 @@
   "login_first": {
     "message": "请先登录"
   },
-  "popup_item_sentences": {
-    "message": "句子列表"
-  },
-  "popup_item_words": {
-    "message": "单词列表"
-  },
-  "popup_item_wordsrecite": {
-    "message": "背单词"
-  },
   "popup_item_help": {
     "message": "帮助"
   },
@@ -100,12 +91,6 @@
   },
   "options_general_autocut_sentence_tips": {
     "message": "自动将例句剪切至3句"
-  },
-  "options_general_card_fontsize": {
-    "message": "卡片字体大小"
-  },
-  "options_general_omnibox_enter_show_sentence": {
-    "message": "Omnibox 显示例句"
   },
   "options_general_precision_first": {
     "message": "精准优先"
@@ -187,5 +172,11 @@
   },
   "options_youdao_secret": {
     "message": "AppSecret"
+  },
+  "popup_item_settings": {
+    "message": "设置"
+  },
+  "popup_item_website": {
+    "message": "官网"
   }
 }

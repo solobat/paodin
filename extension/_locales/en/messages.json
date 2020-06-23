@@ -50,12 +50,6 @@
   "login_first": {
     "message": "Please log in first"
   },
-  "popup_item_words": {
-    "message": "Word list"
-  },
-  "popup_item_wordsrecite": {
-    "message": "Memory word"
-  },
   "popup_item_help": {
     "message": "Help"
   },
@@ -98,12 +92,6 @@
   "options_general_autocut_sentence_tips": {
     "message": "Automatically cut sentences to 3 sentences"
   },
-  "options_general_card_fontsize": {
-    "message": "Card font size"
-  },
-  "options_general_omnibox_enter_show_sentence": {
-    "message": "Omnibox Enter to show sentences"
-  },
   "options_general_precision_first": {
     "message": "More precise"
   },
@@ -115,9 +103,6 @@
   },
   "logout_ok": {
     "message": "Logout successfully"
-  },
-  "popup_item_sentences": {
-    "message": "popup_item_sentences"
   },
   "register": {
     "message": "Register"
@@ -187,5 +172,11 @@
   },
   "options_youdao_secret": {
     "message": "AppSecret"
+  },
+  "popup_item_settings": {
+    "message": "popup_item_settings"
+  },
+  "popup_item_website": {
+    "message": "popup_item_website"
   }
 }

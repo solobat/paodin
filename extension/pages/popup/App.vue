@@ -2,15 +2,15 @@
   <div id="main" class="main">
     <ul class="menus">
       <li>
-        <a href="https://paodin.app/#/recite" target="_blank">
-          <img src="/img/recite.png" alt />
-          <span>{{$i18n("popup_item_wordsrecite")}}</span>
+        <a href="options.html#/" target="_blank">
+          <img src="/img/icon.png" alt />
+          <span>{{$i18n("popup_item_settings")}}</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href="https://paodin.app/#/sentences" target="_blank">
-          <img src="/img/list.png" alt />
-          <span>{{$i18n("popup_item_sentences")}}</span>
+        <a href="https://paodin.app/" target="_blank">
+          <img src="/img/pc.svg" alt />
+          <span>{{$i18n("popup_item_website")}}</span>
         </a>
       </li>
       <li>
