@@ -14,7 +14,8 @@
         "default_popup": "popup.html"
     },
     "content_scripts": [{
-        "matches": ["<all_urls>"],
+        "matches"     : [ "http://*/*", "https://*/*" ],
+        "exclude_matches": [ "http://localhost/*" ],
         "css": ["content.css"],
         "all_frames": true,
         "js": ["manifest.js", "common.js", "vendor.js", "content.js"]
@@ -34,12 +35,7 @@
         "activeTab",
         "contextMenus",
         "storage",
-        "tts",
-        "https://fanyi.baidu.com/",
-        "https://api-paodin.nohabitlife.com/",
-        "https://translate.google.com/",
-        "https://translate.google.cn/",
-        "https://openapi.youdao.com/"
+        "tts"
     ],
     "commands": {
         "lookup_in_selection": {
