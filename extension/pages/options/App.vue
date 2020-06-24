@@ -10,17 +10,17 @@
       active-text-color="#ffd04b"
       :router="true"
     >
-      <el-menu-item index="/">{{i18n.tabs.general}}</el-menu-item>
-      <el-menu-item index="/sentences">{{i18n.tabs.sentences}}</el-menu-item>
-      <el-menu-item index="/words">{{i18n.tabs.words}}</el-menu-item>
-      <el-menu-item index="/wordsrecite">{{i18n.tabs.wordsrecite}}</el-menu-item>
-      <el-menu-item index="/wordroots">{{i18n.tabs.wordroots}}</el-menu-item>
-      <el-menu-item index="/advanced">{{i18n.tabs.advanced}}</el-menu-item>
-      <el-menu-item index="/help">{{i18n.tabs.help}}</el-menu-item>
-      <el-menu-item index="/update">{{i18n.tabs.update}}</el-menu-item>
+      <el-menu-item index="/">{{$i18n("options_tab_general")}}</el-menu-item>
+      <el-menu-item index="/sentences">{{$i18n("options_tab_sentences")}}</el-menu-item>
+      <el-menu-item index="/words">{{$i18n("options_tab_words")}}</el-menu-item>
+      <el-menu-item index="/wordsrecite">{{$i18n("options_tab_wordsrecite")}}</el-menu-item>
+      <el-menu-item index="/wordroots">{{$i18n("options_tab_wordroots")}}</el-menu-item>
+      <el-menu-item index="/advanced">{{$i18n("options_tab_advanced")}}</el-menu-item>
+      <el-menu-item index="/help">{{$i18n("options_tab_help")}}</el-menu-item>
+      <el-menu-item index="/update">{{$i18n("options_tab_update")}}</el-menu-item>
     </el-menu>
     <div class="page-container">
-      <router-view :config="config" :i18n="i18n" />
+      <router-view :config="config" :i18n="i18n" :user="user" />
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ const filterKeyMap = {
 const reciteStages = ["name", "sentence", "trans"];
 
 export default {
-  props: ["i18nTexts", "config", "userInfo"],
+  props: ["i18nTexts", "config", "userInfo", "user"],
 
   data: function() {
     return {
@@ -246,7 +246,7 @@ html {
   }
 
   .form-btns {
-    margin-top: 20px;
+    margin-top: 5px;
   }
 
   .form-aside {

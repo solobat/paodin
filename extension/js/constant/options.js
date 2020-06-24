@@ -32,6 +32,9 @@ export const TRANSLATE_ENGINS = [{
 }, {
     label: 'Google',
     value: 'google'
+}, {
+    label: 'Youdao',
+    value: 'youdao'
 }];
 
 export const SENTENCE_MODE = [{

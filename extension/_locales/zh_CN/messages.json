@@ -1,88 +1,212 @@
 {
-    "extName": { "message": "庖丁解语: 查词句/收集/背单词/造句" },
-    "extShortName": { "message": "庖丁解语" },
-    "extDesc": { "message": "庖丁解语: 网页查词句，制作wordcard，背单词，单词导出" },
-    "extCmdDesc": { "message": "查询选中的单词" },
-
-    
-    "background_msg_maxwords_tips": { "message": "庖丁解语最多只能容纳{{max}}个单词" },
-
-
-    "popup_item_sentences": { "message": "句子列表" },
-    "popup_item_words": { "message": "单词列表" },
-    "popup_item_wordsrecite": { "message": "背单词" },
-    "popup_item_help": { "message": "帮助" },
-
-    
-    "translate_save_confirm_tips": { "message": "会覆盖单词库里的单词，确定要继续吗?" },
-    "translate_item_tips": { "message": "提示" },
-    "translate_item_confirm": { "message": "确认" },
-    "translate_item_cancel": { "message": "取消" },
-    
-
-    "options_base_choose": { "message": "请选择" },
-    "options_base_edit": { "message": "编辑" },
-    "options_base_delete": { "message": "删除" },
-    "options_base_cancel": { "message": "取消" },
-    "options_base_save": { "message": "保存" },
-
-    "options_tab_general": { "message": "通用" },
-    "options_tab_sentences": { "message": "句子列表" },
-    "options_tab_words": { "message": "单词列表" },
-    "options_tab_wordsrecite": { "message": "背单词" },
-    "options_tab_wordroots": { "message": "词根表" },
-    "options_tab_advanced": { "message": "高级" },
-    "options_tab_help": { "message": "帮助" },
-    "options_tab_update": { "message": "更新" },
-
-    "options_general_engine": { "message": "翻译引擎" },
-    "options_general_source": { "message": "源语言" },
-    "options_general_target": { "message": "目标语言" },
-    "options_general_lang_tips": { "message": "点击查看语种代码" },
-    "options_general_auto_source": { "message": "自动设置源语言" },
-    "options_general_dblclick_trigger": { "message": "双击取词" },
-    "options_general_hold_ctrl": { "message": "按住 Ctrl / ⌘" },
-    "options_general_hold_ctrl_tips": { "message": "按住 Ctrl / ⌘ 时才双击取词" },
-    "options_general_autocut_sentence": { "message": "自动裁剪例句" },
-    "options_general_autocut_sentence_tips": { "message": "自动将例句剪切至3句" },
-    "options_general_card_fontsize": { "message": "卡片字体大小" },
-    "options_general_omnibox_enter_show_sentence": { "message": "Omnibox Enter时显示例句" },
-    "options_general_precision_first": { "message": "精准优先" },
-    "options_general_precision_first_tips": { "message": "将自动探测语种，因而速度较慢" },
-    "options_general_autosync": { "message": "自动同步" },
-    
-    "options_sentences_answer": { "message": "答案" },
-
-    "options_words_search": { "message": "搜索" },
-    "options_words_vocabulary": { "message": "单词本" },
-    "options_words_reset": { "message": "复位" },
-    "options_words_level": { "message": "记忆级别" },
-    "options_words_tag": { "message": "标签" },
-    "options_words_count": { "message": "{{choosed}} 个 / 共{{all}}个单词" },
-    "options_words_batchdelete": { "message": "批量删除" },
-
-    "options_wordsrecite_title": { "message": "测验方案" },
-    "options_wordsrecite_submit": { "message": "开始测验" },
-    "options_wordsrecite_newquiz": { "message": "新测验" },
-    "options_wordsrecite_result": { "message": "测验结果" },
-
-    "options_advanced_export": { "message": "导出" },
-    "options_advanced_onlywords": { "message": "仅单词" },
-
-    "options_item_word": { "message": "单词" },
-    "options_item_translate": { "message": "翻译" },
-    "options_item_tag": { "message": "标签" },
-    "options_item_sentence": { "message": "例句" },
-    "options_item_right": { "message": "正确" },
-    "options_item_wrong": { "message": "错误" },
-    "options_item_tips": { "message": "提示" },
-
-    "options_msg_saveok": { "message": "保存成功" },
-    "options_msg_deletewords_confirm": { "message": "此操作将永久删除这些单词, 是否继续?" },
-    "options_msg_nowords_todelete": { "message": "没有要删除的单词!" },
-    "options_msg_batchdelete_ok": { "message": "批量删除成功" },
-    "options_msg_delete_ok": { "message": "删除成功!" },
-    "options_msg_form_error": { "message": "信息填写有问题" },
-    "options_msg_wordschoosed_nothing": { "message": "没有选中任何单词" },
-    "options_msg_nowords_toexport": { "message": "没有可导出的词语！" }
+  "extName": {
+    "message": "庖丁解语: 查词句/收集/背单词/造句"
+  },
+  "extShortName": {
+    "message": "庖丁解语"
+  },
+  "extDesc": {
+    "message": "庖丁解语: 网页查词句，制作wordcard，背单词，单词导出"
+  },
+  "extCmdDesc": {
+    "message": "查询选中的单词"
+  },
+  "translate_save_confirm_tips": {
+    "message": "会覆盖单词库里的单词，确定要继续吗?"
+  },
+  "translate_item_tips": {
+    "message": "提示"
+  },
+  "translate_item_confirm": {
+    "message": "确认"
+  },
+  "translate_item_cancel": {
+    "message": "取消"
+  },
+  "options_base_choose": {
+    "message": "请选择"
+  },
+  "options_base_delete": {
+    "message": "删除"
+  },
+  "options_base_cancel": {
+    "message": "取消"
+  },
+  "options_base_save": {
+    "message": "保存"
+  },
+  "options_tab_general": {
+    "message": "通用"
+  },
+  "options_tab_sentences": {
+    "message": "句子列表"
+  },
+  "options_tab_words": {
+    "message": "单词列表"
+  },
+  "options_tab_wordsrecite": {
+    "message": "背单词"
+  },
+  "options_tab_wordroots": {
+    "message": "词根表"
+  },
+  "options_tab_advanced": {
+    "message": "高级"
+  },
+  "options_tab_help": {
+    "message": "帮助"
+  },
+  "options_tab_update": {
+    "message": "更新"
+  },
+  "options_general_engine": {
+    "message": "翻译引擎"
+  },
+  "options_general_source": {
+    "message": "源语言"
+  },
+  "options_general_target": {
+    "message": "目标语言"
+  },
+  "options_general_lang_tips": {
+    "message": "点击查看语种代码"
+  },
+  "options_general_auto_source": {
+    "message": "自动设置源语言"
+  },
+  "options_general_dblclick_trigger": {
+    "message": "双击取词"
+  },
+  "options_general_hold_ctrl": {
+    "message": "按住 Ctrl / ⌘"
+  },
+  "options_general_hold_ctrl_tips": {
+    "message": "按住 Ctrl / ⌘ 时才双击取词"
+  },
+  "options_general_autocut_sentence": {
+    "message": "自动裁剪例句"
+  },
+  "options_general_autocut_sentence_tips": {
+    "message": "自动将例句剪切至3句"
+  },
+  "options_general_card_fontsize": {
+    "message": "卡片字体大小"
+  },
+  "options_general_omnibox_enter_show_sentence": {
+    "message": "Omnibox Enter时显示例句"
+  },
+  "options_general_precision_first": {
+    "message": "精准优先"
+  },
+  "options_general_precision_first_tips": {
+    "message": "将自动探测语种，因而速度较慢"
+  },
+  "options_general_autosync": {
+    "message": "自动同步"
+  },
+  "options_words_search": {
+    "message": "搜索"
+  },
+  "options_words_vocabulary": {
+    "message": "单词本"
+  },
+  "options_words_reset": {
+    "message": "复位"
+  },
+  "options_words_level": {
+    "message": "记忆级别"
+  },
+  "options_words_tag": {
+    "message": "标签"
+  },
+  "options_words_batchdelete": {
+    "message": "批量删除"
+  },
+  "options_wordsrecite_title": {
+    "message": "测验方案"
+  },
+  "options_wordsrecite_submit": {
+    "message": "开始测验"
+  },
+  "options_wordsrecite_newquiz": {
+    "message": "新测验"
+  },
+  "options_wordsrecite_result": {
+    "message": "测验结果"
+  },
+  "options_advanced_export": {
+    "message": "导出"
+  },
+  "options_advanced_onlywords": {
+    "message": "仅单词"
+  },
+  "options_item_word": {
+    "message": "单词"
+  },
+  "options_item_translate": {
+    "message": "翻译"
+  },
+  "options_item_tag": {
+    "message": "标签"
+  },
+  "options_item_sentence": {
+    "message": "例句"
+  },
+  "options_item_right": {
+    "message": "正确"
+  },
+  "options_item_wrong": {
+    "message": "错误"
+  },
+  "options_item_tips": {
+    "message": "提示"
+  },
+  "options_msg_saveok": {
+    "message": "保存成功"
+  },
+  "options_msg_deletewords_confirm": {
+    "message": "此操作将永久删除这些单词, 是否继续?"
+  },
+  "options_msg_nowords_todelete": {
+    "message": "没有要删除的单词!"
+  },
+  "options_msg_delete_ok": {
+    "message": "删除成功!"
+  },
+  "options_msg_form_error": {
+    "message": "信息填写有问题"
+  },
+  "options_msg_wordschoosed_nothing": {
+    "message": "没有选中任何单词"
+  },
+  "options_msg_nowords_toexport": {
+    "message": "没有可导出的词语！"
+  },
+  "options_youdao_key": {
+    "message": "AppKey"
+  },
+  "options_youdao_secret": {
+    "message": "AppSecret"
+  },
+  "options_sentences_answer": {
+    "message": "答案"
+  },
+  "options_base_edit": {
+    "message": "编辑"
+  },
+  "save_ok": {
+    "message": "保存成功"
+  },
+  "confirm_to_delete": {
+    "message": "确认删除"
+  },
+  "note": {
+    "message": "提醒"
+  },
+  "delete_ok": {
+    "message": "删除成功"
+  },
+  "options_words_count": {
+    "message": "{{choosed}} 个 / 共 {{all}} 个单词"
+  }
 }

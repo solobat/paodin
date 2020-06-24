@@ -26,7 +26,6 @@
           :item="item"
           :key="index"
           :mode="mode"
-          :i18n="i18n"
           @delete="onDelete"
         />
       </div>
@@ -38,7 +37,6 @@
                 :is="`sentence-${mode}-card`"
                 :item="item"
                 :mode="mode"
-                :i18n="i18n"
                 @delete="onDelete"
               />
             </div>

@@ -15,8 +15,8 @@
           :icon="editable ? 'check' : 'edit'"
           @click="toggleEdit"
         >{{editBtnText}}</el-button>
-        <el-button v-if="editable" size="small" icon="close" @click="editable = false">{{i18n.base.cancel}}</el-button>
-        <el-button v-if="!editable" size="small" icon="delete" @click="handleDeleteClick">{{i18n.base.delete}}</el-button>
+        <el-button v-if="editable" size="small" icon="close" @click="editable = false">{{$i18n("options_base_cancel")}}</el-button>
+        <el-button v-if="!editable" size="small" icon="delete" @click="handleDeleteClick">{{$i18n("options_base_delete")}}</el-button>
       </div>
       <el-switch v-model="transVisible" on-text off-text></el-switch>
     </div>
@@ -27,8 +27,6 @@
 import SentenceMixin from "@/js/mixins/sentence.mixin";
 
 export default {
-  props: ["i18n"],
-
   mixins: [SentenceMixin],
 
   data() {
@@ -40,7 +38,7 @@ export default {
 
   computed: {
     editBtnText() {
-      return this.editable ? this.i18n.base.save : this.i18n.base.edit;
+      return this.editable ? this.$i18n('options_base_save') : this.$i18n('options_base_edit')
     }
   },
 
@@ -50,7 +48,7 @@ export default {
         this.save().then(() => {
           this.$message({
             type: "success",
-            message: "Save successfully!"
+            message: this.$i18n('save_ok')
           });
         });
       }

@@ -20,6 +20,8 @@ export const defaultConfig = {
     autoSetFrom: true,
     precisionFirst: false,
     engine: 'google',
+    ydAppKey: '',
+    ydAppSecret: '',
     version
 }
 

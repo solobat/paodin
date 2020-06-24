@@ -108,7 +108,7 @@ export default {
         this.reciteWord();
       } else {
         this.$message({
-          message: i18n.msg.wordsChoosedNothing,
+          message: this.$i18n('options_msg_wordschoosed_nothing'),
           type: "warning"
         });
       }

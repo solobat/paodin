@@ -11,7 +11,7 @@ export default {
       return sentenceController.del(this.item.id);
     },
     handleDeleteClick() {
-      this.$confirm("Confirm to delete?", "Note", {
+      this.$confirm(this.$i18n('confirm_to_delete'), this.$i18n('note'), {
         type: "warning"
       })
         .then(() => {
@@ -19,7 +19,7 @@ export default {
             this.$emit("delete");
             this.$message({
               type: "success",
-              message: "Delete successfully!"
+              message: this.$i18n('delete_ok')
             });
           });
         })

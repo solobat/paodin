@@ -50,6 +50,7 @@ export const words = {
     reset: chrome.i18n.getMessage('options_words_reset'),
     level: chrome.i18n.getMessage('options_words_level'),
     tag: chrome.i18n.getMessage('options_words_tag'),
+    // $i18n('options_words_count')
     count: (choosed, all) => simTemplate(chrome.i18n.getMessage('options_words_count'), { choosed, all }),
     batchdelete: chrome.i18n.getMessage('options_words_batchdelete')
 }

@@ -2,24 +2,24 @@
   <div class="view-container words-container">
     <div class="word-filter filter-panel">
       <div class="filter-item">
-        <div class="field-label">{{ i18n.words.search }}</div>
+        <div class="field-label">{{$i18n("options_words_search")}}</div>
         <el-input placeholder="Search" icon="search" v-model="filter.wordSearchText"></el-input>
       </div>
       <div class="filter-item">
         <div class="field-label">
-          <span class="label-text">{{ i18n.words.vocabulary }}</span>
-          <el-button type="primary" size="mini" @click="filter.langPair = ''">{{ i18n.words.reset }}</el-button>
+          <span class="label-text">{{$i18n("options_words_vocabulary")}}</span>
+          <el-button type="primary" size="mini" @click="filter.langPair = ''">{{$i18n("options_words_reset")}}</el-button>
         </div>
         <div class="filter-tags">
-          <el-select v-model="filter.langPair" :placeholder="i18n.base.choose">
+          <el-select v-model="filter.langPair" :placeholder="$i18n('options_base_choose')">
             <el-option v-for="(item, index) in langPairs" :key="index" :label="item" :value="item"></el-option>
           </el-select>
         </div>
       </div>
       <div class="filter-item">
         <div class="field-label">
-          <span class="label-text">{{ i18n.words.level }}</span>
-          <el-button type="primary" size="mini" @click="filter.levels = []">{{ i18n.words.reset }}</el-button>
+          <span class="label-text">{{$i18n("options_words_level")}}</span>
+          <el-button type="primary" size="mini" @click="filter.levels = []">{{$i18n("options_words_reset")}}</el-button>
         </div>
         <div class="filter-tags">
           <el-tag
@@ -33,8 +33,8 @@
       </div>
       <div class="filter-item filter-item-tags">
         <div class="field-label">
-          <span class="label-text">{{ i18n.words.tag }}</span>
-          <el-button type="primary" size="mini" @click="filter.tags = []">{{ i18n.words.reset }}</el-button>
+          <span class="label-text">{{$i18n("options_words_tag")}}</span>
+          <el-button type="primary" size="mini" @click="filter.tags = []">{{$i18n("options_words_reset")}}</el-button>
         </div>
         <div class="filter-tags">
           <el-tag
@@ -48,7 +48,7 @@
       </div>
       <div class="other-info">
         <div class="word-nums">{{ i18n.words.count(filteredWords.length, words.length) }}</div>
-        <div class="batch-delete-btn" @click="handleBatchDeleteClick">{{ i18n.words.batchdelete }}</div>
+        <div class="batch-delete-btn" @click="handleBatchDeleteClick">{{$i18n("options_words_batchdelete")}}</div>
       </div>
     </div>
     <div class="word-list-container">
@@ -92,7 +92,7 @@
             <el-tooltip
               v-if="i18n.lang === 'zh-CN'"
               effect="dark"
-              content="已同步到单词小卡片，点击重置"
+              content="已同步，点击重置"
               placement="top-start"
             >
               <i
@@ -115,13 +115,13 @@
                 label-width="80px"
                 @submit.prevent="onWordFormSubmit"
               >
-                <el-form-item :label="i18n.item.word + ':'" prop="name">
+                <el-form-item :label="$i18n('options_item_word') + ':'" prop="name">
                   <el-input type="text" v-model="wordForm.name"></el-input>
                 </el-form-item>
-                <el-form-item :label="i18n.item.translate + ':'" prop="trans">
+                <el-form-item :label="$i18n('options_item_translate') + ':'" prop="trans">
                   <el-input type="text" v-model="wordForm.trans"></el-input>
                 </el-form-item>
-                <el-form-item :label="i18n.item.tag + ':'">
+                <el-form-item :label="$i18n('options_item_tag') + ':'">
                   <el-tag
                     style="margin-right: 5px;"
                     :key="tag"
@@ -148,20 +148,20 @@
                     @click="showTagInput"
                   >+ New Tag</el-button>
                 </el-form-item>
-                <el-form-item :label="i18n.item.sentence + ':'">
+                <el-form-item :label="$i18n('options_item_sentence') + ':'">
                   <el-input type="textarea" :rows="3" v-model="wordForm.sentence"></el-input>
                 </el-form-item>
                 <div class="form-btns">
-                  <el-button size="small" @click="handleEditorCancelClick">{{ i18n.base.cancel }}</el-button>
-                  <el-button size="small" @click="handleEditorDeleteClick">{{ i18n.base.delete }}</el-button>
+                  <el-button size="small" @click="handleEditorCancelClick">{{$i18n("options_base_cancel")}}</el-button>
+                  <el-button size="small" @click="handleEditorDeleteClick">{{$i18n("options_base_delete")}}</el-button>
                 </div>
               </el-form>
             </el-col>
             <el-col :span="4">
               <div class="form-aside">
                 <div class="form-aside-fields">
-                  <div class="el-form-item__label">{{ i18n.words.level }} :</div>
-                  <el-select v-model="wordForm.level" :placeholder="i18n.base.choose" size="small">
+                  <div class="el-form-item__label">{{$i18n("options_words_level")}} :</div>
+                  <el-select v-model="wordForm.level" :placeholder="$i18n('options_base_choose')" size="small">
                     <el-option
                       v-for="item in levels"
                       :key="item.value"
@@ -175,7 +175,7 @@
                     type="primary"
                     size="small"
                     @click.native.prevent="handleEditorSubmit"
-                  >{{ i18n.base.save }}</el-button>
+                  >{{$i18n("options_base_save")}}</el-button>
                 </div>
               </div>
             </el-col>
@@ -223,8 +223,8 @@ export default {
         level: 0
       },
       wordRules: {
-        name: Validator.text(this.i18n.item.word),
-        trans: Validator.text(this.i18n.item.translate)
+        name: Validator.text(this.$i18n('options_item_word')),
+        trans: Validator.text(this.$i18n('options_item_translate'))
       }
     };
   },
@@ -252,7 +252,7 @@ export default {
         })
         .then(resp => {
           if (!silent) {
-            this.$message(this.i18n.msg.saveok);
+            this.$message(this.$i18n('options_msg_saveok'));
           }
         });
     },
@@ -285,7 +285,7 @@ export default {
       const words = this.filteredWords;
 
       if (words.length) {
-        this.$confirm(this.i18n.msg.deletewordsConfirm, this.i18n.item.tips)
+        this.$confirm(this.$i18n('options_msg_deletewords_confirm'), this.$i18n('options_item_tips'))
           .then(() => {
             this.batchDelete();
           })
@@ -293,7 +293,7 @@ export default {
             console.log("cancel");
           });
       } else {
-        this.$message.warning(this.i18n.msg.nowordsToDelete);
+        this.$message.warning(this.$i18n('options_msg_nowords_todelete'));
       }
     },
 
@@ -337,7 +337,7 @@ export default {
           data: { id: this.wordForm.id }
         },
         () => {
-          this.$message(this.i18n.msg.deleteOk);
+          this.$message(this.$i18n('options_msg_delete_ok'));
           this.resetWordEditor();
         }
       );
@@ -389,7 +389,7 @@ export default {
     handleEditorSubmit() {
       this.$refs.wordForm.validate(valid => {
         if (!valid) {
-          this.$message.error(this.i18n.msg.formError);
+          this.$message.error(this.$i18n('options_msg_form_error'));
           return;
         }
 

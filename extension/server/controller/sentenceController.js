@@ -17,6 +17,10 @@ export async function save(attrs) {
   }
 }
 
+export function update(id, attrs) {
+  return db.sentence.update(id, attrs)
+}
+
 export function query({scope, query }) {
   return db.sentence.toArray()
 }

@@ -4,25 +4,25 @@
       <li class="menu-item">
         <a href="options.html#/sentences" target="_blank">
           <img src="/img/list.png" alt />
-          <span>{{ i18n.item.sentences }}</span>
+          <span>{{$i18n("options_tab_sentences")}}</span>
         </a>
       </li>
       <li class="menu-item">
         <a href="options.html#/words" target="_blank">
           <img src="/img/list.png" alt />
-          <span>{{ i18n.item.words }}</span>
+          <span>{{$i18n("options_tab_words")}}</span>
         </a>
       </li>
       <li>
         <a href="wordcard.html" target="_blank">
           <img src="/img/recite.png" alt />
-          <span>{{ i18n.item.wordsrecite }}</span>
+          <span>{{$i18n("options_tab_wordsrecite")}}</span>
         </a>
       </li>
       <li>
         <a href="options.html#/help" target="_blank">
           <img src="/img/help.png" alt />
-          <span>{{ i18n.item.help }}</span>
+          <span>{{$i18n("options_tab_help")}}</span>
         </a>
       </li>
     </ul>

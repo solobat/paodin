@@ -42,7 +42,7 @@ export default {
         })
         .then(resp => {
           if (!silent) {
-            this.$message(this.i18n.msg.saveok);
+            this.$message(this.$i18n('options_msg_saveok'));
           }
         });
     }

@@ -72,7 +72,7 @@ import * as sentenceController from "@/server/controller/sentenceController";
 export default {
   name: "sentence",
 
-  props: ["meta", "i18n"],
+  props: ["meta"],
 
   data() {
     const { word: text, from, to, engine, source } = this.meta;
@@ -104,6 +104,7 @@ export default {
       this.to = to;
       this.engine = engine;
       this.source = source;
+      this.translate()
     },
     text() {
       this.reset();
@@ -151,9 +152,13 @@ export default {
         .then(resp => {
           this.id = resp;
           this.assit.saving = false;
-          this.$message.success("Save successfully!");
+          this.$message.success(this.$i18n('save_ok'));
         });
     }
+  },
+
+  mounted() {
+    this.translate();
   }
 };
 </script>
@@ -169,5 +174,10 @@ export default {
 
 .translated-container {
   height: 100%;
+}
+
+.sentence-wrap {
+  height: 150px;
+  overflow: auto;
 }
 </style>

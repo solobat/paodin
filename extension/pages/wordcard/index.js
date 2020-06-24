@@ -3,6 +3,7 @@ import App from './App.vue';
 import '../../css/base.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import { checkDB } from '@/server/db'
 
 Vue.use(ElementUI)
 
@@ -16,4 +17,5 @@ function render() {
     });
 }
 
+checkDB();
 render();

@@ -2,16 +2,16 @@
   <div>
     <section class="scheme-filter" v-if="!wordrecitevisible && !allRecited">
       <header>
-        <h2>{{ i18n.wordsrecite.title }}</h2>
+        <h2>{{$i18n("options_wordsrecite_title")}}</h2>
       </header>
       <div class="filter-items">
         <div class="filter-results">{{ i18n.words.count(schemedWords.length, words.length) }}</div>
         <div class="filter-item">
           <div class="field-label">
-            <span class="label-text">{{ i18n.words.vocabulary }}</span>
+            <span class="label-text">{{$i18n("options_words_vocabulary")}}</span>
           </div>
           <div class="filter-tags">
-            <el-select v-model="reciteFilter.langPair" clearable :placeholder="i18n.base.choose">
+            <el-select v-model="reciteFilter.langPair" clearable :placeholder="$i18n('options_base_choose')">
               <el-option
                 v-for="(item, index) in langPairs"
                 :key="index"
@@ -23,7 +23,7 @@
         </div>
         <div class="filter-item">
           <div class="field-label">
-            <span class="label-text">{{ i18n.words.level }}</span>
+            <span class="label-text">{{$i18n("options_words_level")}}</span>
           </div>
           <div class="filter-tags">
             <el-tag
@@ -37,7 +37,7 @@
         </div>
         <div class="filter-item">
           <div class="field-label">
-            <span class="label-text">{{ i18n.words.tag }}</span>
+            <span class="label-text">{{$i18n("options_words_tag")}}</span>
           </div>
           <div class="filter-tags">
             <el-tag
@@ -52,7 +52,7 @@
       </div>
       <footer>
         <div class="action-btns">
-          <el-button size="small" @click="beginRecite">{{ i18n.wordsrecite.submit }}</el-button>
+          <el-button size="small" @click="beginRecite">{{$i18n("options_wordsrecite_submit")}}</el-button>
         </div>
       </footer>
     </section>
@@ -91,14 +91,14 @@
     </section>
     <section class="recite-results" v-if="allRecited">
       <header>
-        <h2>{{ i18n.wordsrecite.result }}</h2>
+        <h2>{{$i18n("options_wordsrecite_result")}}</h2>
       </header>
       <div>
         <pie style="width: 300px;height: 200px; margin: 0 auto" :chart-data="reciteResultData"></pie>
       </div>
       <footer>
         <div class="action-btns">
-          <el-button size="small" @click="beginNewReciteFilter">{{ i18n.wordsrecite.newquiz }}</el-button>
+          <el-button size="small" @click="beginNewReciteFilter">{{$i18n("options_wordsrecite_newquiz")}}</el-button>
         </div>
       </footer>
     </section>
@@ -161,7 +161,7 @@ export default {
       let { right, wrong } = this.reciteResult;
 
       return {
-        labels: [this.i18n.item.right, this.i18n.item.wrong],
+        labels: [this.$i18n('options_item_right'), this.$i18n('options_item_wrong')],
         datasets: [
           {
             backgroundColor: ["#1ebe8d", "#e80d39"],
@@ -180,7 +180,7 @@ export default {
         this.reciteWord();
       } else {
         this.$message({
-          message: this.i18n.msg.wordsChoosedNothing,
+          message: this.$i18n('options_msg_wordschoosed_nothing'),
           type: "warning"
         });
       }

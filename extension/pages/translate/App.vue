@@ -38,15 +38,17 @@
                     class="title"
                     :readonly="!assit.wordEditable"
                   />
-                  <span
-                    class="voice-item"
-                    v-if="assit.translate.phonetic && assit.translate.phonetic.length"
-                    v-for="(item, index) in assit.translate.phonetic"
-                    :key="index"
-                  >
-                    <span>[{{item.name}}]</span>
-                    <span class="ico-audio" @mouseover="playAudio(item.ttsURI || meta.word)"></span>
-                  </span>
+                  <template v-if="assit.translate.phonetic && assit.translate.phonetic.length">
+                    <span
+                      class="voice-item"
+                      v-for="(item, index) in assit.translate.phonetic"
+                      :key="index"
+                      @mouseenter="playAudio(meta.word, item.name)"
+                    >
+                      <span>[{{item.name}}]</span>
+                      <span class="ico-audio"></span>
+                    </span>                    
+                  </template>
                   <span class="add-txt"></span>
                 </div>
                 <a
@@ -300,8 +302,14 @@ export default {
       });
     },
 
-    playAudio(url) {
-      Translate.playAudio(url, this.meta.from);
+    playAudio(word, tl) {
+      const tlMap = {
+        'en-US': 'en-US',
+        'en-UK': 'en-GB',
+        '美': 'en-US',
+        '英': 'en-GB'
+      }
+      return chrome.tts.speak(word, {'lang': tlMap[tl] || tl});
     },
 
     enbaleWordInput() {
@@ -432,16 +440,16 @@ export default {
         },
         function({ data }) {
           vm.assit.orgWord = data;
-          vm.$message("Save successfully");
+          vm.$message("save_ok");
         }
       );
     },
 
     handleSaveClick() {
       if (this.assit.orgWord) {
-        this.$confirm(i18n.msg.forceSaveTips, i18n.item.tips, {
-          confirmButtonText: i18n.item.confirm,
-          cancelButtonText: i18n.item.cancel,
+        this.$confirm(this.$i18n('translate_save_confirm_tips'), this.$i18n('translate_item_tips'), {
+          confirmButtonText: this.$i18n('translate_item_confirm'),
+          cancelButtonText: this.$i18n('translate_item_cancel'),
           type: "warning"
         })
           .then(() => {

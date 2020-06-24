@@ -15,6 +15,7 @@ import { WORD_LEVEL } from '../../js/constant/options'
 import { getSyncConfig, getUserInfo } from '../../js/common/config'
 import * as i18n from '../../js/i18n/background'
 import { getSyncHelper4Bg } from '../../js/helper/syncData'
+import { checkDB } from '@/server/db'
 
 const cocoaTags = ['4000', '8000', '12000', '15000', '20000'];
 // browser.runtime.sendMessage api is not equivalent to chrome.runtime.sendMessage
@@ -452,7 +453,8 @@ function setup() {
 function loadConfig() {
     return Promise.all([
         getSyncConfig(),
-        getUserInfo()
+        getUserInfo(),
+        checkDB()
     ]).then(([conf, userInfo]) => {
         config = conf;
 
