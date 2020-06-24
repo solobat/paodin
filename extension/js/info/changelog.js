@@ -2,6 +2,12 @@ const stewardUrl = 'https://chrome.google.com/webstore/detail/dnkhdiodfglfckibnf
 
 let langZh = [
     {
+        version: 'v3.1.0',
+        detail: `
+            添加同步到新小程序。
+        `
+    },
+    {
         version: 'v3.0.2',
         detail: `
             Bug 修复。
@@ -207,6 +213,12 @@ let langZh = [
 ];
 
 let langEn = [
+    {
+        version: 'v3.1.0',
+        detail: `
+            Add Youdao translation engine.
+        `
+    },
     {
         version: 'v3.0.2',
         detail: `
