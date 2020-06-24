@@ -153,7 +153,7 @@ import { updateUserLang } from "@/js/helper/lang";
 import $ from "jquery";
 import _ from "underscore";
 import Translate from "@/js/translate";
-import { AVHelper } from "@/js/helper/leancloud";
+import { AVHelper } from "@/services/cocoa.service";
 import { TEXT_TYPE } from "@/js/constant/options";
 import { getTextType } from "@/js/helper/text";
 import Sentence from "@/js/components/sentence/index.vue";
